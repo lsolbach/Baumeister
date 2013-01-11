@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="unittest"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/runtime/clojure.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/ant.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/CljLibrary.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/aspectjrt.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/data.xml.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/CljJavaLibrary.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/CljModelGenerator.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/ModelRepository2.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/TemplateEngine.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/UmlModelBuilder.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/XmiRepository2.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/ant-junit.jar" sourcepath="/home/soulman/devel/java/apache-ant-1.8.3/src/main"/>
+	<classpathentry kind="lib" path="lib/runtime/ant-jdepend.jar" sourcepath="/home/soulman/devel/java/apache-ant-1.8.3/src/main"/>
+	<classpathentry kind="lib" path="lib/runtime/jdepend.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/pmd.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/jaxen.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/asm-tree.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/asm.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/cobertura.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/findbugs-ant.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/findbugs.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/data.zip.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/bcel.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/checkstyle.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/dom4j.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/jsr305.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/oro.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

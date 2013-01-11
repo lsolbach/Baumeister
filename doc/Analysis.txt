@@ -1,0 +1,52 @@
+Baumeister Build System Analysis
+================================
+
+Value proposition
+-----------------
+ * automatization
+   * repeatable, fast, error free, efficient
+ * enablement
+  * continuous integration, documentation, statistics and quality metrics
+ * standardization
+ * structural clearness, explicit specification/documentation of dependencies and workflows
+
+Build tasks to automate
+-----------------------
+ * development builds
+ * release builds
+ * project/module setup
+ * tests
+ * documentation generation
+ * project distribution
+ * deployments
+
+Dimensions
+----------
+ * workflows, phases, steps
+ * plugins
+ * source types (code, models, data)
+ * implementation languages (java, aspectj, clojure, ...)
+ * source (code/test) types (unit, integration, acceptance, performance, load, stress, ...)
+ * architectural module types (library, framework, component (integration layer, domain layer, application layer, presentation layer), web service, frontend (web, console, app))
+ * dependencies (inclusion/exclusion)
+ * usage types (model, runtime, dev, aspect, aspectin)
+ * artifacts, versions
+ * environments (servers, ...)?
+ * (development, test, staging, production, ...)
+ * build classification (development snapshots, releases)
+
+Possible build environments
+---------------------------
+ * local developer pc
+   * command line
+   * IDE (eclipse, netbeans, idea, ...)
+ * build server (continuous integration server) (jenkins, cruise control)
+ * test/production servers?
+ 
+Demarcation of Build Tools and Build Servers
+--------------------------------------------
+ * Build Tools can run locally and on a Build Server,
+ * Build Servers run on a "centralized" server
+ * Build Servers can distribute builds to Build machines
+ * Who checks out the code from the scm? 
+ * Publishing of artifacts (Build Tool or Build Server?)

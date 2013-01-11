@@ -1,0 +1,60 @@
+TODO's
+======
+
+Guidelines
+----------
+ * Make everything as simple as possible but not simpler
+ * Make common tasks easy
+ * Make uncommon tasks possible
+
+
+* Implement transitive dependency management (partially implemented)
+* Implement repositories (initially implemented, use an HTTP client library for proxy support in HTTP requests)
+* Multi project builds
+
+
+Think About
+-----------
+
+Transitive Dependency Management
+What is the difference between an artifact and a dependency. What are the properties of a dependency and an artifact.
+dependency: target/scope/usage
+
+Artifact
+A resource generated or used by the build process,
+Properties: ProjectName, ModuleName, ArtifactName, ArtifactType, ArtifactVersion
+
+Dependency
+A dependency is a reference to an existing artifact (from outside the current module) or to an abstract artifact pattern
+(e.g with open version, or just project and module configured).
+A dependency can be scoped for the usage in the current module.
+Properties: ArtifactUsage (scope, target, exclusion), ArtifactReference(Pattern)
+
+
+Plugins
+Plugin storage, user plugins, plugin dependencies, multi plugin dependencies, version conflicts for plugin and plugin dependencies
+Plugin orthogonalization!
+
+Orthogonality
+How to cut through the different dimensions?
+[workflows, phases, steps, plugins, module types]
+e.g.
+mdsd initializing, cleaning, dependencies
+aspectj initializing, cleaning, dependencies
+
+
+Build listeners/notifiers?
+Listener/Notifier plugin to register functions on build phases?
+
+Global initialization (apart from plugins)?
+build-dir
+dist-dir
+lib-dir
+
+
+Rethink the registries!
+How to store module variables?
+prefixed with "module-", eg. "module-name"?
+unprefixed?
+store in var registry?
+store in global config?
