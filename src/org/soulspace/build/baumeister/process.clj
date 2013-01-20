@@ -7,6 +7,7 @@
 
 ; TODO check to (set! *read-eval* false) to prevent security issues reading files
 (defn -main [& args]
+  "Baumeister entry method."
   (log :debug "Current dir: " (System/getProperty "user.dir"))
   (init-config)
   (if (seq args)
