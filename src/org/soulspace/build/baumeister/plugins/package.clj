@@ -41,6 +41,7 @@
   (ant-zip {:destFile (param "${dist-dir}/${name}.zip")}
            (ant-fileset {:dir (param :module-dir) :excludes (param "${dist-dir} ${build-dir} ${lib-dir}")})))
 
+; TODO handle source jars
 (defn package-jars []
   (package-jar (param :build-classes-dir) "" "jar" {})
   (when (unittest?)

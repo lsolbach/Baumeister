@@ -107,28 +107,31 @@
     (query-dependencies (param :deps-repositories) artifact)))
 
 ; consume artifacts, build nodes
-(defn dependency-tree-children [parent artifacts nodes loaded-set]
+; TODO handle excluded-set
+(defn dependency-tree-children [parent artifacts nodes loaded-set excluded-set]
   (if-not (seq artifacts)
     [(new-dependency-node parent nodes) loaded-set] ; build and return dependency node for parent with the subtrees as children
     (let [actual (first artifacts)
           remaining (rest artifacts)
-          [node aloaded-set] (dependency-tree actual loaded-set) ; build subtree for actual artifact (recursive bottom up because of persistent data structures)
+          [node aloaded-set] (dependency-tree actual loaded-set excluded-set) ; build subtree for actual artifact (recursive bottom up because of persistent data structures)
           anodes (if (seq node) (conj nodes node) nodes)] ; don't append 'nil' nodes for already loaded 
       (recur parent remaining (conj nodes node) aloaded-set)))) ; loop 
 
 ; load dependencies, build dependency node
-(defn dependency-tree-for-artifact [parent loaded-set]
+; TODO handle excluded-set
+(defn dependency-tree-for-artifact [parent loaded-set excluded-set]
   (let [dependencies (get-dependencies parent)]
     (if-not (seq dependencies)
       [(new-dependency-node parent []) loaded-set] ; build and return dependency node for parent with no children
       (let [dep-as (map new-artifact dependencies)]
-        (dependency-tree-children parent dep-as [] loaded-set)))))
+        (dependency-tree-children parent dep-as [] loaded-set excluded-set)))))
 
-(defn dependency-tree [parent loaded-set]
+; TODO handle excluded-set
+(defn dependency-tree [parent loaded-set excluded-set]
   "build the dependency tree"
   (if-not (loaded-artifact? loaded-set parent)
     (let [loaded (loaded-artifact loaded-set parent)]
-      (dependency-tree-for-artifact parent loaded))
+      (dependency-tree-for-artifact parent loaded excluded-set))
     [(new-dependency-node parent []) loaded-set])) ; build and return dependency node for parent with no children
 
 ;
@@ -225,9 +228,11 @@
   (when (web-module?)
     ) ; TODO distribute war files here or use publish?!?
   (when (data-module?)
-    (distribute-artifact dev-repository-path (new-artifact (param :project) (param :name) (param :version) "runtime" (param :name) "zip")))
+    (distribute-artifact dev-repository-path
+                         (new-artifact (param :project) (param :name) (param :version) "runtime" (param :name) "zip")))
   (when (plugin? "mdsd")
-    (distribute-artifact dev-repository-path (new-artifact (param :project) (param :name) (param :version) "model" (param :mdsd-model-name) "xmi") (param :mdsd-model-dir))))
+    (distribute-artifact dev-repository-path
+                         (new-artifact (param :project) (param :name) (param :version) "model" (param :mdsd-model-name) "xmi") (param :mdsd-model-dir))))
 
 ;
 ; plugin initialization
