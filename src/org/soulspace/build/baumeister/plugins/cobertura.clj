@@ -6,7 +6,7 @@
         [org.soulspace.build.baumeister.config registry]))
 
 (def cobertura-classpath (lib-path ["cobertura" "asm" "asm-tree" "jakarta-oro"])) ; log4j?
-(ant-taskdef {:classpath cobertura-classpath :resource "task.properties"})
+(ant-taskdef {:classpath cobertura-classpath :resource "tasks.properties"})
 (define-ant-task ant-cobertura-instrument cobertura-instrument)
 (define-ant-task ant-cobertura-report cobertura-report)
 (define-ant-type ant-ignore net.sourceforge.cobertura.ant.Ignore)

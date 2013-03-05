@@ -5,11 +5,11 @@
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository repositories]))
 
-; TODO switch to repository abstraction (for repository types?!)
-
+; TODO artifact or dependency
 (def artifacts [])
 (def artifact-root)
 
+; TODO switch to repository abstraction (for repository types?!)
 (def repository-path "/home/soulman/devel/repositories/") 
 (def repositories (create-repositories (param :repositories))) ; fine, this creates the configured repositories, TODO: use deps-repositories parameter
 (def dev-repository-path (str repository-path "/development")) ; TODO remove, use repository(ies?) with (type repo "development")
@@ -100,30 +100,33 @@
   "tests if an artifact is already loaded"
   (contains? loaded (artifact-key artifact)))
 
-(defn get-dependencies [artifact]
-  "get the dependencies configuration for the specified artifact"
-  (if (= (:target artifact) "root")
+
+
+(defn get-dependencies [dependency]
+  "get the dependencies configuration for the specified dependency"
+  (if (= (:target dependency) "root")
     (param :dependencies) ; current module, use config
-    (query-dependencies (param :deps-repositories) artifact)))
+    (query-dependencies (param :deps-repositories) dependency)))
 
 ; consume artifacts, build nodes
 ; TODO handle excluded-set
 (defn dependency-tree-children [parent artifacts nodes loaded-set excluded-set]
   (if-not (seq artifacts)
-    [(new-dependency-node parent nodes) loaded-set] ; build and return dependency node for parent with the subtrees as children
+    [(new-dependency parent nodes) loaded-set] ; build and return dependency node for parent with the subtrees as children
     (let [actual (first artifacts)
           remaining (rest artifacts)
           [node aloaded-set] (dependency-tree actual loaded-set excluded-set) ; build subtree for actual artifact (recursive bottom up because of persistent data structures)
           anodes (if (seq node) (conj nodes node) nodes)] ; don't append 'nil' nodes for already loaded 
-      (recur parent remaining (conj nodes node) aloaded-set)))) ; loop 
+      (recur parent remaining (conj nodes node) aloaded-set excluded-set)))) ; loop 
 
 ; load dependencies, build dependency node
 ; TODO handle excluded-set
 (defn dependency-tree-for-artifact [parent loaded-set excluded-set]
   (let [dependencies (get-dependencies parent)]
     (if-not (seq dependencies)
-      [(new-dependency-node parent []) loaded-set] ; build and return dependency node for parent with no children
-      (let [dep-as (map new-artifact dependencies)]
+      [(new-dependency parent []) loaded-set] ; build and return dependency node for parent with no children
+      ; FIXME dependencies is actually now a vector of an artifact and an exclusion seq
+      (let [dep-as (map new-artifact (map first dependencies))] ; FIXME handle vector instead of mapping first
         (dependency-tree-children parent dep-as [] loaded-set excluded-set)))))
 
 ; TODO handle excluded-set
@@ -132,7 +135,7 @@
   (if-not (loaded-artifact? loaded-set parent)
     (let [loaded (loaded-artifact loaded-set parent)]
       (dependency-tree-for-artifact parent loaded excluded-set))
-    [(new-dependency-node parent []) loaded-set])) ; build and return dependency node for parent with no children
+    [(new-dependency parent []) loaded-set])) ; build and return dependency node for parent with no children
 
 ;
 ; distribution of the built artifacts
@@ -209,7 +212,7 @@
   (log :info "initializing dependencies...")
   ; initialize dependencies the old way first to leave the project in a usable state for debugging 
   (let [root-artifact (new-artifact (param :project) (param :name) (param :version) "root")
-        [dependency-root loaded-set] (dependency-tree root-artifact {})
+        [dependency-root loaded-set] (dependency-tree root-artifact {} #{})
         [q in ex] (process-dependency-tree (:dependencies dependency-root) {} #{} #{})]
     (log :trace "DEPS" dependency-root)
     (log :trace "Excluded:" ex)
@@ -229,10 +232,10 @@
     ) ; TODO distribute war files here or use publish?!?
   (when (data-module?)
     (distribute-artifact dev-repository-path
-                         (new-artifact (param :project) (param :name) (param :version) "runtime" (param :name) "zip")))
+                         (new-artifact (param :project) (param :name) (param :version) (param :name) "zip")))
   (when (plugin? "mdsd")
     (distribute-artifact dev-repository-path
-                         (new-artifact (param :project) (param :name) (param :version) "model" (param :mdsd-model-name) "xmi") (param :mdsd-model-dir))))
+                         (new-artifact (param :project) (param :name) (param :version) (param :mdsd-model-name) "xmi") (param :mdsd-model-dir))))
 
 ;
 ; plugin initialization

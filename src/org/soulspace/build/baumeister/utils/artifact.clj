@@ -1,47 +1,50 @@
 (ns org.soulspace.build.baumeister.utils.artifact
-  (:use [clojure.string :only [split]]
-        [org.soulspace.clj.lib string]
-        [org.soulspace.build.baumeister.config registry]))
+  (:use [org.soulspace.clj.lib string]
+        [org.soulspace.build.baumeister.config registry]
+        [org.soulspace.build.baumeister.utils version]))
 
-(defrecord Artifact [project module version target artifact type scope])
+; TODO define artifact protocol and include the artifact-* functions
+; TODO let ArtifactImpl implement the artifact protocol
+
+; Part of the artifact: project module version artifact type
+; Part of the dependency: target scope exclusions
+; TODO rename parameter artifact to name
+(defrecord Artifact [project module version artifact type])
+
+
 
 (defn new-artifact
   ([project module version]
-    (Artifact. project module version "runtime" module "jar" nil))
-  ([project module version target]
-    (Artifact. project module version target module "jar" nil))
-  ([project module version target artifact]
-    (Artifact. project module version target artifact "jar" nil))
-  ([project module version target artifact type]
-    (Artifact. project module version target artifact type nil))
-  ([project module version target artifact type scope]
-    (Artifact. project module version target artifact type scope))
-  ([dep]
-    ; FIXME copy fields instead of apply dep to cope with structural differences between dependencies and artifacts
-    (if (instance? Artifact dep) ; TODO remove if everything works
+    (Artifact. project module version module "jar"))
+  ([project module version artifact]
+    (Artifact. project module version artifact "jar"))
+  ([project module version artifact type]
+    (Artifact. project module version artifact type))
+  ([art]
+    ; TODO apply new artifact anyway to create a copy?
+    (if (instance? Artifact art) ; TODO remove if everything works
       (throw (RuntimeException. "It's already an artifact!")))
-    (apply new-artifact dep)))
+    (apply new-artifact art)))
+
+
 
 ; A 'nil' in a field means unspecified for an artifact pattern
 ; (e.g. a 'nil' version in the pattern will match every version)
 (defn new-artifact-pattern
   ([project module]
-    (Artifact. project module nil nil module nil nil))
+    (Artifact. project module nil module nil))
   ([project module version]
-    (Artifact. project module version nil module nil nil))
-  ([project module version target]
-    (Artifact. project module version target module nil nil))
-  ([project module version target artifact]
-    (Artifact. project module version target artifact nil nil))
-  ([project module version target artifact type]
-    (Artifact. project module version target artifact type nil))
-  ([project module version target artifact type scope]
-    (Artifact. project module version target artifact type scope))
-  ([dep]
-    ; FIXME copy fields instead of apply dep to cope with structural differences between dependencies and artifacts
-    (if (instance? Artifact dep) ; TODO remove if everything works
+    (Artifact. project module version module nil))
+  ([project module version artifact]
+    (Artifact. project module version artifact nil))
+  ([project module version artifact type]
+    (Artifact. project module version artifact type))
+  ([arti]
+    ; TODO apply new artifact anyway to create a copy?
+    (if (instance? Artifact arti) ; TODO remove if everything works
       (throw (RuntimeException. "It's already an artifact!")))
-    (apply new-artifact-pattern dep)))
+    (apply new-artifact-pattern arti)))
+
 
 (defn artifact-name [artifact]
   (str (:artifact artifact) "." (:type artifact)))
@@ -51,47 +54,13 @@
 
 (defn artifact-key [artifact]
   (str (:project artifact) "/" (:module artifact) "/" (:version artifact) "/"
-       (:artifact artifact) "." (:type artifact) "->" (:target artifact)))
+       (:artifact artifact) "." (:type artifact)))
 
 (defn artifact-module-key [artifact]
   (str (:project artifact) "/" (:module artifact)))
 
 (defn artifact-module-version-key [artifact]
   (str (:project artifact) "/" (:module artifact) "/" (:version artifact)))
-
-; version comparison
-(defn numeric? [x]
-  (and (not (nil? x)) (re-matches #"^[0-9]+$" x)))
-
-(defn compare-revision [c1 c2]
-  "compare a revision"
-  (if (and (numeric? c1) (numeric? c2)) ; compare numerically or lexically?
-    (compare (Long/valueOf c1) (Long/valueOf c2))
-    (compare c1 c2)))
-
-(defn split-version [version]
-  "split version string at dots"
-  (split version #"[.]")) 
-
-(defn compare-version [v1 v2]
-  "split versions and compare components until difference or equality is established"
-  (if (or (nil? v1) (nil? v2))
-    (compare v1 v2)
-    (loop [c1 (split-version v1)
-           c2 (split-version v2)]
-      (if (and (seq c1) (seq c1))
-        (if (not= (first c1) (first c2))
-          (compare-revision (first c1) (first c2))
-          (recur (rest c1) (rest c2)))
-        (compare-revision (first c1) (first c2))))))
-
-
-(defn version-match? [pattern version]
-  "match a version against a version pattern"
-  (or (nil? pattern)
-      (empty? pattern)
-      ; TODO use matching
-      (= pattern version)))
 
 (defn identifier-match? [pattern name]
   "match an identifier against a pattern"

@@ -63,27 +63,22 @@
 (defn pom-dependency [prop-map dep]
 ;  (if-let [exclusion (zx/xml-> dep :exclusions :exclusion)]
 ;    (println "Excludes" (map (partial pom-exclusion prop-map) exclusion)))
-  (let [a ((juxt
-             #(replace-properties prop-map (zx/xml1-> % :groupId zx/text))
-             #(replace-properties prop-map (zx/xml1-> % :artifactId zx/text))
-             #(replace-properties prop-map (zx/xml1-> % :version zx/text))
-             #(scope-to-target (zx/xml1-> % :scope zx/text)))
-            dep)]
-    (log :debug "POM ARTIFACT" a)
-    a))
+  (let [artifact ((juxt
+                    #(replace-properties prop-map (zx/xml1-> % :groupId zx/text))
+                    #(replace-properties prop-map (zx/xml1-> % :artifactId zx/text))
+                    #(replace-properties prop-map (zx/xml1-> % :version zx/text))
+                    #(scope-to-target (zx/xml1-> % :scope zx/text)))
+            dep)
+        exclusions (map pom-exclusion (zx/xml-> dep :exclusions :exclusion))]
+    (log :debug "POM ARTIFACT" artifact "->" exclusions)
+    [artifact exclusions]))
 
 (defn pom-dependencies [pom]
   ; Returns a sequence of artifacts?
   (let [zipped (pom-zipper pom)
         prop-map (pom-properties zipped)
-        deps (zx/xml-> zipped :dependencies :dependency)
-        excls (zx/xml-> zipped :dependencies :dependency :exclusions :exclusion)]
-;    (println "EXATYPE:" (type excls))
-;    (println "EXA:" (map #(zx/xml1-> % :artifactId zx/text) excls))
+        deps (zx/xml-> zipped :dependencies :dependency)]
     (try
-      ; TODO don't simply map pom-artifacts,
-      ; TODO convert the more complex structure of dependencies, properties (e.g.) and exclusions for the dependencies
-      ;(println "EXB:" (map (partial pom-exclusion prop-map) excls))
       (map (partial pom-dependency prop-map) deps);(zx/xml-> zipped :dependencies :dependency))
       (catch Exception e
         (log :error "Could not parse" pom (.getMessage e))))))

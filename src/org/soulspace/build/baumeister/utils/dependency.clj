@@ -2,29 +2,30 @@
   (:use [org.soulspace.clj.lib file]
         [org.soulspace.build.baumeister.config registry]))
 
-
-(def dep-config
+(def dependency-config
   (load-file (str (get-home) "/config/dependency_defaults.clj")))
 
-(defn copy? [artifact]
-  (contains? (:copy (:actions dep-config)) (:target artifact)))
+(defn copy? [dependency]
+  (contains? (:copy (:actions dependency-config)) (:target dependency)))
 
-(defn unzip? [artifact]
-  (contains? (:unzip (:actions dep-config)) (:target artifact)))
+(defn unzip? [dependency]
+  (contains? (:unzip (:actions dependency-config)) (:target dependency)))
 
-(defn follow? [artifact]
-  (contains? (:follow (:actions dep-config)) (:target artifact)))
+(defn follow? [dependency]
+  (contains? (:follow (:actions dependency-config)) (:target dependency)))
 
-(defn exclude? [artifact]
-  (contains? (:exclude (:actions dep-config)) (:target artifact)))
+(defn exclude? [dependency]
+  (contains? (:exclude (:actions dependency-config)) (:target dependency)))
 
-(defprotocol DependencyNode
+(defprotocol Dependency
   (is-excluded? [node] "returns true if the artifact of this dependency is excluded")
   (includes [node])
   (excludes [node]))
 
-(defrecord DependencyNodeImpl [artifact dependencies]
-  DependencyNode
+; TODO rethink whats part of the artifact and whats part of the dependency
+; Part of the dependency: artifact target scope dependencies exclusions
+(defrecord DependencyImpl [artifact target scope dependencies exclusions]
+  Dependency
   (is-excluded? [node]
                 (exclude? (:artifact node)))
   (includes [node]
@@ -32,6 +33,41 @@
   (excludes [node]
             (filter #(exclude? %) dependencies)))
 
-(defn new-dependency-node
-  ([artifact dependencies]
-    (DependencyNodeImpl. artifact dependencies)))
+; TODO add required signatures
+(defn new-dependency
+  ([artifact]
+    (DependencyImpl. artifact "runtime" nil nil nil))
+  ([artifact target]
+    (DependencyImpl. artifact target nil nil nil))
+  ([artifact target dependencies]
+    (DependencyImpl. artifact target nil dependencies nil))
+  ([artifact target dependencies exclusions]
+    (DependencyImpl. artifact target nil dependencies exclusions))
+  ([artifact target dependencies exclusions scope]
+    (DependencyImpl. artifact target scope dependencies exclusions)))
+
+(defn create-dependency-dispatch
+  [x & xs]
+  (cond
+    (map? x) :artifact-map
+    (sequential? x) :artifact-seq
+    :default :artifact-flat))
+
+(defmulti create-dependency
+  "create a new dependency"
+  #'create-dependency-dispatch)
+
+(defmethod create-dependency :artifact-map
+  [x & xs]
+  (println ":artifact-map" x xs)
+  )
+
+(defmethod create-dependency :artifact-seq
+  [x & xs]
+  (println ":artifact-seq" x xs)
+  )
+
+(defmethod create-dependency :artifact-flat
+  [x & xs]
+  (println ":artifact-flat" x xs)
+  )
