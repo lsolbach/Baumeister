@@ -14,22 +14,22 @@
 (def repositories (create-repositories (param :repositories))) ; fine, this creates the configured repositories, TODO: use deps-repositories parameter
 (def dev-repository-path (str repository-path "/development")) ; TODO remove, use repository(ies?) with (type repo "development")
 
-(defn processed? [dep in ex]
+(defn processed? [dep included ex]
   (let [a (:artifact dep)]
-    (or (contains? in a) (contains? ex a))))
+    (or (contains? included a) (contains? ex a))))
 
-(defn add-module [mm dep]
+(defn add-module [module-map dep]
   (let [a (:artifact dep)]
-    (assoc mm (artifact-module-key a) a)))
+    (assoc module-map (artifact-module-key a) a)))
 
-(defn version-conflict? [mm dep]
+(defn version-conflict? [module-map dep]
   (let [a (:artifact dep)
-        pa (get mm (artifact-module-key a))]
-    (and pa (not (= (get mm (:version (artifact-module-key a))) (:version a))))))
+        pa (get module-map (artifact-module-key a))]
+    (and pa (not (= (get module-map (:version (artifact-module-key a))) (:version a))))))
 
-(defn version-conflict [mm dep]
+(defn version-conflict [module-map dep]
   (let [a (:artifact dep)
-        pa (get mm (artifact-module-key a))]
+        pa (get module-map (artifact-module-key a))]
     (log :warn "version conflict for" (artifact-module-key pa) (:version pa) (:version a))))
 
 (defn process-artifact [artifact]
@@ -68,24 +68,24 @@
 ; mm is used as module map?!
 ; in set
 ; ex set
-(defn process-dependency-tree [queue mm in ex]
+(defn process-dependency-tree [queue module-map included excluded]
   "process the nodes of the dependency tree"
   (if-not (seq queue)
-    [queue mm in ex] ; queue is empty, return
+    [queue module-map included excluded] ; queue is empty, return
     (let [dep (first queue)]
-      (if (processed? dep in ex) ; check if dep was processed earlier
-        (recur (rest queue) mm in ex) ; dep was processed, recur on rest of the queue
-        (if (contains? ex dep) ; check if dep was excluded earlier
-          (recur (rest queue) mm in ex) ; dep was excluded earlier, recur on rest of the queue
+      (if (processed? dep included excluded) ; check if dep was processed earlier
+        (recur (rest queue) module-map included excluded) ; dep was processed, recur on rest of the queue
+        (if (contains? excluded dep) ; check if dep was excluded earlier
+          (recur (rest queue) module-map included excluded) ; dep was excluded earlier, recur on rest of the queue
           (if (is-excluded? dep) ; check if dep is excluded
-            (recur (rest queue) mm in (conj ex (:artifact dep))) ; dep is excluded here, add to excluded and recur on rest of the queue
+            (recur (rest queue) module-map included (conj excluded (:artifact dep))) ; dep is excluded here, add to excluded and recur on rest of the queue
             (do
               ; TODO use version matching from artifact
-              (when (version-conflict? mm dep) ; check if there's a version conflict on dep
-                (version-conflict mm dep))
+              (when (version-conflict? module-map dep) ; check if there's a version conflict on dep
+                (version-conflict module-map dep))
               (if (seq (:dependencies dep))
-                (recur (concat (rest queue) (:dependencies dep)) (add-module  mm dep) (conj in (:artifact dep)) ex)
-                (recur (rest queue) (add-module  mm dep) (conj in (:artifact dep)) ex)))))))))
+                (recur (concat (rest queue) (:dependencies dep)) (add-module  module-map dep) (conj included (:artifact dep)) excluded)
+                (recur (rest queue) (add-module  module-map dep) (conj included (:artifact dep)) excluded)))))))))
 
 ;
 ; transitive dependencies management
@@ -99,7 +99,6 @@
 (defn loaded-artifact? [loaded artifact]
   "tests if an artifact is already loaded"
   (contains? loaded (artifact-key artifact)))
-
 
 
 (defn get-dependencies [dependency]
@@ -168,7 +167,7 @@
   )
 
 ;
-; create dot graph of the dependencies TODO use writer instead of println
+; create dot graph of the dependencies TODO use writer instead of println (re-bind *out*?!)
 ;
 (defn dependency-dot-vertex [artifact]
   "render a vertex for the artifact in the dot representation of the dependency tree"

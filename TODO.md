@@ -3,9 +3,10 @@ TODO's
 
 Guidelines
 ----------
- * Make everything as simple as possible but not simpler
- * Make common tasks easy
- * Make uncommon tasks possible
+
+* Make everything as simple as possible but not simpler
+* Make common tasks easy
+* Make uncommon tasks possible
 
 
 * Implement transitive dependency management (partially implemented)
@@ -14,15 +15,14 @@ Guidelines
 
 
 Think About
------------
+===========
 
 Transitive Dependency Management
-What is the difference between an artifact and a dependency. What are the properties of a dependency and an artifact.
-dependency: target/scope/usage
+--------------------------------
 
 Artifact
 A resource generated or used by the build process,
-Properties: ProjectName, ModuleName, ArtifactName, ArtifactType, ArtifactVersion
+Properties: ProjectName, ModuleName, ArtifactName, ArtifactType (extension?), ArtifactVersion
 
 Dependency
 A dependency is a reference to an existing artifact (from outside the current module) or to an abstract artifact pattern
@@ -30,8 +30,16 @@ A dependency is a reference to an existing artifact (from outside the current mo
 A dependency can be scoped for the usage in the current module.
 Properties: ArtifactUsage (scope, target, exclusion), ArtifactReference(Pattern)
 
+What is the difference between an artifact and a dependency. What are the properties of a dependency and an artifact.
+dependency: target/scope/usage
+
+Dependency Plugin
+Feed the deps plugin with a dependency tree, but build the dependency tree outside of the plugin
+Move the dependency management into an extra module?
+
 
 Plugins
+-------
 Plugin storage, user plugins, plugin dependencies, multi plugin dependencies, version conflicts for plugin and plugin dependencies
 Plugin orthogonalization!
 
