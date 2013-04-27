@@ -1,6 +1,6 @@
 (ns org.soulspace.build.baumeister.plugins.jdepend
   (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj.lib file]
+        [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
         [org.soulspace.build.baumeister.utils checks ant-utils log]
         [org.soulspace.build.baumeister.config registry])

@@ -1,6 +1,6 @@
 (ns org.soulspace.build.baumeister.config.registry
   (:require [clojure.string :as str :only [replace]])
-  (:use [org.soulspace.clj.lib function]))
+  (:use [org.soulspace.clj function]))
 
 (def home-dir (get-env "HOME"))
 (def home (get-env "BAUMEISTER_HOME" (str home-dir "/devel/Baumeister")))

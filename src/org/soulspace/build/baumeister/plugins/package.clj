@@ -1,5 +1,5 @@
 (ns org.soulspace.build.baumeister.plugins.package
-  (:use [org.soulspace.clj.lib file function]
+  (:use [org.soulspace.clj file function]
         [org.soulspace.build.baumeister.utils ant-utils checks log]
         [org.soulspace.build.baumeister.config registry]))
 

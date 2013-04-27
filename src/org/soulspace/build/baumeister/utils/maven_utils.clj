@@ -4,7 +4,7 @@
             [clojure.data.zip :as zf]
             [clojure.data.zip.xml :as zx])
   (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj.lib file file-search function string]
+        [org.soulspace.clj file file-search function string]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.utils log artifact property])
   (:import [org.soulspace.build.baumeister.utils.artifact Artifact]))
@@ -61,8 +61,8 @@
 ; TODO Should the exclusions in the resulting tree be children of the artifacts they are children of in the pom file
 ; TODO or should they be promoted to exclusions of the artifact represented by the pom file itself?
 (defn pom-dependency [prop-map dep]
-;  (if-let [exclusion (zx/xml-> dep :exclusions :exclusion)]
-;    (println "Excludes" (map (partial pom-exclusion prop-map) exclusion)))
+  ;  (if-let [exclusion (zx/xml-> dep :exclusions :exclusion)]
+  ;    (println "Excludes" (map (partial pom-exclusion prop-map) exclusion)))
   (let [artifact ((juxt
                     #(replace-properties prop-map (zx/xml1-> % :groupId zx/text))
                     #(replace-properties prop-map (zx/xml1-> % :artifactId zx/text))

@@ -33,10 +33,10 @@
                 ["dom4j" "dom4j" "1.6.1"] ; transitive, findbugs plugin
                 ["com.puppycrawl.tools" "checkstyle" "5.5"] ; checkstyle plugin
                 ["oro" "oro" "2.0.8"] ; transitive, mdsd/architecture/cobertura plugins
-                ["org.soulspace.clj" "CljLibrary" "0.2.0"] ; transitive?
+                ["org.soulspace.clj" "CljLibrary" "0.3.0"] ; transitive?
                 ["org.soulspace.clj" "CljJavaLibrary" "0.2.0"]
                 ["org.soulspace.clj" "CljModelGenerator" "0.2.0"] ; mdsd/architecture plugins
-                ["org.soulspace" "TemplateEngine" "1.0.0rc7"] ; transitive, mdsd/architecture plugins
+                ["org.soulspace.template" "TemplateEngine" "1.0.0"] ; transitive, mdsd/architecture plugins
                 ["org.soulspace.modelling" "XmiRepository2" "0.2.0"] ; transitive, mdsd/architecture plugins
                 ["org.soulspace.modelling" "ModelRepository2" "0.2.0"] ; transitive, mdsd/architecture plugins
                 ["org.soulspace.modelling" "UmlModelBuilder" "0.2.0"]] ; transitive, mdsd/architecture plugins

@@ -1,7 +1,7 @@
 (ns org.soulspace.build.baumeister.plugins.cobertura
   (:use [clojure.java.io :exclude [delete-file]]
         [clojure.string :only [join split]]
-        [org.soulspace.clj.lib file]
+        [org.soulspace.clj file]
         [org.soulspace.build.baumeister.utils ant-utils files log]
         [org.soulspace.build.baumeister.config registry]))
 

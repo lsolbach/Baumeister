@@ -14,7 +14,6 @@
 
 (defn do-steps [steps]
   (doseq [step steps]
-    (log :warn "LOGSTEP" (:doc step))
     (step)))
 
 (defn do-phase [phase]

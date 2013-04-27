@@ -1,6 +1,6 @@
 (ns org.soulspace.build.baumeister.repository.repositories
   (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj.lib file file-search function net]
+        [org.soulspace.clj file file-search function net]
         [org.soulspace.build.baumeister.utils artifact maven-utils log]
         [org.soulspace.build.baumeister.config registry]))
 
@@ -11,13 +11,13 @@
   (str (artifact-prefix artifact) "/" (:artifact artifact) "." (:type artifact)))  
 
 (defn module-artifact [artifact]
-  (new-artifact [(:project artifact) (:module artifact) (:version artifact) "dependency" "module" "clj"]))
+  (new-artifact [(:project artifact) (:module artifact) (:version artifact) "module" "clj"]))
 
 (defn mvn-artifact-path [artifact]
   (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (:version artifact) "/" (:artifact artifact) "-" (:version artifact) "." (:type artifact)))  
 
 (defn mvn-pom-artifact [artifact]
-  (new-artifact [(:project artifact) (:module artifact) (:version artifact) "dependency" (:module artifact) "pom"]))
+  (new-artifact [(:project artifact) (:module artifact) (:version artifact) (:module artifact) "pom"]))
 
 ; TODO add usage type of repository ("dev" "release" "thirdparty"), add (usage-type [repo] "Returns the usage type of the repository") 
 (defprotocol ArtifactRepository
@@ -146,16 +146,16 @@
       (log :debug "Could not find artifact" (artifact-name-version a) "in the configured repositories!")
       nil)))
 
-(defn query-dependencies [repositories a]
+(defn query-dependencies [repositories dependency]
   (if (seq repositories)
     ; Iterate through the configured repositories to find the dependencies file for this artifact
-    (let [deps (dependencies (first repositories) a)]
+    (let [deps (dependencies (first repositories) (:artifact dependency))]
       (log :trace "Querying depependencies from repository" (first repositories))
       ; test for nil instead of seq to distinguish between no module/pom file or no dependencies in module/pom file
       (if-not (nil? deps)
         (do 
-          (log :debug "Found" (count deps) "dependencies for artifact" (artifact-name-version a) "in the configured repositories!")
+          (log :debug "Found" (count deps) "dependencies for artifact" (artifact-name-version (:artifact dependency)) "in the configured repositories!")
           deps)
-        (recur (rest repositories) a)))
-    (do (log :debug "No dependencies found for artifact" (artifact-name-version a) "in the configured repositories!")
+        (recur (rest repositories) (:artifact dependency))))
+    (do (log :debug "No dependencies found for artifact" (artifact-name-version (:artifact dependency)) "in the configured repositories!")
       nil)))

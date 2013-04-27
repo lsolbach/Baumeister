@@ -1,6 +1,6 @@
 (ns org.soulspace.build.baumeister.utils.checks
   (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj.lib file file-search string]
+        [org.soulspace.clj file string]
         [org.soulspace.build.baumeister.config registry]))
 
 (defn workflow? [phase] (ends-with "-workflow" (name phase)))

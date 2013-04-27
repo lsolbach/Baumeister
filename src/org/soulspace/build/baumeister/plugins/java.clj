@@ -1,6 +1,6 @@
 (ns org.soulspace.build.baumeister.plugins.java
   (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj.lib file function]
+        [org.soulspace.clj file function]
         [org.soulspace.build.baumeister.utils files ant-utils checks log]
         [org.soulspace.build.baumeister.config registry]))
 

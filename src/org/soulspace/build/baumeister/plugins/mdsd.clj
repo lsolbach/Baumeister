@@ -1,7 +1,7 @@
 (ns org.soulspace.build.baumeister.plugins.mdsd
   (:use [clojure.string :only [split]]
         [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj.lib file file-search function]
+        [org.soulspace.clj file file-search function]
         [org.soulspace.clj.modelgenerator generator]
         [org.soulspace.build.baumeister.utils ant-utils log]
         [org.soulspace.build.baumeister.config registry]))

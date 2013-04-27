@@ -1,5 +1,5 @@
 (ns org.soulspace.build.baumeister.utils.artifact
-  (:use [org.soulspace.clj.lib string]
+  (:use [org.soulspace.clj string]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.utils version]))
 
@@ -22,6 +22,7 @@
     (Artifact. project module version artifact type))
   ([art]
     ; TODO apply new artifact anyway to create a copy?
+    (println "new-artifact:" art)
     (if (instance? Artifact art) ; TODO remove if everything works
       (throw (RuntimeException. "It's already an artifact!")))
     (apply new-artifact art)))

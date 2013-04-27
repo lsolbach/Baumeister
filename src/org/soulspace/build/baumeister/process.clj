@@ -1,5 +1,5 @@
 (ns org.soulspace.build.baumeister.process
-  (:use [org.soulspace.clj.lib.file]
+  (:use [org.soulspace.clj file]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister workflow-engine]
         [org.soulspace.build.baumeister.utils log])

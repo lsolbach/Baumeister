@@ -1,5 +1,5 @@
 (ns org.soulspace.build.baumeister.utils.dependency
-  (:use [org.soulspace.clj.lib file]
+  (:use [org.soulspace.clj file]
         [org.soulspace.build.baumeister.config registry]))
 
 (def dependency-config
