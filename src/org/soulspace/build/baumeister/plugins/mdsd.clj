@@ -35,8 +35,9 @@
 ;   :profiles (profile-files (param :mdsd-profile-path) (param :mdsd-std-profiles))})
    :profiles (filter not-nil? (concat (std-profiles) (profiles)))})
 
+; TODO don't hardcode the project type to generator mapping, use configuration or convention 
 (defn generators []
-  (let [gen-config (load-file (str (param :mdsd-config-dir) "/mdsd_defaults.clj"))]
+  (let [gen-config (load-file (str (param :mdsd-config-dir) "/mdsd_defaults.clj"))] ; TODO rename mdsd_defaults to generator_config,clj or so
     (cond
       (= (param :type) "data")
       (flatten [(:doc-generators gen-config)])
@@ -99,9 +100,9 @@
                   [:mdsd-generation-dir "${module-dir}/generated"]
                   [:mdsd-backup-dir "${module-dir}/backup"]
                   [:mdsd-config-dir "${lib-generator-dir}/config"]
-                  [:mdsd-template-path "${lib-generator-dir}/std-templates2:${lib-generator-dir}/templates2"]
+                  [:mdsd-template-path "${lib-generator-dir}/templates"]
                   [:mdsd-profile-path "${lib-generator-dir}/profiles:${lib-model-dir}"]
-                  [:mdsd-std-profiles ["argouml/default-uml14" "MDSDProfile"]]
+                  [:mdsd-std-profiles ["argouml/default-uml14"]]
                   [:mdsd-profiles nil]])
   (register-fns [[:clean mdsd-clean]
                  [:init mdsd-init]
