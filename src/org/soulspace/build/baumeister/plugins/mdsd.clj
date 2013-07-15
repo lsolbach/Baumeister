@@ -82,7 +82,7 @@
               (ant-fileset {:dir (param :mdsd-generation-dir)}))
   (ant-unzip {:src (param "${mdsd-model-dir}/${mdsd-model-name}.zargo")
               :dest (param "${mdsd-model-dir") :overwrite "true"}
-             (ant-fileset {:dir "." :includes (param "${mdsd-model-name}.xmi")})))
+             (ant-patternset {:includes (param "${mdsd-model-name}.xmi")})))
 
 (defn mdsd-generate []
   (log :info  "generating artifacts from model...")

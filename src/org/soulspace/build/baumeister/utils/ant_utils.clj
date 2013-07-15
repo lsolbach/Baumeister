@@ -69,6 +69,10 @@ The default behaviour is to add an element as a fileset."
   [_ task zipfileset]
   (.addZipfileset task zipfileset))
 
+(defmethod add-nested [::unzip org.apache.tools.ant.types.PatternSet]
+  [_ task patternset]
+  (.addPatternset task patternset))
+
 (defmethod add-nested :default [_ task nested] 
   ;(println task nested)
   (.addFileset task nested))
@@ -133,6 +137,7 @@ The default behaviour is to add an element as a fileset."
 ; (define-ant-type files org.apache.tools.ant.types.resources.Files)
 (define-ant-type ant-fileset org.apache.tools.ant.types.FileSet)
 (define-ant-type ant-dirset org.apache.tools.ant.types.DirSet)
+(define-ant-type ant-patternset org.apache.tools.ant.types.PatternSet)
 (define-ant-type ant-zipfileset org.apache.tools.ant.types.ZipFileSet)
 (define-ant-type ant-variable org.apache.tools.ant.types.Environment$Variable)
 (define-ant-type ant-arg org.apache.tools.ant.types.Commandline$Argument)
