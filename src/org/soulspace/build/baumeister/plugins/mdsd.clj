@@ -17,9 +17,11 @@
 (defn profile-finder [path]
   (existing-files-on-path "xmi" path))
 
+; TODO find required profiles by a profile search path?
 (defn std-profiles []
   (profile-files (param "${lib-generator-dir}/profiles") (param :mdsd-std-profiles)))
 
+; TODO find required profiles by a profile search path?
 (defn profiles []
   (if (param :mdsd-profiles) ; preserve order of profiles if specified (as long as the dependency order is not used)
     (profile-files (param "${lib-model-dir}") (param :mdsd-profiles))
