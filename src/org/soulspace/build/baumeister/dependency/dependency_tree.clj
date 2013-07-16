@@ -1,5 +1,6 @@
-(ns org.soulspace.build.baumeister.utils.dependency-tree
-  (:use [org.soulspace.build.baumeister.utils artifact dependency log]
+(ns org.soulspace.build.baumeister.dependency.dependency-tree
+  (:use [org.soulspace.build.baumeister.dependency artifact dependency]
+        [org.soulspace.build.baumeister.utils log]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository repositories]))
 
@@ -22,6 +23,13 @@
   (if (= (:target dependency) "root")
     (param :dependencies) ; current module, use config
     (query-dependencies (param :deps-repositories) dependency)))
+
+(defn build-dependency [dep]
+  (println "====> build-dependency: " dep)
+  (let [[project module version &rest] dep]
+    ; TODO handle rest
+    (new-dependency (new-artifact project module version))
+    ))
 
 ; consume artifacts, build nodes
 ; TODO handle excluded-set
@@ -48,7 +56,8 @@
       ; FIXME dependencies is actually now a vector of an artifact and an exclusion seq
       (do
         (println "build-dependency-tree-for-artifact2:" dependencies)
-        (let [dep-as (map new-dependency dependencies)] ; FIXME handle vector instead of mapping first
+        (let [dep-as (map build-dependency dependencies)] ; FIXME handle vector instead of mapping first
+          (println "==> build-dependency-tree-for-artifact3:" dep-as)
           (build-dependency-tree-children parent dep-as [] loaded-set excluded-set))))))
 
 ; TODO handle excluded-set

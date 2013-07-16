@@ -1,5 +1,5 @@
-(ns org.soulspace.build.baumeister.utils.dependency-dot
-  (:use [org.soulspace.build.baumeister.utils artifact dependency]))
+(ns org.soulspace.build.baumeister.dependency.dependency-dot
+  (:use [org.soulspace.build.baumeister.dependency artifact dependency]))
 
 ;
 ; create dot graph of the dependencies TODO use writer instead of println (re-bind *out*?!)

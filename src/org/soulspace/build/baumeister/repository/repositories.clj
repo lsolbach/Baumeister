@@ -1,6 +1,7 @@
 (ns org.soulspace.build.baumeister.repository.repositories
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function net]
+        [org.soulspace.build.baumeister.dependency artifact]
         [org.soulspace.build.baumeister.utils artifact maven-utils log]
         [org.soulspace.build.baumeister.config registry]))
 
@@ -11,6 +12,7 @@
   (str (artifact-prefix artifact) "/" (:artifact artifact) "." (:type artifact)))  
 
 (defn module-artifact [artifact]
+  (println "module-artifact: " artifact (type artifact))
   (new-artifact [(:project artifact) (:module artifact) (:version artifact) "module" "clj"]))
 
 (defn mvn-artifact-path [artifact]
@@ -147,6 +149,8 @@
       nil)))
 
 (defn query-dependencies [repositories dependency]
+  (println "query-dependencies: " dependency)
+  (println "query-dependencies artifact: " (:artifact dependency))
   (if (seq repositories)
     ; Iterate through the configured repositories to find the dependencies file for this artifact
     (let [deps (dependencies (first repositories) (:artifact dependency))]

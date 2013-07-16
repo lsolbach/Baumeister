@@ -1,4 +1,4 @@
-(ns org.soulspace.build.baumeister.utils.dependency
+(ns org.soulspace.build.baumeister.dependency.dependency
   (:use [org.soulspace.clj file]
         [org.soulspace.build.baumeister.config registry]))
 

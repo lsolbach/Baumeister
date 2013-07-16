@@ -1,4 +1,4 @@
-(ns org.soulspace.build.baumeister.utils.artifact
+(ns org.soulspace.build.baumeister.dependency.artifact
   (:use [org.soulspace.clj string]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.utils version]))
