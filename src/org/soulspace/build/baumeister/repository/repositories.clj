@@ -1,8 +1,8 @@
 (ns org.soulspace.build.baumeister.repository.repositories
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function net]
-        [org.soulspace.build.baumeister.dependency artifact]
-        [org.soulspace.build.baumeister.utils artifact maven-utils log]
+        [org.soulspace.build.baumeister.repository artifact]
+        [org.soulspace.build.baumeister.utils maven-utils log]
         [org.soulspace.build.baumeister.config registry]))
 
 (defn artifact-prefix [artifact]

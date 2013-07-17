@@ -1,5 +1,6 @@
 (ns org.soulspace.build.baumeister.dependency.dependency-tree
-  (:use [org.soulspace.build.baumeister.dependency artifact dependency]
+  (:use [org.soulspace.build.baumeister.repository artifact]
+        [org.soulspace.build.baumeister.dependency dependency]
         [org.soulspace.build.baumeister.utils log]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository repositories]))

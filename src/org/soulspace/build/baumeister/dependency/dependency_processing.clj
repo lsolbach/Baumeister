@@ -1,6 +1,7 @@
 (ns org.soulspace.build.baumeister.dependency.dependency-processing
   (:use [clojure.java.io :only [as-file copy]]
-        [org.soulspace.build.baumeister.dependency artifact dependency]
+        [org.soulspace.build.baumeister.repository artifact]
+        [org.soulspace.build.baumeister.dependency dependency]
         [org.soulspace.build.baumeister.utils log ant-utils]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository repositories]))
