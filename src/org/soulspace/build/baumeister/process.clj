@@ -13,4 +13,5 @@
   (if (seq args)
     (doseq [wf args]
       (do-workflow (keyword wf)))
-    (do-workflow :build-workflow)))
+    (do-workflow :build-workflow))
+  "Done!")

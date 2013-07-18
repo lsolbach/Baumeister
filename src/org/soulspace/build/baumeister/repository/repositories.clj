@@ -9,14 +9,14 @@
   (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (:version artifact)))
 
 (defn artifact-path [artifact]
-  (str (artifact-prefix artifact) "/" (:artifact artifact) "." (:type artifact)))  
+  (str (artifact-prefix artifact) "/" (:name artifact) "." (:type artifact)))  
 
 (defn module-artifact [artifact]
   (println "module-artifact: " artifact (type artifact))
   (new-artifact [(:project artifact) (:module artifact) (:version artifact) "module" "clj"]))
 
 (defn mvn-artifact-path [artifact]
-  (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (:version artifact) "/" (:artifact artifact) "-" (:version artifact) "." (:type artifact)))  
+  (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (:version artifact) "/" (:name artifact) "-" (:version artifact) "." (:type artifact)))  
 
 (defn mvn-pom-artifact [artifact]
   (new-artifact [(:project artifact) (:module artifact) (:version artifact) (:module artifact) "pom"]))

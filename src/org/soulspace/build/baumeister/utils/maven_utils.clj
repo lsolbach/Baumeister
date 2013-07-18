@@ -6,9 +6,8 @@
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function string]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.dependency artifact]
-        [org.soulspace.build.baumeister.utils log property])
-  (:import [org.soulspace.build.baumeister.dependency.artifact Artifact]))
+        [org.soulspace.build.baumeister.repository artifact]
+        [org.soulspace.build.baumeister.utils log property]))
 
 (def target-to-scope
   ; TODO map all maven scopes

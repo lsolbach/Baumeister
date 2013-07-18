@@ -1,6 +1,6 @@
 (ns org.soulspace.build.baumeister.test.artifact
   (:use [clojure.test] 
-        [org.soulspace.build.baumeister.utils.artifact]))
+        [org.soulspace.build.baumeister.repository artifact]))
 
 (deftest match-identifier-true
   (is (true? (identifier-match? nil "module")))
@@ -20,20 +20,20 @@
 
 ; TODO enhance tests for artifact matching
 (deftest match-artifact-true
-  (is (true? (artifact-match? (new-artifact-pattern "" "" "") (new-artifact "org.soulspace" "module" "1.0.0"))))
-  (is (true? (artifact-match? (new-artifact-pattern "org.soulspace" "" "") (new-artifact "org.soulspace" "module" "1.0.0"))))
-  (is (true? (artifact-match? (new-artifact-pattern "org.soulspace" "module" "") (new-artifact "org.soulspace" "module" "1.0.0"))))
-  (is (true? (artifact-match? (new-artifact-pattern "org.soulspace" "module" "1.0.0") (new-artifact "org.soulspace" "module" "1.0.0"))))
-  (is (true? (artifact-match? (new-artifact-pattern "org.soulspace" "module" "1.0.0") (new-artifact "org.soulspace" "module" "1.0.0" "module" "jar"))))
+  (is (true? (matches-artifact? (new-artifact-pattern ["" "" ""]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
+  (is (true? (matches-artifact? (new-artifact-pattern ["org.soulspace" "" ""]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
+  (is (true? (matches-artifact? (new-artifact-pattern ["org.soulspace" "module" ""]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
+  (is (true? (matches-artifact? (new-artifact-pattern ["org.soulspace" "module" "1.0.0"]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
+  (is (true? (matches-artifact? (new-artifact-pattern ["org.soulspace" "module" "1.0.0"]) (new-artifact ["org.soulspace" "module" "1.0.0" "module" "jar"]))))
   )
 
 (deftest match-artifact-false
-  (is (false? (artifact-match? (new-artifact-pattern "org.apache" "" "") (new-artifact "org.soulspace" "module" "1.0.0"))))
-  (is (false? (artifact-match? (new-artifact-pattern "" "module1" "") (new-artifact "org.soulspace" "module" "1.0.0"))))
-  (is (false? (artifact-match? (new-artifact-pattern "" "" "1.1.0") (new-artifact "org.soulspace" "module" "1.0.0"))))
-  (is (false? (artifact-match? (new-artifact-pattern "org.apache" "module" "1.0.0") (new-artifact "org.soulspace" "module" "1.0.0"))))
-  (is (false? (artifact-match? (new-artifact-pattern "org.soulspace" "module1" "1.0.0") (new-artifact "org.soulspace" "module" "1.0.0"))))
-  (is (false? (artifact-match? (new-artifact-pattern "org.soulspace" "module" "1.1.0") (new-artifact "org.soulspace" "module" "1.0.0"))))
+  (is (false? (matches-artifact? (new-artifact-pattern ["org.apache" "" ""]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
+  (is (false? (matches-artifact? (new-artifact-pattern ["" "module1" ""]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
+  (is (false? (matches-artifact? (new-artifact-pattern ["" "" "1.1.0"]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
+  (is (false? (matches-artifact? (new-artifact-pattern ["org.apache" "module" "1.0.0"]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
+  (is (false? (matches-artifact? (new-artifact-pattern ["org.soulspace" "module1" "1.0.0"]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
+  (is (false? (matches-artifact? (new-artifact-pattern ["org.soulspace" "module" "1.1.0"]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
   )
 
 (run-tests)

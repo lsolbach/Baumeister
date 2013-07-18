@@ -1,10 +1,10 @@
 (ns org.soulspace.build.baumeister.plugins.deps
   (:use [clojure.java.io :only [as-file copy]]
         [org.soulspace.clj file file-search function]
-        [org.soulspace.build.baumeister.dependency artifact dependency dependency-tree dependency-processing dependency-dot]
+        [org.soulspace.build.baumeister.dependency dependency dependency-tree dependency-processing dependency-dot]
         [org.soulspace.build.baumeister.utils checks log ant-utils maven-utils]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.repository repositories]))
+        [org.soulspace.build.baumeister.repository artifact repositories]))
 
 ; TODO artifact or dependency
 (def artifacts [])

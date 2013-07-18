@@ -1,68 +1,92 @@
 (ns org.soulspace.build.baumeister.repository.artifact
-  (:use [org.soulspace.clj string]
+  (:use [clojure.string :only [split]]
+        [org.soulspace.clj string]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.utils version]))
 
-; TODO define artifact protocol and include the artifact-* functions
-; TODO let ArtifactImpl implement the artifact protocol
+; Part of the artifact: project module version name type
+(defprotocol Artifact
+  (artifact-name [artifact])
+  (artifact-name-version [artifact])
+  (artifact-key [artifact])
+  (artifact-module-key [artifact])
+  (artifact-module-version-key [artifact])
+  )
 
-; Part of the artifact: project module version artifact type
-; Part of the dependency: target scope exclusions
-; TODO rename parameter artifact to name
-(defrecord Artifact [project module version artifact type])
+(defprotocol ArtifactPattern
+  (matches-artifact? [p a])
+  )
 
+(defrecord ArtifactImpl [project module version name type]
+  Artifact
+  (artifact-name [artifact]
+    (str (:name artifact) "." (:type artifact)))
+  
+  (artifact-name-version [artifact]
+    (str (:name artifact) "." (:type artifact) "[" (:version artifact) "]"))
+  
+  (artifact-key [artifact]
+    (str (:project artifact) "/" (:module artifact) "/" (:version artifact) "/"
+         (:name artifact) "." (:type artifact)))
+  
+  (artifact-module-key [artifact]
+    (str (:project artifact) "/" (:module artifact)))
+  
+  (artifact-module-version-key [artifact]
+    (str (:project artifact) "/" (:module artifact) "/" (:version artifact)))
+  )
 
-
-(defn new-artifact
+; TODO multi method?
+(defn create-artifact
   ([project module version]
-    (Artifact. project module version module "jar"))
-  ([project module version artifact]
-    (Artifact. project module version artifact "jar"))
-  ([project module version artifact type]
-    (Artifact. project module version artifact type))
-  ([art]
-    ; TODO apply new artifact anyway to create a copy?
-    (println "new-artifact:" art)
-    (if (instance? Artifact art) ; TODO remove if everything works
-      (throw (RuntimeException. "It's already an artifact!")))
-    (apply new-artifact art)))
-
-
+    (ArtifactImpl. project module version module "jar"))
+  ([project module version name]
+    (ArtifactImpl. project module version name "jar"))
+  ([project module version name type]
+    (ArtifactImpl. project module version name type)))
 
 ; A 'nil' in a field means unspecified for an artifact pattern
 ; (e.g. a 'nil' version in the pattern will match every version)
-(defn new-artifact-pattern
+(defn create-artifact-pattern
   ([project module]
-    (Artifact. project module nil module nil))
+    (ArtifactImpl. project module nil module nil))
   ([project module version]
-    (Artifact. project module version module nil))
-  ([project module version artifact]
-    (Artifact. project module version artifact nil))
-  ([project module version artifact type]
-    (Artifact. project module version artifact type))
-  ([arti]
-    ; TODO apply new artifact anyway to create a copy?
-    (if (instance? Artifact arti) ; TODO remove if everything works
-      (throw (RuntimeException. "It's already an artifact!")))
-    (apply new-artifact-pattern arti)))
+    (ArtifactImpl. project module version module nil))
+  ([project module version name]
+    (ArtifactImpl. project module version name nil))
+  ([project module version name type]
+    (ArtifactImpl. project module version name type)))
 
 
-(defn artifact-name [artifact]
-  (str (:artifact artifact) "." (:type artifact)))
+(defmulti new-artifact type)
 
-(defn artifact-name-version [artifact]
-  (str (:artifact artifact) "." (:type artifact) "[" (:version artifact) "]"))
+(defmethod new-artifact String [p]
+  (apply create-artifact (split p #"(/|:|;|,)")))
 
-(defn artifact-key [artifact]
-  (str (:project artifact) "/" (:module artifact) "/" (:version artifact) "/"
-       (:artifact artifact) "." (:type artifact)))
+(defmethod new-artifact clojure.lang.IPersistentVector [p]
+  (apply create-artifact p))
 
-(defn artifact-module-key [artifact]
-  (str (:project artifact) "/" (:module artifact)))
+(defmethod new-artifact clojure.lang.ISeq [p]
+  (println p)
+  (apply create-artifact p))
 
-(defn artifact-module-version-key [artifact]
-  (str (:project artifact) "/" (:module artifact) "/" (:version artifact)))
 
+(defmulti new-artifact-pattern type)
+
+(defmethod new-artifact-pattern String [p]
+  (apply create-artifact-pattern (split p #"(/|:|;|,)")))
+
+(defmethod new-artifact-pattern clojure.lang.IPersistentVector [p]
+  (apply create-artifact-pattern p))
+
+(defmethod new-artifact-pattern clojure.lang.ISeq [p]
+  (apply create-artifact-pattern p))
+
+
+
+;
+;
+;
 (defn identifier-match? [pattern name]
   "match an identifier against a pattern"
   (or (nil? pattern)
@@ -84,6 +108,6 @@
     (identifier-match? (:module artifact-pattern) (:module artifact))
     (version-match? (:version artifact-pattern) (:version artifact))
     (identifier-match? (:target artifact-pattern) (:target artifact))
-    (identifier-match? (:artifact artifact-pattern) (:artifact artifact))
+    (identifier-match? (:name artifact-pattern) (:name artifact))
     (type-match? (:type artifact-pattern) (:type artifact))
     (identifier-match? (:scope artifact-pattern) (:scope artifact))))

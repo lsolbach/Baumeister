@@ -19,56 +19,32 @@
   (contains? (:exclude (:actions dependency-config)) (:target dependency)))
 
 (defprotocol Dependency
-  (is-excluded? [node] "returns true if the artifact of this dependency is excluded")
-  (includes [node])
-  (excludes [node]))
+  (is-excluded? [dependency] "returns true if the artifact of this dependency is excluded")
+  (includes [dependency])
+  (excludes [dependency]))
 
-; TODO rethink whats part of the artifact and whats part of the dependency
+(defprotocol DependencyPattern
+  (matches-dependency? [pattern dependency]))
+
 ; Part of the dependency: artifact target scope dependencies exclusions
 (defrecord DependencyImpl [artifact target scope dependencies exclusions]
   Dependency
-  (is-excluded? [node]
-                (exclude? (:artifact node)))
-  (includes [node]
+  (is-excluded? [dependency]
+                (exclude? (:artifact dependency)))
+  (includes [dependency]
             (filter #(not (exclude? %)) dependencies))
-  (excludes [node]
+  (excludes [dependency]
             (filter #(exclude? %) dependencies)))
 
 ; TODO add required signatures
 (defn new-dependency
   ([artifact]
-    (DependencyImpl. artifact "runtime" nil nil nil))
+    (DependencyImpl. (new-artifact artifact) "runtime" nil [] []))
   ([artifact target]
-    (DependencyImpl. artifact target nil nil nil))
+    (DependencyImpl. (new-artifact artifact) target nil  [] []))
   ([artifact target dependencies]
-    (DependencyImpl. artifact target nil dependencies nil))
+    (DependencyImpl. (new-artifact artifact) target nil dependencies []))
   ([artifact target dependencies exclusions]
-    (DependencyImpl. artifact target nil dependencies exclusions))
+    (DependencyImpl. (new-artifact artifact) target nil dependencies exclusions))
   ([artifact target dependencies exclusions scope]
-    (DependencyImpl. artifact target scope dependencies exclusions)))
-
-(defn create-dependency-dispatch
-  [x & xs]
-  (cond
-    (map? x) :artifact-map
-    (sequential? x) :artifact-seq
-    :default :artifact-flat))
-
-(defmulti create-dependency
-  "create a new dependency"
-  #'create-dependency-dispatch)
-
-(defmethod create-dependency :artifact-map
-  [x & xs]
-  (println ":artifact-map" x xs)
-  )
-
-(defmethod create-dependency :artifact-seq
-  [x & xs]
-  (println ":artifact-seq" x xs)
-  )
-
-(defmethod create-dependency :artifact-flat
-  [x & xs]
-  (println ":artifact-flat" x xs)
-  )
+    (DependencyImpl. (new-artifact artifact) target scope dependencies exclusions)))
