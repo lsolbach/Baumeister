@@ -7,8 +7,7 @@
         [org.soulspace.build.baumeister.config registry]))
 
 ; TODO handle model dependencies from mdsd plugin?
-; TODO at least access to the dependency tree is needed (to specify model dependencies in the right order)
-
+; TODO at least access to the dependency tree is needed (to specify model dependencies in the right order)?
 (defn profile-files [path profiles]
   (let [search-path (map as-file (split path #":"))
         xmi-locator (file-locator search-path "xmi")]
@@ -39,7 +38,7 @@
 
 ; TODO don't hardcode the project type to generator mapping, use configuration or convention 
 (defn generators []
-  (let [gen-config (load-file (str (param :mdsd-config-dir) "/mdsd_defaults.clj"))] ; TODO rename mdsd_defaults to generator_config,clj or so
+  (let [gen-config (load-file (str (param "${mdsd-config-dir}/${mdsd-config-file}")))]
     (cond
       (= (param :type) "data")
       (flatten [(:doc-generators gen-config)])
@@ -102,6 +101,7 @@
                   [:mdsd-generation-dir "${module-dir}/generated"]
                   [:mdsd-backup-dir "${module-dir}/backup"]
                   [:mdsd-config-dir "${lib-generator-dir}/config"]
+                  [:mdsd-config-file "generators.clj"]
                   [:mdsd-template-path "${lib-generator-dir}/templates"]
                   [:mdsd-profile-path "${lib-generator-dir}/profiles:${lib-model-dir}"]
                   [:mdsd-std-profiles ["argouml/default-uml14"]]
