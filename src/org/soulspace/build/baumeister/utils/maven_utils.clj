@@ -66,12 +66,12 @@
   (let [artifact ((juxt
                     #(replace-properties prop-map (zx/xml1-> % :groupId zx/text))
                     #(replace-properties prop-map (zx/xml1-> % :artifactId zx/text))
-                    #(replace-properties prop-map (zx/xml1-> % :version zx/text))
-                    #(scope-to-target (zx/xml1-> % :scope zx/text)))
-            dep)
+                    #(replace-properties prop-map (zx/xml1-> % :version zx/text)))
+                     dep)
+        target (scope-to-target (zx/xml1-> dep :scope zx/text))
         exclusions (map pom-exclusion (zx/xml-> dep :exclusions :exclusion))]
     (log :debug "POM ARTIFACT" artifact "->" exclusions)
-    [artifact exclusions]))
+    [artifact target exclusions]))
 
 (defn pom-dependencies [pom]
   ; Returns a sequence of artifacts?

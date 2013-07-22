@@ -1,30 +1,14 @@
 (ns org.soulspace.build.baumeister.dependency.dependency-processing
   (:use [clojure.java.io :only [as-file copy]]
-        [org.soulspace.build.baumeister.dependency dependency]
+        [org.soulspace.build.baumeister.dependency dependency dependency-initialization]
         [org.soulspace.build.baumeister.utils log ant-utils]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository artifact repositories]))
 
-(defn process-artifact [artifact]
-  (let [src (query-artifact (param :deps-repositories) artifact)
-        tgt (param (keyword (str "lib-" (:target artifact) "-dir")))]
-    (if (nil? src)
-      (log :error (artifact-path artifact) "not found in repositories!")
-      ; (throw (RuntimeException. (str "Error: " (artifact-path artifact) " not found!")))
-      (cond
-        (copy? artifact)
-        (copy src (as-file (str tgt "/" (:artifact artifact) "." (:type artifact))))
-        (unzip? artifact)
-        (ant-unzip {:src src :dest tgt :overwrite "true"})))))
-
-(defn process-artifacts [artifacts]
-  (doseq [artifact artifacts]
-    (process-artifact artifact)))
-
 (defn process-dependencies [dependencies]
   "process dependencies"
   (doseq [dependency dependencies]
-    (process-artifact (:artifact dependency))))
+    (init-dependency dependency)))
 
 (defn processed? [dep included ex]
   (let [a (:artifact dep)]

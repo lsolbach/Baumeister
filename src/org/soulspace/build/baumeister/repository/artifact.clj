@@ -21,17 +21,13 @@
   Artifact
   (artifact-name [artifact]
     (str (:name artifact) "." (:type artifact)))
-  
   (artifact-name-version [artifact]
     (str (:name artifact) "." (:type artifact) "[" (:version artifact) "]"))
-  
   (artifact-key [artifact]
     (str (:project artifact) "/" (:module artifact) "/" (:version artifact) "/"
          (:name artifact) "." (:type artifact)))
-  
   (artifact-module-key [artifact]
     (str (:project artifact) "/" (:module artifact)))
-  
   (artifact-module-version-key [artifact]
     (str (:project artifact) "/" (:module artifact) "/" (:version artifact)))
   )
@@ -45,6 +41,13 @@
   ([project module version name type]
     (ArtifactImpl. project module version name type)))
 
+
+(defmulti new-artifact type)
+(defmethod new-artifact String [p] (apply create-artifact (split p #"(/|:|;|,)")))
+(defmethod new-artifact clojure.lang.IPersistentVector [p] (apply create-artifact p))
+(defmethod new-artifact clojure.lang.ISeq [p] (apply create-artifact p))
+
+
 ; A 'nil' in a field means unspecified for an artifact pattern
 ; (e.g. a 'nil' version in the pattern will match every version)
 (defn create-artifact-pattern
@@ -57,32 +60,10 @@
   ([project module version name type]
     (ArtifactImpl. project module version name type)))
 
-
-(defmulti new-artifact type)
-
-(defmethod new-artifact String [p]
-  (apply create-artifact (split p #"(/|:|;|,)")))
-
-(defmethod new-artifact clojure.lang.IPersistentVector [p]
-  (apply create-artifact p))
-
-(defmethod new-artifact clojure.lang.ISeq [p]
-  (println p)
-  (apply create-artifact p))
-
-
 (defmulti new-artifact-pattern type)
-
-(defmethod new-artifact-pattern String [p]
-  (apply create-artifact-pattern (split p #"(/|:|;|,)")))
-
-(defmethod new-artifact-pattern clojure.lang.IPersistentVector [p]
-  (apply create-artifact-pattern p))
-
-(defmethod new-artifact-pattern clojure.lang.ISeq [p]
-  (apply create-artifact-pattern p))
-
-
+(defmethod new-artifact-pattern String [p] (apply create-artifact-pattern (split p #"(/|:|;|,)")))
+(defmethod new-artifact-pattern clojure.lang.IPersistentVector [p] (apply create-artifact-pattern p))
+(defmethod new-artifact-pattern clojure.lang.ISeq [p] (apply create-artifact-pattern p))
 
 ;
 ;

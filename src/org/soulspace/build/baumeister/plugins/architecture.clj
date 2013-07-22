@@ -5,8 +5,10 @@
         [org.soulspace.build.baumeister.utils ant-utils log]
         [org.soulspace.build.baumeister.config registry]))
 
+; TODO better align with mdsd plugin?
+
 (defn generators []
-  (load-file (param "${architecture-config-dir}/architecture_defaults.clj")))
+  (load-file (param "${architecture-config-dir}/${architecture-config-file}")))
 
 ; TODO find required profiles by a profile search path?
 (defn generation-context []
@@ -75,6 +77,7 @@
                   [:architecture-generation-dir "${module-dir}/generated"]
                   [:architecture-backup-dir "${module-dir}/backup"]
                   [:architecture-config-dir "${lib-generator-dir}/config"]
+                  [:architecture-config-file "architecture_generators.clj"]
                   [:architecture-template-path ["${lib-generator-dir}/std-templates2" "${lib-generator-dir}/templates2"]]
                   [:architecture-profile-dir "${lib-generator-dir}/profiles"]
                   [:architecture-profiles ["argouml/default-uml14.xmi" "MDSDProfile.xmi"]]

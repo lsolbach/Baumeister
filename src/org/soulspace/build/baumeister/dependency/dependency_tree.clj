@@ -19,7 +19,7 @@
   "tests if an artifact is already loaded"
   (contains? loaded (artifact-key artifact)))
 
-(defn get-dependencies [dependency]
+(defn get-transitive-dependencies [dependency]
   "get the dependencies configuration for the specified dependency"
   (if (= (:target dependency) "root")
     (param :dependencies) ; current module, use config
@@ -51,7 +51,7 @@
 ; TODO handle excluded-set
 (defn build-dependency-tree-for-artifact [parent loaded-set excluded-set]
   (println "build-dependency-tree-for-artifact:" parent loaded-set excluded-set)
-  (let [dependencies (get-dependencies parent)]
+  (let [dependencies (get-transitive-dependencies parent)]
     (if-not (seq dependencies)
       [(new-dependency parent []) loaded-set] ; build and return dependency node for parent with no children
       ; FIXME dependencies is actually now a vector of an artifact and an exclusion seq

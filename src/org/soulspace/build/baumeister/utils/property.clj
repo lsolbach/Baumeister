@@ -16,4 +16,3 @@
     (map (partial replace-properties prop-map) value)
     :default
     value))
-

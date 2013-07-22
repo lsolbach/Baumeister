@@ -38,6 +38,7 @@
     (register-plugin name)))
   
 (defn init-plugins [plugins]
+  "initialize the given set of plugins"
   (doseq [plugin plugins]
     (init-plugin plugin)))
 

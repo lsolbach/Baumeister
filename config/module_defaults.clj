@@ -17,7 +17,7 @@
  :app-module-types #{"appfrontend"}
  :data-module-types #{"data"}
  :test-types #{"unittest" "integrationtest" "acceptancetest"}
- :repositories [[:file :release "${baumeister-home-dir}/../repositories/release"] ; TODO use keywords instead of strings for the type?
+ :repositories [[:file :release "${baumeister-home-dir}/../repositories/release"]
                 [:file :development "${baumeister-home-dir}/../repositories/development"]
                 [:file :thirdparty "${baumeister-home-dir}/../repositories/thirdparty"]
                 [:maven-proxy :thirdparty "http://repo1.maven.org/maven2" "${baumeister-home-dir}/../repositories/repo1.maven.org"]

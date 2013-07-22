@@ -9,7 +9,7 @@
  :author "Ludger Solbach"
  :provider "soulspace.org"
  :plugins ["global" "sdeps" "clojure" "package"]
- ; :license ["Eclipse Public License 1.0" "http://www.eclipse.org/legal/epl-v10.html"]
+; :license ["Eclipse Public License 1.0" "http://www.eclipse.org/legal/epl-v10.html"]
 ; :extra-repositories [[:maven-proxy :thirdparty "http://maven.alfresco.com/nexus/content/groups/public" "${baumeister-home-dir}/../repositories/maven.alfresco.com"]]
  :dependencies [[["org.clojure" "clojure" "1.5.1"] "runtime"]
                 [["org.clojure" "data.xml" "0.0.7"]] ; maven support
@@ -35,6 +35,7 @@
                 [["oro" "oro" "2.0.8"]] ; transitive, mdsd/architecture/cobertura plugins
                 [["org.soulspace.clj" "CljLibrary" "0.3.0"]] ; transitive?
                 [["org.soulspace.clj" "CljJavaLibrary" "0.2.0"]]
+                [["org.soulspace.clj" "CljXmlLibrary" "0.2.0"]] ; maven support
                 [["org.soulspace.clj" "CljModelGenerator" "0.3.0"]] ; mdsd/architecture plugins
                 [["org.soulspace.template" "TemplateEngine" "1.0.0"]] ; transitive, mdsd/architecture plugins
                 [["org.soulspace.modelling" "ModelRepository2" "0.3.0"]] ; transitive, mdsd/architecture plugins
