@@ -50,8 +50,7 @@
 
   ArtifactRepository
   (artifact-folder [repo artifact]
-    (log :info "artifact-folder" (artifact-module-version-key artifact))
-    (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (:version artifact)))
+    (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (artifact-version artifact)))
   (get-artifact [repo artifact]
     (artifact-file repo artifact))
   (get-dependencies-for-artifact [repo artifact]
@@ -65,13 +64,12 @@
 
   BaumeisterArtifactRepository
   (module-artifact [repo artifact]
-    (new-artifact [(:project artifact) (:module artifact) (:version artifact) "module" "clj"]))
+    (new-artifact [(:project artifact) (:module artifact) (artifact-version artifact) "module" "clj"]))
 
   FileArtifactRepository
   (artifact-dir [repo artifact]
     (as-file (str  path "/" (artifact-folder repo artifact))))
   (artifact-file [repo artifact]
-    (log :info (str (absolute-path (artifact-dir repo artifact)) "/" (artifact-name artifact)))
     (as-file (str (absolute-path (artifact-dir repo artifact)) "/" (artifact-name artifact))))
   )
 
@@ -79,7 +77,7 @@
 ;  "A proxy artifact repository in Baumeister layout that can retrieve and store artifacts from an HTTP repository."
   ArtifactRepository
   (artifact-folder [repo artifact]
-    (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (:version artifact)))
+    (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (artifact-version artifact)))
   (get-artifact [repo  artifact]
     (when (and (not (local-hit? repo artifact)) (remote-hit? repo artifact))
       (cache-artifact repo artifact))
@@ -97,7 +95,7 @@
 
   BaumeisterArtifactRepository
   (module-artifact [repo artifact]
-    (new-artifact [(:project artifact) (:module artifact) (:version artifact) "module" "clj"]))
+    (new-artifact [(:project artifact) (:module artifact) (artifact-version artifact) "module" "clj"]))
 
   FileArtifactRepository
   (artifact-dir [repo artifact]
@@ -114,10 +112,10 @@
     (create-dir (artifact-dir repo artifact))
     (copy (input-stream (artifact-url repo artifact)) (artifact-file repo artifact)))
   (local-hit? [repo artifact]
-    (log :debug "checking local hit for" (artifact-file repo artifact) "->" (exists? (artifact-file repo artifact))) 
+    (log :trace "checking local hit for" (artifact-file repo artifact) "->" (exists? (artifact-file repo artifact))) 
     (exists? (artifact-file repo artifact)))
   (remote-hit? [repo artifact]
-    (log :debug "checking remote hit for" (artifact-url repo artifact))
+    (log :trace "checking remote hit for" (artifact-url repo artifact))
     (test-url (artifact-url repo artifact)))
   )
 
@@ -125,7 +123,7 @@
 (defrecord MavenProxyArtifactRepositoryImpl [usage url path]
   ArtifactRepository
   (artifact-folder [repo artifact]
-    (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (:version artifact)))
+    (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (artifact-version artifact)))
   (get-artifact [repo artifact]
     (when (and (not (local-hit? repo artifact)) (remote-hit? repo artifact))
       (cache-artifact repo artifact))
@@ -143,9 +141,9 @@
   
   MavenArtifactRepository
   (artifact-mvn-name [repo artifact]
-    (str (:name artifact) "-" (:version artifact) "." (:type artifact)))
+    (str (:name artifact) "-" (artifact-version artifact) "." (:type artifact)))
   (pom-artifact [repo artifact]
-    (new-artifact [(:project artifact) (:module artifact) (:version artifact) (:module artifact) "pom"]))
+    (new-artifact [(:project artifact) (:module artifact) (artifact-version artifact) (:module artifact) "pom"]))
   
   FileArtifactRepository
   (artifact-dir [repo artifact]
@@ -163,15 +161,15 @@
     (create-dir (artifact-dir repo artifact))
     (copy (input-stream (artifact-url repo artifact)) (artifact-file repo artifact)))
   (local-hit? [repo artifact]
-    (log :debug "checking local hit for" (artifact-file repo artifact) "->" (exists? (artifact-file repo artifact))) 
+    (log :trace "checking local hit for" (artifact-file repo artifact) "->" (exists? (artifact-file repo artifact))) 
     (exists? (artifact-file repo artifact)))
   (remote-hit? [repo artifact]
-    (log :debug "checking remote hit for" (artifact-url repo artifact))
+    (log :trace "checking remote hit for" (artifact-url repo artifact))
     (test-url (artifact-url repo artifact)))
   )
 
 ;
-;
+; repository functions
 ;
 (defmulti create-repository first)
 (defmethod create-repository :file [opts]
@@ -196,10 +194,10 @@
   (filter #(= (:usage %) (keyword usage)) repositories))
 
 ;
-;
+; query functions
 ;
 (defn query-artifact [repositories artifact]
-  (log :debug "querying artifact:" (artifact-name-version artifact))
+  (log :debug "Querying artifact:" (artifact-name-version artifact))
   (if (seq repositories)
     ; Iterate through the configured repositories to find this artifact
     (let [repo (first repositories)
@@ -207,16 +205,15 @@
       (log :trace "querying repository" repo)
       (if (exists? artifact-file)
         (do 
-          (log :info "Found artifact" (artifact-name-version artifact) "in the configured repositories!")
+          (log :debug "Found artifact" (artifact-name-version artifact) "in the configured repositories!")
           artifact-file)
         (recur (rest repositories) artifact)))
     (do
-      (log :info "Could not find artifact" (artifact-name-version artifact) "in the configured repositories!")
+      (log :warn "Could not find artifact" (artifact-name-version artifact) "in the configured repositories!")
       nil)))
 
 (defn query-dependencies [repositories dependency]
-  (log :debug "querying dependencies:" dependency)
-  (log :debug "querying dependencies in artifact:" (:artifact dependency))
+  (log :debug "Querying dependencies for artifact:" (artifact-name-version (:artifact dependency)))
   (if (seq repositories)
     ; Iterate through the configured repositories to find the dependencies file for this artifact
     (let [repo (first repositories)

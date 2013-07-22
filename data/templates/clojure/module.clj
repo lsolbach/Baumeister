@@ -1,5 +1,5 @@
 [
- :name ""
+ :module ""
  :project ""
  ; :project-lead ""
  ; :description ""

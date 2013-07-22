@@ -20,7 +20,7 @@
 (defn deps-dependencies []
   (log :info "initializing dependencies...")
   ; initialize dependencies the old way first to leave the project in a usable state for debugging 
-  (let [root-dependency (new-dependency (new-artifact (param :project) (param :name) (param :version)) "root")
+  (let [root-dependency (new-dependency (new-artifact (param :project) (param :module) (param :version)) "root")
         [dependency-root loaded-set] (build-dependency-tree root-dependency #{} #{})
         [q in ex] (process-dependency-tree (:dependencies dependency-root) {} #{} #{})]
     (log :trace "DEPS" dependency-root)
@@ -39,10 +39,10 @@
     ) ; TODO distribute war files here or use publish?!?
   (when (data-module?)
     (distribute-artifact (get-dev-repository (param :deps-repositories))
-                         (new-artifact (param :project) (param :name) (param :version) (param :name) "zip")))
+                         (new-artifact (param :project) (param :module) (param :version) (param :module) "zip")))
   (when (plugin? "mdsd")
     (distribute-artifact (get-dev-repository (param :deps-repositories))
-                         (new-artifact (param :project) (param :name) (param :version) (param :mdsd-model-name) "xmi") (param :mdsd-model-dir))))
+                         (new-artifact (param :project) (param :module) (param :version) (param :mdsd-model-name) "xmi") (param :mdsd-model-dir))))
 
 ;
 ; plugin initialization

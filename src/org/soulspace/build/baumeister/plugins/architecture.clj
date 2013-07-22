@@ -73,7 +73,7 @@
   (register-vars [[:lib-generator-dir "${lib-dir}/generator"]
                   [:lib-model-dir "${lib-dir}/model"]
                   [:architecture-model-dir "${module-dir}/model"]
-                  [:architecture-model-name "${name}"]
+                  [:architecture-model-name "${module}"]
                   [:architecture-generation-dir "${module-dir}/generated"]
                   [:architecture-backup-dir "${module-dir}/backup"]
                   [:architecture-config-dir "${lib-generator-dir}/config"]

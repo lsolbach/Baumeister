@@ -97,7 +97,7 @@
   (register-vars [[:lib-generator-dir "${lib-dir}/generator"]
                   [:lib-model-dir "${lib-dir}/model"]
                   [:mdsd-model-dir "${module-dir}/model"]
-                  [:mdsd-model-name "${name}"]
+                  [:mdsd-model-name "${module}"]
                   [:mdsd-generation-dir "${module-dir}/generated"]
                   [:mdsd-backup-dir "${module-dir}/backup"]
                   [:mdsd-config-dir "${lib-generator-dir}/config"]

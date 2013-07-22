@@ -1,5 +1,5 @@
 [
- :name "DefaultModule"
+ :module "DefaultModule"
  :project "DefaultProject"
  :version "0.1.0"
  :module-dir "."

@@ -1,18 +1,18 @@
 (ns org.soulspace.build.baumeister.test.version
   (:use [clojure.test] 
-        [org.soulspace.build.baumeister.utils.version]))
+        [org.soulspace.build.baumeister.repository.version]))
 
 (deftest numeric-true
-  (is (numeric? "1"))
-  (is (numeric? "10"))
-  (is (numeric? "101"))
+  (is (digits-only? "1"))
+  (is (digits-only? "10"))
+  (is (digits-only? "101"))
   )
 
 (deftest numeric-false
-  (is (not (numeric? nil)))
-  (is (not (numeric? "10a")))
-  (is (not (numeric? "abc")))
-  (is (not (numeric? "ten")))
+  (is (not (digits-only? nil)))
+  (is (not (digits-only? "10a")))
+  (is (not (digits-only? "abc")))
+  (is (not (digits-only? "ten")))
   )
 
 (deftest compare-ver-equals
@@ -79,11 +79,28 @@
 (deftest match-version-false
   (is (false? (version-match? "1.1.0" "1.0.0"))))
 
-;
-;
-;
-(deftest create-new-version
-  (is (not (nil? (new-version "1.3.0")))))
+(deftest contains-version-true
+  (is (true? (contains-version? (new-version-range "1.0.0" "2.0.0") (new-version "1.5.0"))))
+  (is (true? (contains-version? (new-version-range nil "2.0.0") (new-version "1.5.0"))))
+  (is (true? (contains-version? (new-version-range "1.0.0") (new-version "1.5.0"))))
+  (is (true? (contains-version? (new-version-range) (new-version "1.5.0"))))
+  (is (true? (contains-version? (new-version-range nil) (new-version "1.5.0"))))
+  (is (true? (contains-version? (new-version-range nil nil) (new-version "1.5.0"))))
+  )
+
+(deftest contains-version-false
+  (is (false? (contains-version? (new-version-range "1.0.0" "2.0.0") (new-version "0.5.0"))))
+  (is (false? (contains-version? (new-version-range "1.0.0" "2.0.0") (new-version "2.0.0"))))
+  (is (false? (contains-version? (new-version-range nil "2.0.0") (new-version "2.5.0"))))
+  (is (false? (contains-version? (new-version-range nil "2.0.0") (new-version "2.0.0"))))
+  (is (false? (contains-version? (new-version-range "1.0.0") (new-version "0.5.0"))))
+  (is (false? (contains-version? (new-version-range "1.0.0") (new-version "0.9.9"))))
+  (is (false? (contains-version? (new-version-range "1.0.0") (new-version nil))))
+  (is (false? (contains-version? (new-version-range nil nil) (new-version nil))))
+  (is (false? (contains-version? (new-version-range) (new-version nil))))
+  (is (false? (contains-version? (new-version-range) (new-version ""))))
+  )
+
 
 (run-tests)
 

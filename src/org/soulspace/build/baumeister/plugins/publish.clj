@@ -8,7 +8,7 @@
   ; TODO for what module types do we need a binary distribution (webfrontends, appfrontends, webservices, consolefrontends)?
   ; TODO should binary packages only be build for releases?
   ; TODO in release or publish or ... plugin?
-  (let [filename (param "${name}-${version}.zip")]
+  (let [filename (param "${module}-${version}.zip")]
     (ant-zip {:destFile (str (param :dist-dir) "/" filename)}
              (ant-fileset {:dir (param :dist-dir) :includes "*.jar"})
              (ant-zipfileset {:dir (param :lib-runtime-dir) :includes "*.jar" :prefix "/lib"})

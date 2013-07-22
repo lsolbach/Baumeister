@@ -6,26 +6,37 @@ Situation
 Build systems are used to build software projects. A software build is
 the manufacturing process for the production of deployable software
 products.
+
 There are many existing build systems available, e.g. make, ant, maven,
 gradle, leiningen and others.
-Some of them are targeted for specific languages, some of them support
-many languages.
+
+Some of them are targeted for specific
+languages, some of them support many languages.
+
 Some implement a build workflow while with others the build workflow
 has to be implemented by the user.
+
 Some favour convention over configuration while others don't have any
 build in conventions at all.
+
 With the convention based approach you have to model your projects
 after the conventions of the build system.
+
 With the configuration based approach you can customize the build
 system to match your projects.
+
 Some build systems provide support for multi module projects while
 others target single module projects only.
+
 Some build systems provide dependency management, others do not.
+
 Simple Dependency management is a crucial feature for even smaller
 projects. Bigger projects or multi module projects need Transitive
 Dependency Management.
+
 None of the existing projects is aware of common software
 architectures.
+
 
 Competition
 -----------
@@ -60,6 +71,7 @@ o extensible build process via plugins
 - inflexible artifact concept, only one artifact per project/module
 - no architecture awareness
 
+
 ### Gradle ###
 + flexible
 + reuse of existing ant tasks and targets 
@@ -73,6 +85,7 @@ o implemented in Groovy
 o implemented in Clojure
 - mainly clojure focused
 - no architecture awareness
+
 
 Opportunity
 -----------
@@ -93,6 +106,7 @@ configuration based approach and the extensibility provided by clojure.
 * multi language builds
 * reuse of existing ant tasks
 
+
 Stakeholders
 ------------
 + Software Architects
@@ -100,10 +114,12 @@ Stakeholders
 + Configuration Managers
 + Project Managers
 
+
 Users
 -----
 + Software Architects
 + Developers
+
 
 Features
 --------
@@ -123,6 +139,7 @@ Plugin architecture
 * extensible via clojure plugins
 * usage of ant tasks in plugins where feasible
 
+
 Language support via plugins
 ----------------------------
 Shipped plugins (at least)
@@ -130,7 +147,7 @@ Shipped plugins (at least)
 * AspectJ
 * Clojure
 * additional languages via plugins
-* support for languages for with an ant task is available is straight forward
+* support for languages for which an ant task is available should be straight forward
 
 
 Module configuration

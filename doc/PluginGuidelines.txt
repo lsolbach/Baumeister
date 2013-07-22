@@ -2,14 +2,21 @@ Plugin Development Guidelines
 =============================
 
 * Plugins are components participating in the Baumeister project.
+
 * Standard principles of good software development apply.
+
 * Aim for high cohesion and low coupling.
 
 * Design orthogonal plugins that can be combined in different ways
+
 * Define a concrete responsibility for the plugin
+
 * Minimize inter-plugin dependencies
-* Check for plugin existence before using stuff (e.g. parameters,
-* directories, output) from other plugins
+
+* Check for plugin existence before using stuff from other plugins (e.g. parameters, directories, output)
+
 * Define all reasonable configuration parameters in plugin setup
+
 * Define reasonable default values in plugin setup
-* Prefix coniguration parameters with the plugin name
+
+* Prefix configuration parameters with the plugin name

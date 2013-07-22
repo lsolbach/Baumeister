@@ -14,8 +14,8 @@
     (doto logger
       (.setMessageOutputLevel org.apache.tools.ant.Project/MSG_INFO)
       (.setEmacsMode true)
-      (.setOutputPrintStream System/out)
-      (.setErrorPrintStream System/err))
+      (.setOutputPrintStream System/out) ; TODO use own output streams
+      (.setErrorPrintStream System/err)) ; TODO use own output streams
     (doto proj
       (.init)
       (.addBuildListener logger))))

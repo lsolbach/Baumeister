@@ -2,6 +2,7 @@
   (:use [clojure.test] 
         [org.soulspace.build.baumeister.repository artifact]))
 
+(comment 
 (deftest match-identifier-true
   (is (true? (identifier-match? nil "module")))
   (is (true? (identifier-match? "" "module")))
@@ -17,6 +18,7 @@
 
 (deftest match-type-false
   (is (false? (type-match? "zip" "jar"))))
+)
 
 ; TODO enhance tests for artifact matching
 (deftest match-artifact-true

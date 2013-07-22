@@ -32,10 +32,10 @@
     ) ; TODO distribute war files here or use publish?!?
   (when (data-module?)
     (distribute-artifact (get-dev-repository (param :deps-repositories))
-                         (new-artifact [(param :project) (param :name) (param :version) (param :name) "zip"])))
+                         (new-artifact [(param :project) (param :module) (param :version) (param :module) "zip"])))
   (when (plugin? "mdsd")
     (distribute-artifact (get-dev-repository (param :deps-repositories))
-                         (new-artifact [(param :project) (param :name) (param :version) (param :mdsd-model-name) "xmi"]) (param :mdsd-model-dir))))
+                         (new-artifact [(param :project) (param :module) (param :version) (param :mdsd-model-name) "xmi"]) (param :mdsd-model-dir))))
 
 ;
 ; plugin initialization

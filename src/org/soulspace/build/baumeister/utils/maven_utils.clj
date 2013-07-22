@@ -2,11 +2,13 @@
   (:require [clojure.zip :as zip]
             [clojure.data.xml :as xml]
             [clojure.data.zip :as zf]
-            [clojure.data.zip.xml :as zx])
+            [clojure.data.zip.xml :as zx]
+            [org.soulspace.build.baumeister.utils.pom-dsl :as pom])
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function string]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository artifact]
+        [org.soulspace.build.baumeister.dependency dependency]
         [org.soulspace.build.baumeister.utils log property]))
 
 (def target-to-scope
@@ -86,22 +88,28 @@
 ;
 ; pom creation
 ;
-(defn build-pom-dependency-xml [artifact]
-  ; TODO scope translation
-    (xml/element :dependency {}
-             (xml/element :groupId {} (:project artifact))
-             (xml/element :artifactId {} (:module artifact))
-             (xml/element :version {} (:version artifact))))
+(defn build-pom-dependency [dependency]
+  (let [artifact (:artifact dependency)]
+    (pom/dependency 
+      {}
+      (pom/groupid {} (:project artifact))
+      (pom/artifactid {} (:module artifact))
+      (pom/version {} (artifact-version artifact))
+      ; TODO scope translation if needed
+    )))
 
-(defn build-pom-dependencies-xml []
-  (apply xml/element :dependencies {}
-         (map build-pom-dependency-xml (map new-artifact (param :dependencies)))))
+(defn build-pom-dependencies []
+  (map build-pom-dependency (map new-dependency (param :dependencies))))
 
-(defn build-pom-xml []
+(defn build-pom []
   (xml/indent-str
-    (xml/element :project {}
-                 (xml/element :modelVersion {} "4.0.0")
-                 (xml/element :groupId {} (param :project))
-                 (xml/element :artifactId {} (param :name))
-                 (xml/element :version {} (param :version))
-                 (build-pom-dependencies-xml))))
+    (pom/project
+      {}
+      (pom/modelversion {} "4.0.0")
+      (pom/groupid {} (param :project))
+      (pom/artifactid {} (param :module))
+      (pom/version {} (param :version))
+      (pom/dependencies
+        {}
+        (build-pom-dependencies)))))
+  

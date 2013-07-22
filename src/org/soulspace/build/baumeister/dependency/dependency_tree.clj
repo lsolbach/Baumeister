@@ -5,6 +5,39 @@
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository repositories]))
 
+(defprotocol DependencyNode
+  ; TODO functions
+  )
+
+; A node in the transitive dependency tree
+; contains a dependency, included nodes, excluded artifact patterns?
+(defrecord DependencyNodeImpl
+  [dependency included excluded]
+  ; TODO functions
+  )
+
+(defn new-dependency-node
+  ([dependency]
+    (new-dependency dependency [] {}))
+  ([dependency included]
+    (new-dependency dependency included {}))
+  ([dependency included excluded]
+    (DependencyNodeImpl. dependency included excluded)))
+
+(defn build-dependency-node [dependency loaded excluded]
+  ""
+; build list of dependency nodes as included, for all children that are not already loaded or excluded
+  
+  (new-dependency-node dependency [] ; <- included
+                       ))
+
+
+
+
+
+
+
+
 ;
 ; transitive dependencies management
 ;
@@ -27,10 +60,7 @@
 
 (defn build-dependency [dep]
   (println "====> build-dependency: " dep)
-  (let [[project module version &rest] dep]
-    ; TODO handle rest
-    (new-dependency (new-artifact project module version))
-    ))
+  (new-dependency dep))
 
 ; consume artifacts, build nodes
 ; TODO handle excluded-set

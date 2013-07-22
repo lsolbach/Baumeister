@@ -10,7 +10,7 @@
   (let [artifact (:artifact dependency)
         src (query-artifact (param :deps-repositories) artifact)
         tgt (param (keyword (str "lib-" (:target dependency) "-dir")))]
-    (log :info "Copying" src " -> " tgt)
+    (log :debug "Copying" src " -> " tgt)
     (if (nil? src)
       (do
         (log :error (artifact-name artifact) "not found in repositories!"))

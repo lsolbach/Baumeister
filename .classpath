@@ -31,5 +31,6 @@
 	<classpathentry kind="lib" path="lib/runtime/oro.jar"/>
 	<classpathentry kind="lib" path="lib/runtime/UML14ModelBuilder.jar"/>
 	<classpathentry kind="lib" path="lib/runtime/UML14Repository.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/CljXmlLibrary.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -5,9 +5,9 @@
 ;
 ; create dot graph of the dependencies TODO use writer instead of println (re-bind *out*?!)
 ;
-(defn dependency-dot-vertex [artifact]
+(defn dependency-dot-vertex [dep-node]
   "render a vertex for the artifact in the dot representation of the dependency tree"
-  (str "[label=<" (artifact-name-version (:artifact artifact))">]"))
+  (str "[label=<" (artifact-name-version (:artifact dep-node))">]"))
 
 (defn dependency-dot-edge [parent child]
   "render an edge in the dot representation of the dependency tree"
@@ -32,4 +32,3 @@
     node [shape=plaintext fontsize=9];")
     (dependency-dot root-node)
     (println "}")))
-

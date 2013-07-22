@@ -19,14 +19,14 @@
 
 (defn deps-distribute-jars [repository]
   "distribute the built jar artifacts"
-  (distribute-artifact repository (new-artifact [(param :project) (param :name) (param :version) "module" "clj"]) (param :module-dir))
-  (distribute-artifact repository (new-artifact [(param :project) (param :name) (param :version) (param :name) "jar"]))
+  (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) "module" "clj"]) (param :module-dir))
+  (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (param :module) "jar"]))
   (when (unittest?)
-    (distribute-artifact repository (new-artifact [(param :project) (param :name) (param :version) (str (param :name) "Unittest") "jar"])))
+    (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) "Unittest") "jar"])))
   (when (integrationtest?)
-    (distribute-artifact repository (new-artifact [(param :project) (param :name) (param :version) (str (param :name) "Integrationtest") "jar"])))
+    (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) "Integrationtest") "jar"])))
   (when (acceptancetest?)
-    (distribute-artifact repository (new-artifact [(param :project) (param :name) (param :version) (str (param :name) "Acceptancetest") "jar"])))
+    (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) "Acceptancetest") "jar"])))
   (when (seq (param :package-additional-jars)) ; FIXME resolve dependency on package parameter
     (doseq [[_ artifact-suffix] (param :package-additional-jars)]
-      (distribute-artifact repository (new-artifact [(param :project) (param :name) (param :version) (str (param :name) artifact-suffix) "jar"])))))
+      (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) artifact-suffix) "jar"])))))

@@ -17,15 +17,15 @@
   ([dir jar-type archive-type additional-manifest-entries]
     (log :debug  "packaging jar" dir " " jar-type " " archive-type)
     (manifest dir additional-manifest-entries)
-    (ant-jar {:destFile (str (param "${dist-dir}/${name}") jar-type "." archive-type) :manifest (str dir "/MANIFEST.MF")}
+    (ant-jar {:destFile (str (param "${dist-dir}/${module}") jar-type "." archive-type) :manifest (str dir "/MANIFEST.MF")}
              (ant-fileset {:dir dir}))))
 
 (defn package-war [dir environment additional-manifest-entries]
   (log :debug  "packaging war" dir " " environment)
   ; TODO generate environment specific configuration
   ; generate environment specific war file
-  (ant-war {:destFile (str dir "/" environment "/" (param :context-name (param :name)) ".war" )}
-           (ant-zipfileset {:dir (param :dist-dir) :includes (param "${dist-dir}/${name}.jar") :prefix "WEB-INF/lib"})
+  (ant-war {:destFile (str dir "/" environment "/" (param :context-name (param :module)) ".war" )}
+           (ant-zipfileset {:dir (param :dist-dir) :includes (param "${dist-dir}/${module}.jar") :prefix "WEB-INF/lib"})
            (ant-zipfileset {:dir (param :lib-runtime-dir) :prefix "WEB-INF/lib"})
            (when (has-plugin? "aspectj")
              (ant-zipfileset {:dir (param :lib-aspect-dir) :prefix "WEB-INF/lib"}))
@@ -34,11 +34,11 @@
              (ant-fileset {:dir (param "${mdsd-generation-dir}/WebContent")}))))
 
 (defn package-ear [dir environment additional-manifest-entries]
-  (log :debug  "packaging ear" dir " " environment))
+  (log :debug "packaging ear" dir " " environment))
 
 (defn package-data []
   (log :debug  "packaging data" (param :dist-dir))
-  (ant-zip {:destFile (param "${dist-dir}/${name}.zip")}
+  (ant-zip {:destFile (param "${dist-dir}/${module}.zip")}
            (ant-fileset {:dir (param :module-dir) :excludes (param "${dist-dir} ${build-dir} ${lib-dir}")})))
 
 ; TODO handle source jars
