@@ -5,7 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/runtime/clojure.jar"/>
 	<classpathentry kind="lib" path="lib/runtime/ant-launcher.jar"/>
-	<classpathentry kind="lib" path="lib/runtime/ant.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/ant.jar" sourcepath="/home/soulman/devel/tmp/apache-ant-1.8.2/src/main"/>
 	<classpathentry kind="lib" path="lib/runtime/CljLibrary.jar"/>
 	<classpathentry kind="lib" path="lib/runtime/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="lib/runtime/data.xml.jar"/>

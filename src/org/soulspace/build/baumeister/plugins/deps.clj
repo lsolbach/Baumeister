@@ -1,8 +1,8 @@
 (ns org.soulspace.build.baumeister.plugins.deps
   (:use [clojure.java.io :only [as-file copy]]
         [org.soulspace.clj file file-search function]
-        [org.soulspace.build.baumeister.dependency dependency dependency-tree dependency-processing dependency-dot]
-        [org.soulspace.build.baumeister.utils checks log ant-utils maven-utils]
+        [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-processing dependency-dot]
+        [org.soulspace.build.baumeister.utils checks log ant-utils]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository artifact repositories distribution]))
 
@@ -20,15 +20,12 @@
 (defn deps-dependencies []
   (log :info "initializing dependencies...")
   ; initialize dependencies the old way first to leave the project in a usable state for debugging 
-  (let [root-dependency (new-dependency (new-artifact (param :project) (param :module) (param :version)) "root")
-        [dependency-root loaded-set] (build-dependency-tree root-dependency #{} #{})
-        [q in ex] (process-dependency-tree (:dependencies dependency-root) {} #{} #{})]
-    (log :trace "DEPS" dependency-root)
-    (log :trace "Excluded:" ex)
-    (log :trace "Included:" in)
+  (let [root (build-dependency-tree)
+;        [q in ex] (process-dependency-tree (:dependencies dependency-root) {} #{} #{})
+        ]
     (if (param :deps-report)
       (let [writer (java.io.StringWriter.)]
-        (dependencies-dot writer dependency-root)
+        (dependencies-dot writer root)
         (spit (param "${deps-report-dir}/dependencies.dot") (str writer))))))
 
 (defn deps-distribute []

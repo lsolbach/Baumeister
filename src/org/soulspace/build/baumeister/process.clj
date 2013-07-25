@@ -6,17 +6,20 @@
   (:import [java.util Date])
   (:gen-class))
 
+(defn start-workflow
+  "Start the Baumeister "
+  ([]
+    (do-workflow :build-workflow))
+  ([args]
+    (doseq [wf args]
+      (do-workflow (keyword wf)))))
+
 ; TODO check to (set! *read-eval* false) to prevent security issues reading files
 (defn -main [& args]
   "Baumeister entry method."
   (let [start (System/currentTimeMillis)]
     (log :info "Started at" (Date. start))
-    (log :debug "Current dir:" (System/getProperty "user.dir"))
     (init-config)
-    (if (seq args)
-      (doseq [wf args]
-        (do-workflow (keyword wf)))
-      (do-workflow :build-workflow))
-    (let [end (System/currentTimeMillis)]
-      (log :info "Done at" (Date. end) " duration" (/ (- end start) 1000.0) "seconds.")))
+    (apply start-workflow args)
+    (let [end (System/currentTimeMillis)] (log :info "Done at" (Date. end) ", duration" (/ (- end start) 1000.0) "seconds.")))
   "Done!")

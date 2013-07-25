@@ -1,13 +1,14 @@
 (ns org.soulspace.build.baumeister.repository.artifact
-  (:use [clojure.string :only [split]]
+  (:use [clojure.string :only [split trim]]
         [org.soulspace.clj string]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository version]))
+
 ;
 ; Part of the artifact: project module version name type
 ;
 (defprotocol Artifact
-  (artifact-name [artifact])
+  (artifact-name [artifact] "Returns the name of the artifact.")
   (artifact-version [artifact])
   (artifact-name-version [artifact])
   (artifact-key [artifact])
@@ -31,20 +32,46 @@
     (str (:project artifact) "/" (:module artifact) "/" (artifact-version artifact)))
   )
 
-; TODO multi method?
+;
+; TODO needed?
+;
+(defprotocol MavenArtifact
+  (mvn-artifact-name [artifact] "Returns the name of the artifact in maven convention."))
+
+(defrecord MavenArtifactImpl [project module version name type classifier]
+  Artifact
+  (artifact-name [artifact]
+    (str (:name artifact)
+         (if (seq classifier) classifier)
+         "." (:type artifact)))
+  (artifact-version [artifact]
+    (:string (:version artifact)))
+  (artifact-name-version [artifact]
+    (str (:name artifact) "." (:type artifact) "[" (artifact-version artifact) "]"))
+  (artifact-key [artifact]
+    (str (:project artifact) "/" (:module artifact) "/" (artifact-version artifact) "/"
+         (:name artifact) "." (:type artifact)))
+  (artifact-module-key [artifact]
+    (str (:project artifact) "/" (:module artifact)))
+  (artifact-module-version-key [artifact]
+    (str (:project artifact) "/" (:module artifact) "/" (artifact-version artifact)))
+  MavenArtifact
+  (mvn-artifact-name [artifact]
+    (str name "-" (artifact-version artifact)
+         (if (seq classifier) (str "-" classifier))
+         "." type))
+  )
+
+
 (defn create-artifact
   ([project module version]
     (ArtifactImpl. project module (new-version version) module "jar"))
   ([project module version name]
     (ArtifactImpl. project module (new-version version) name "jar"))
   ([project module version name type]
-    (ArtifactImpl. project module (new-version version) name type)))
-
-
-(defmulti new-artifact type)
-(defmethod new-artifact String [p] (apply create-artifact (split p #"(/|:|;|,)")))
-(defmethod new-artifact clojure.lang.IPersistentVector [p] (apply create-artifact p))
-(defmethod new-artifact clojure.lang.ISeq [p] (apply create-artifact p))
+    (ArtifactImpl. project module (new-version version) name type))
+  ([project module version name type classifier]
+    (MavenArtifactImpl. project module (new-version version) name type classifier)))
 
 
 (defn matches-identifier? [pattern name]
@@ -79,7 +106,7 @@
   )
 
 ; A 'nil' in a field means unspecified for an artifact pattern
-; (e.g. a 'nil' version in the pattern will match every version)
+; (e.g. a 'nil' module in the pattern will match every module in the project)
 (defn create-artifact-pattern
   ([project module]
     (ArtifactPatternImpl. project module (new-version-range) module nil))
@@ -90,7 +117,21 @@
   ([project module range name type]
     (ArtifactPatternImpl. project module (new-version-range range) name type)))
 
+
+(def artifact-hierarchy (make-hierarchy))
+
+; TODO use hierarchy
+(defmulti new-artifact type)
+(defmethod new-artifact String [arg] (apply create-artifact (map trim (split arg #"(/|:|;|,)"))))
+(defmethod new-artifact clojure.lang.IPersistentVector [arg] (apply create-artifact arg))
+(defmethod new-artifact clojure.lang.ISeq [arg] (apply create-artifact arg))
+(defmethod new-artifact ArtifactImpl [arg] arg)
+
+; TODO use hierarchy
 (defmulti new-artifact-pattern type)
-(defmethod new-artifact-pattern String [p] (apply create-artifact-pattern (split p #"(/|:|;|,)")))
-(defmethod new-artifact-pattern clojure.lang.IPersistentVector [p] (apply create-artifact-pattern p))
-(defmethod new-artifact-pattern clojure.lang.ISeq [p] (apply create-artifact-pattern p))
+(defmethod new-artifact-pattern String [arg] (apply create-artifact-pattern (map trim (split arg #"(/|:|;|,)"))))
+(defmethod new-artifact-pattern clojure.lang.IPersistentVector [arg] (apply create-artifact-pattern arg))
+(defmethod new-artifact-pattern clojure.lang.ISeq [arg] (apply create-artifact-pattern arg))
+(defmethod new-artifact-pattern ArtifactPatternImpl [arg] (apply create-artifact-pattern arg))
+(defmethod new-artifact-pattern ArtifactImpl [arg]
+  (create-artifact-pattern (:project arg) (:module arg) (:version arg) (:name arg) (:type arg)))

@@ -9,8 +9,8 @@
   "Initialize the dependency for the build by copying or unzipping the referenced artifact."
   (let [artifact (:artifact dependency)
         src (query-artifact (param :deps-repositories) artifact)
-        tgt (param (keyword (str "lib-" (:target dependency) "-dir")))]
-    (log :debug "Copying" src " -> " tgt)
+        tgt (param (keyword (str "lib-" (name (:target dependency)) "-dir")))]
+    (log :info "Copying" src " -> " tgt)
     (if (nil? src)
       (do
         (log :error (artifact-name artifact) "not found in repositories!"))
@@ -22,5 +22,10 @@
         (ant-unzip {:src src :dest tgt :overwrite "true"})
         :default
         (log :error "Could not handle dependency " dependency)))))
+
+(defn init-dependencies [dependencies]
+  "Initialize the sequence of dependencies."
+  (doseq [dependency dependencies]
+    (init-dependency dependency)))
 
 

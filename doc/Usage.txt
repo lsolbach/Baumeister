@@ -1,0 +1,26 @@
+Baumeister Usage
+================
+
+
+Workflows
+---------
+Workflows consist of phases
+
+Phases
+------
+Each phase consists of 3 steps, pre-<phase>, <phase> and post-<phase>
+
+Steps
+-----
+pre-step
+step
+post-step
+
+
+Plugins
+-------
+A plugin registers parameters and functions for steps of phases.
+The registered functions get executed in order of the plugin declaration for pre-step and step.
+The registered functions get executed in reverse order of the plugin declaration for post-step.
+
+

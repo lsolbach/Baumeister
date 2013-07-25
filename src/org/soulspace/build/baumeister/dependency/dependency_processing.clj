@@ -5,11 +5,6 @@
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository artifact repositories]))
 
-(defn process-dependencies [dependencies]
-  "process dependencies"
-  (doseq [dependency dependencies]
-    (init-dependency dependency)))
-
 (defn processed? [dep included ex]
   (let [a (:artifact dep)]
     (or (contains? included a) (contains? ex a))))
@@ -27,7 +22,6 @@
   (let [a (:artifact dep)
         pa (get module-map (artifact-module-key a))]
     (log :warn "version conflict for" (artifact-module-key pa) (:version pa) (:version a))))
-
 
 
 ; TODO unneccessary postprocessing of the dependency tree, handle checks on tree building
@@ -49,7 +43,7 @@
         (recur (rest queue) module-map included excluded) ; dep was processed, recur on rest of the queue
         (if (contains? excluded dep) ; check if dep was excluded earlier
           (recur (rest queue) module-map included excluded) ; dep was excluded earlier, recur on rest of the queue
-          (if (is-excluded? dep) ; check if dep is excluded
+          (if false ; (is-excluded? dep) ; check if dep is excluded
             (recur (rest queue) module-map included (conj excluded (:artifact dep))) ; dep is excluded here, add to excluded and recur on rest of the queue
             (do
               ; TODO use version matching from artifact
@@ -58,4 +52,3 @@
               (if (seq (:dependencies dep))
                 (recur (concat (rest queue) (:dependencies dep)) (add-module  module-map dep) (conj included (:artifact dep)) excluded)
                 (recur (rest queue) (add-module  module-map dep) (conj included (:artifact dep)) excluded)))))))))
-

@@ -60,11 +60,11 @@
   (log :debug "generated models" (models))
   (log :debug "generated modules" (modules))
   (doseq [model (models)] ; package models
-    (println "packaging model" model)
+    (log :debug "packaging model" model)
     (ant-zip {:destFile (str (param :architecture-generated-modules-dir) "/" model "/model/" model ".zargo")
               :basedir (str (param :architecture-generated-models-dir) "/" model)}))
   (doseq [module (modules)] ; package modules
-    (println "packaging module" module)
+    (log :info "packaging module" module)
     (ant-zip {:destFile (str (param :dist-dir) "/" module ".zip")
               :basedir (str (param :architecture-generated-modules-dir) "/" module)})))
 

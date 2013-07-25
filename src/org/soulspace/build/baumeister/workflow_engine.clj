@@ -1,6 +1,10 @@
 (ns org.soulspace.build.baumeister.workflow-engine
-  (:use [org.soulspace.build.baumeister.utils checks log]
+  (:use [org.soulspace.clj string]
+        [org.soulspace.build.baumeister.utils checks log]
         [org.soulspace.build.baumeister.config registry]))
+
+(defn workflow? [id] (ends-with "-workflow" (name id)))
+(defn phase? [id] (not (ends-with "-workflow" (name id))))
 
 (defn pre-key [phase]
   (keyword (str "pre-" (name phase))))

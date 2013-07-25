@@ -3,7 +3,7 @@
   (:use [org.soulspace.clj function]))
 
 (def home-dir (get-env "HOME"))
-(def home (get-env "BAUMEISTER_HOME" (str home-dir "/devel/Baumeister")))
+(def home (get-env "BAUMEISTER_HOME" "."))
 (defn get-home [] home)
 (defn get-lib-dir [] (str home "/lib"))
 
@@ -76,11 +76,14 @@
       (assoc var-registry key (replace-vars value))
       (vector? value)
       (assoc var-registry key (map replace-vars value))
+      (set? value)
+      (assoc var-registry key value)
+      (map? value)
+      (assoc var-registry key value)
       (seq? value)
       (assoc var-registry key (map replace-vars value))
       :default
       (do 
-        ;(println "default!" (type value))
         (assoc var-registry key value)))))
 
 ; TODO support documentation on vars
@@ -101,7 +104,7 @@
         (reduce str (map (partial concat-tokens vars) tokens))
         value)
       (coll? value)
-      (map (partial replace-vars vars )value)
+      (map (partial replace-vars vars ) value)
       :default
       value))
   ([value]

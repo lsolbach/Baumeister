@@ -1,4 +1,4 @@
-(ns org.soulspace.build.baumeister.utils.pom-dsl
+(ns org.soulspace.build.baumeister.maven.pom-dsl
   (:refer-clojure :exclude [filter name type])
   (:use [org.soulspace.clj.xml dsl-builder]))
 

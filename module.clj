@@ -3,15 +3,15 @@
  :project "org.soulspace.build"
  :project-lead "Ludger Solbach"
  :description "Baumeister Build System"
- :type "consolefrontend"
+ :type :consolefrontend
  :version "0.2.0"
  :author "Ludger Solbach"
  :provider "soulspace.org"
- :plugins ["global" "sdeps" "clojure" "package"]
+ :plugins ["global" "sdeps" "depsdot" "clojure" "package" "publish"]
 ; :license ["Eclipse Public License 1.0" "http://www.eclipse.org/legal/epl-v10.html"]
+ :repository-root-dir "/home/soulman/devel/repositories" ; FIXME use $HOME here
 ; :extra-repositories [[:maven-proxy :thirdparty "http://maven.alfresco.com/nexus/content/groups/public" "${baumeister-home-dir}/../repositories/maven.alfresco.com"]]
- :log-level "info"
- :dependencies [[["org.clojure" "clojure" "1.5.1"] "runtime"]
+ :dependencies [[["org.clojure" "clojure" "1.5.1"] :runtime]
                 [["org.clojure" "data.xml" "0.0.7"]] ; maven support
                 [["org.clojure" "data.zip" "0.1.1"]] ; maven support
                 [["org.apache.ant" "ant-launcher" "1.8.3"]]
@@ -41,4 +41,7 @@
                 [["org.soulspace.modelling" "ModelRepository2" "0.3.0"]] ; transitive, mdsd/architecture plugins
                 [["org.soulspace.modelling" "UML14Repository" "0.3.0"]] ; transitive, mdsd/architecture plugins
                 [["org.soulspace.modelling" "UML14ModelBuilder" "0.3.0"]]] ; transitive, mdsd/architecture plugins
+ :dependency-excludes [["ch.qos.logback"]
+                       ["avalon-framework"]]
+ :log-level :debug
  ]

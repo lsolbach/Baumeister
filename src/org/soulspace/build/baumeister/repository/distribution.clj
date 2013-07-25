@@ -3,8 +3,7 @@
         [org.soulspace.clj file file-search function]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.utils checks log]
-        [org.soulspace.build.baumeister.repository repositories artifact]
-        ))
+        [org.soulspace.build.baumeister.repository artifact repository-protocol repositories]))
 
 ;
 ; distribution of the built artifacts
