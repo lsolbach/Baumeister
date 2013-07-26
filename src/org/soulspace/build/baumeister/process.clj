@@ -10,11 +10,12 @@
   "Start the Baumeister workflow."
   ([]
     (do-workflow :build-workflow))
-  ([args]
-    (doseq [wf args]
-      (do-workflow (keyword wf)))))
+  ([& args]
+    (doseq [workflow (seq args)]
+      (do-workflow (keyword workflow)))))
 
 ; TODO check to (set! *read-eval* false) to prevent security issues reading files
+; TODO handle args
 (defn -main [& args]
   "Baumeister entry method."
   (let [start (System/currentTimeMillis)]
