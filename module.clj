@@ -43,5 +43,5 @@
                 [["org.soulspace.modelling" "UML14ModelBuilder" "0.3.0"]]] ; transitive, mdsd/architecture plugins
  :dependency-excludes [["ch.qos.logback"]
                        ["avalon-framework"]]
- :log-level :debug
+ :log-level :info
  ]

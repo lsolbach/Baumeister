@@ -7,7 +7,7 @@
   (:gen-class))
 
 (defn start-workflow
-  "Start the Baumeister "
+  "Start the Baumeister workflow."
   ([]
     (do-workflow :build-workflow))
   ([args]

@@ -17,13 +17,13 @@
  ; Sets of architectural module type classifications
  ;
  ; TODO use keywords for module-types?
- :module-types #{:library :framework :application :domain :integration :presentation
+ :module-types #{:library :framework :component :application :domain :integration :presentation
                   :webservice :webfrontend :consolefrontend :appfrontend :data}
- :code-module-types #{:library :framework :application :domain :integration :presentation
+ :code-module-types #{:library :framework :component :application :domain :integration :presentation
                       :webservice :webfrontend :consolefrontend :appfrontend}
  :library-module-types #{:library}
  :framework-module-types #{:framework}
- :component-module-types #{:application :domain :integration :presentation}
+ :component-module-types #{:component :application :domain :integration :presentation}
  :web-module-types #{:webfrontend :webservice}
  :console-module-types #{:consolefrontend}
  :app-module-types #{:appfrontend}

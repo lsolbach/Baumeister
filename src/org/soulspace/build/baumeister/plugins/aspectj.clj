@@ -5,7 +5,8 @@
         [org.soulspace.build.baumeister.utils ant-utils files checks log]))
 
 ; TODO think of a mechanism for specifing different aspectj versions?
-(def aspectj-home (get-env "ASPECTJ_HOME" (str home-dir "/devel/java/aspectj1.6")))
+(def aspectj-home (get-env "ASPECTJ_HOME" (str home-dir "/devel/tools/aspectj")))
+; FIXME aspectjTaskdefs.properties doesn't exist anymore. xml config?
 (ant-taskdef {:classpath (str aspectj-home "/lib/aspectjtools.jar:lib/runtime/ant.jar:lib/runtime/ant-launcher.jar")
               :resource "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"})
 (define-ant-task ant-iajc iajc)

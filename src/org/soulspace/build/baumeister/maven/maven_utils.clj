@@ -22,7 +22,15 @@
     (zip/xml-zip (xml/parse-str str)) ; handle as xml string
     (zip/xml-zip (xml/parse (reader str))))); haandle as file name
 
-(defn parse-pom-properties [prop-map zipped]
+(defn replace-value
+  ([value]
+    value)
+  ([value default]
+    (if-not (nil? value)
+      value
+      default)))
+
+(defn parse-pom-properties [zipped]
   "create property map for pom properties"
   ; zip to properties if any and return a map of child element names and their contents
   (if-let [properties (zx/xml1-> zipped :properties)]
@@ -30,7 +38,9 @@
       (loop [ps props property-map {}]
         (if (seq ps)
           (recur (rest ps) (assoc property-map (:tag (first ps)) (first (:content (first ps)))))
-          property-map)))))
+          property-map))
+      {})
+    {}))
 
 (defn parse-pom-exclusion [prop-map exclusion]
   "Returns the exclusion data of a POM dependency."
@@ -64,34 +74,53 @@
             parent)]
       p)))
 
-(defn parse-pom [prop-map zipped]
-  (let [pom-prop-map (parse-pom-properties prop-map zipped)
-        properties (merge prop-map pom-prop-map)
-        model-version (replace-properties properties (zx/xml1-> zipped :modelVersion zx/text))
-        group-id (replace-properties properties (zx/xml1-> zipped :groupId zx/text))
-        artifact-id (replace-properties properties (zx/xml1-> zipped :artifactId zx/text))
-        version (replace-properties properties (zx/xml1-> zipped :version zx/text))
-        packaging (replace-properties properties (zx/xml1-> zipped :packaging zx/text))
-        parent (parse-pom-parent properties zipped)
-        name (replace-properties properties (zx/xml1-> zipped :modelVersion zx/text))
-        description (replace-properties properties (zx/xml1-> zipped :modelVersion zx/text))
-        url (replace-properties properties (zx/xml1-> zipped :modelVersion zx/text))
-        inception-year (replace-properties properties (zx/xml1-> zipped :modelVersion zx/text))
-        dependencies (map (partial parse-pom-dependency properties) (zx/xml-> zipped :dependencies :dependency))
-        dependencyManagement (map (partial parse-pom-dependency properties)
-                                  (zx/xml-> zipped :dependencyManagement :dependencies :dependency))]
-    (new-pom model-version group-id artifact-id version packaging parent name description url inception-year
-             dependencies dependencyManagement properties)))
-
+;TODO use prop-map from parent pom
+(defn parse-pom
+  ([zipped]
+    (parse-pom zipped nil))
+  ([zipped parent-pom]
+    "Returns the relevant data of the POM."
+    (let [; merge parent properties with properties from pom
+          prop-map (merge (:properties parent-pom) (parse-pom-properties zipped))
+          ; merge properties with common project properties
+          p-map (merge prop-map {"project.groupId" (replace-properties prop-map (zx/xml1-> zipped :groupId zx/text)
+                                                                           (prop-map "project.groupId"))
+                                     "project.artifactID" (replace-properties prop-map (zx/xml1-> zipped :artifactId zx/text)
+                                                                              (prop-map "project.artifactID"))
+                                     "project.version" (replace-properties prop-map (zx/xml1-> zipped :version zx/text)
+                                                                           (prop-map "project.version"))
+                                     "pom.groupId" (replace-properties prop-map (zx/xml1-> zipped :groupId zx/text)
+                                                                       (prop-map "pom.groupId"))
+                                     "pom.artifactID" (replace-properties prop-map (zx/xml1-> zipped :artifactId zx/text)
+                                                                          (prop-map "pom.artifactID"))
+                                     "pom.version" (replace-properties prop-map (zx/xml1-> zipped :version zx/text)
+                                                                       (prop-map "pom.version"))})
+          ; read pom data with property replacement
+          model-version (replace-properties p-map (zx/xml1-> zipped :modelVersion zx/text))
+          group-id (replace-properties p-map (zx/xml1-> zipped :groupId zx/text))
+          artifact-id (replace-properties p-map (zx/xml1-> zipped :artifactId zx/text))
+          version (replace-properties p-map (zx/xml1-> zipped :version zx/text))
+          packaging (replace-properties p-map (zx/xml1-> zipped :packaging zx/text))
+          parent (parse-pom-parent p-map zipped)
+          name (replace-properties p-map (zx/xml1-> zipped :name zx/text))
+          description (replace-properties p-map (zx/xml1-> zipped :description zx/text))
+          url (replace-properties p-map (zx/xml1-> zipped :url zx/text))
+          inception-year (replace-properties p-map (zx/xml1-> zipped :inceptionYear zx/text))
+          dependencies (map (partial parse-pom-dependency p-map) (zx/xml-> zipped :dependencies :dependency))
+          dependencyManagement (map (partial parse-pom-dependency p-map)
+                                    (zx/xml-> zipped :dependencyManagement :dependencies :dependency))
+          ]
+      (new-pom model-version group-id artifact-id version packaging parent name description url inception-year
+               dependencies dependencyManagement p-map parent-pom))))
+  
 (defn pom-parent? [zipped]
   (not (nil? (zx/xml1-> zipped :parent))))
 
 (defn pom-parent-data [prop-map zipped]
-  (parse-pom-parent prop-map zipped))
+  (parse-pom-parent (parse-pom-properties prop-map zipped) zipped))
 
 (defn pom-dependencies-data
   "Returns the dependencies data of the POM."
   [pom]
   (let [dependencies (:dependencies pom)]
-    (println dependencies)
     (map pom-dependency-data dependencies)))

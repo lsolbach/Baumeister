@@ -28,9 +28,12 @@
     (pom-name dependency) (maven-type-to-type (:type dependency))]
    (maven-scope-to-target (:scope dependency)) (:optional dependency) 
    (map pom-exclusion-data (:exclusions dependency))])
-
+;
+; Pom protocols
+;
 (defprotocol Pom
   "Protocol for the maven project object model as far as it is required."
+  ; TODO add functions for parent-pom handling (properties, dependencyManagement)?
   )
 
 (defprotocol PomDependency
@@ -43,7 +46,7 @@
 
 (defrecord PomImpl
   [model-version group-id artifact-id version packaging parent name description url inception-year
-   dependencies dependencyManagement properties]
+   dependencies dependencyManagement properties parent-pom]
   )
 
 (defrecord PomDependencyImpl
@@ -56,9 +59,9 @@
 
 (defn new-pom 
   ([model-version group-id artifact-id version packaging parent name description url inception-year
-    dependencies dependencyManagement properties]
+    dependencies dependencyManagement properties parent-pom]
     (PomImpl. model-version group-id artifact-id version packaging parent name description url inception-year
-    dependencies dependencyManagement properties))
+    dependencies dependencyManagement properties parent-pom))
   )
 
 (defn new-pom-dependency

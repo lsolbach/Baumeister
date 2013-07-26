@@ -40,8 +40,7 @@
   "Protocol for a maven2 artifact repository."
   (artifact-mvn-name [repo artifact] "Get the maven name of this artifact.")
   (pom-artifact [repo artifact] "Create the maven POM artifact for this artifact.")
-  (get-pom-artifact [repo artifact] "Parse and return the POM")
-  (has-parent-pom? [repo artifact] "Returns true if the POM has defined a parent POM.")
+  (get-pom [repo artifact] "Get the POM with parent POMs if any.")
   )
 
 (defprotocol VersionedArtifactRepository
