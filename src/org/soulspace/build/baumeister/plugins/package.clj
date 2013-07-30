@@ -1,7 +1,7 @@
 (ns org.soulspace.build.baumeister.plugins.package
   (:use [org.soulspace.clj file function]
         [org.soulspace.build.baumeister.utils ant-utils checks log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 ; checks plugin mdsd, web-module-type, tests
 (defn get-environments []
@@ -72,8 +72,12 @@
   (when (data-module?)
     (package-data)))
 
+(def package-config
+  {:params [[:package-environment-dir "${module-dir}/env"]
+            [:package-additional-jars []]]
+   :functions [[:package package-package]]})
+
 (defn plugin-init []
   (log :info  "initializing plugin package")
-  (register-vars [[:package-environment-dir "${module-dir}/env"]
-                  [:package-additional-jars []]])
-  (register-fns [[:package package-package]]))
+  (register-vars (:params package-config))
+  (register-fns (:functions package-config)))

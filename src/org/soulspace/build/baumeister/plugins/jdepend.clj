@@ -3,7 +3,7 @@
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
         [org.soulspace.build.baumeister.utils checks ant-utils log]
-        [org.soulspace.build.baumeister.config registry])
+        [org.soulspace.build.baumeister.config registry plugin-registry])
   (:import [java.util Set]))
 
 ;(define-ant-task ant-jdepend jdepend)
@@ -20,7 +20,6 @@
 (defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/jdepend org.apache.tools.ant.types.Path]
   [_ task path]
   (doto  (.createClassespath task) (.add path)))
-
 
 (defn get-classpath []
   (cond
@@ -41,10 +40,14 @@
                (ant-path (param :build-classes-dir))
                (param :jdepend-excludes)))
 
+(def jdepend-config
+  {:params [[:jdepend-report-dir "${build-report-dir}/jdepend"]
+            [:jdepend-excludes #{"java.*" "javax.*" }]]
+   :functions [[:clean jdepend-clean]
+               [:init jdepend-init]
+               [:analyse jdepend-analyse]]})
+
 (defn plugin-init []
   (log :info "initializing plugin jdepend")
-  (register-vars [[:jdepend-report-dir "${build-report-dir}/jdepend"]
-                  [:jdepend-excludes #{"java.*" "javax.*" }]])
-  (register-fns [[:clean jdepend-clean]
-                 [:init jdepend-init]
-                 [:analyse jdepend-analyse]]))
+  (register-vars (:params jdepend-config))
+  (register-fns (:functions jdepend-config)))

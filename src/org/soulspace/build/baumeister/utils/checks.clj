@@ -1,7 +1,7 @@
 (ns org.soulspace.build.baumeister.utils.checks
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file string]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry parameter-registry plugin-registry]))
 
 (defn plugin? [plugin] (has-plugin? plugin))
 

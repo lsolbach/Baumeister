@@ -4,7 +4,7 @@
         [org.soulspace.clj file file-search function]
         [org.soulspace.clj.modelgenerator generator]
         [org.soulspace.build.baumeister.utils ant-utils log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 ; TODO handle model dependencies from mdsd plugin?
 ; TODO at least access to the dependency tree is needed (to specify model dependencies in the right order)?
@@ -40,24 +40,31 @@
 (defn generators []
   (let [gen-config (load-file (str (param "${mdsd-config-dir}/${mdsd-config-file}")))]
     (cond
-      (= (param :type) "data")
-      (flatten [(:doc-generators gen-config)])
-      (= (param :type) "library")
-      (flatten [(:doc-generators gen-config) (:standard-generators gen-config)])
-      (= (param :type) "framework")
-      (flatten [(:doc-generators gen-config) (:standard-generators gen-config)])
-      (= (param :type) "application")
-      (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:application-generators gen-config)])
-      (= (param :type) "domain")
-      (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:domain-generators gen-config)])
-      (= (param :type) "integration")
-      (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:integration-generators gen-config)])
-      (= (param :type) "presentation")
-      (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:presentation-generators gen-config)])
-      (= (param :type) "webfrontend")
-      (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:web-frontend-generators gen-config)])
-      (= (param :type) "webservice")
-      (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:web-service-generators gen-config)]))))
+      (= (keyword (param :type)) :data)
+      (remove nil? (flatten [(:doc-generators gen-config)]))
+      (= (keyword (param :type)) :library)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
+      (= (keyword (param :type)) :framework)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
+      (= (keyword (param :type)) :component)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
+      (= (keyword (param :type)) :application)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:application-generators gen-config)]))
+      (= (keyword (param :type)) :domain)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:domain-generators gen-config)]))
+      (= (keyword (param :type)) :integration)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:integration-generators gen-config)]))
+      (= (keyword (param :type)) :presentation)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:presentation-generators gen-config)]))
+      (= (keyword (param :type)) :webservice)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:web-service-generators gen-config)]))
+      (= (keyword (param :type)) :webfrontend)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:web-frontend-generators gen-config)]))
+      (= (keyword (param :type)) :consolefrontend)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
+      (= (keyword (param :type)) :appfrontend)
+      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
+      )))
 
 (defn mdsd-clean []
   (delete-dir (as-file (param :mdsd-backup-dir)))
@@ -85,29 +92,35 @@
 
 (defn mdsd-generate []
   (log :info  "generating artifacts from model...")
-  (log :debug "Generation Context:" (generation-context))
-  (log :debug "Generators:" (generators))
-  (generate-all (generation-context) (generators)))
+  (let [gen-ctx (generation-context)
+        gens (generators)]
+    (log :debug "Generation Context:" gen-ctx)
+    (log :debug "Generators:" gens)
+    (generate-all gen-ctx gens)))
 
 (defn mdsd-post-generate []
   (log :info  "postprocessing generation from model..."))
 
+(def mdsd-config 
+  {:params [[:lib-generator-dir "${lib-dir}/generator"]
+            [:lib-model-dir "${lib-dir}/model"]
+            [:mdsd-model-dir "${module-dir}/model"]
+            [:mdsd-model-name "${module}"]
+            [:mdsd-generation-dir "${module-dir}/generated"]
+            [:mdsd-backup-dir "${module-dir}/backup"]
+            [:mdsd-config-dir "${lib-generator-dir}/config"]
+            [:mdsd-config-file "generators.clj"]
+            [:mdsd-template-path "${lib-generator-dir}/templates"]
+            [:mdsd-profile-path "${lib-generator-dir}/profiles:${lib-model-dir}"]
+            [:mdsd-std-profiles ["argouml/default-uml14"]]
+            [:mdsd-profiles nil]]
+   :functions [[:clean mdsd-clean]
+               [:init mdsd-init]
+               [:pre-generate mdsd-pre-generate]
+               [:generate mdsd-generate]
+               [:generate mdsd-post-generate]]})
+
 (defn plugin-init []
   (log :info  "initializing plugin mdsd")
-  (register-vars [[:lib-generator-dir "${lib-dir}/generator"]
-                  [:lib-model-dir "${lib-dir}/model"]
-                  [:mdsd-model-dir "${module-dir}/model"]
-                  [:mdsd-model-name "${module}"]
-                  [:mdsd-generation-dir "${module-dir}/generated"]
-                  [:mdsd-backup-dir "${module-dir}/backup"]
-                  [:mdsd-config-dir "${lib-generator-dir}/config"]
-                  [:mdsd-config-file "generators.clj"]
-                  [:mdsd-template-path "${lib-generator-dir}/templates"]
-                  [:mdsd-profile-path "${lib-generator-dir}/profiles:${lib-model-dir}"]
-                  [:mdsd-std-profiles ["argouml/default-uml14"]]
-                  [:mdsd-profiles nil]])
-  (register-fns [[:clean mdsd-clean]
-                 [:init mdsd-init]
-                 [:pre-generate mdsd-pre-generate]
-                 [:generate mdsd-generate]
-                 [:generate mdsd-post-generate]]))
+  (register-vars (:params mdsd-config))
+  (register-fns (:functions mdsd-config)))

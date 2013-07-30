@@ -9,9 +9,6 @@
   "Builds a path with all jar files in the directory."
   (build-path (existing-files-on-path "jar" dir-path)))
 
-(defn lib-path [coll]
-  (join ":" (map #(str (get-lib-dir) "/" % ".jar") coll)))
-
 (defn class-path [coll]
   "Builds a path by joining all non empty path components separated with ':'."
   (join ":" (filter #(not (empty? %)) coll)))

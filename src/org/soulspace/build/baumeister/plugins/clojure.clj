@@ -3,7 +3,7 @@
         [clojure.string :only [join]]
         [org.soulspace.clj file file-search function string ]
         [org.soulspace.build.baumeister.utils ant-utils files checks log]
-        [org.soulspace.build.baumeister.config.registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 (defn remove-clj-ext [clj-path]
   (if (ends-with ".clj" clj-path)
@@ -14,9 +14,11 @@
   (map file-to-ns (map remove-clj-ext (map (partial relative-path src-path) (existing-files-on-path "clj" src-path)))))
 
 (defn compile-clojure [dest-dir src-path class-path]
-  (log :debug "compile-class-path" class-path)
+  (log :debug "compile-clojure dest-dir" dest-dir)
+  (log :debug "compile-clojure src-path" src-path)
+  (log :debug "compile-clojure class-path" class-path)
   (ant-java {:classname "clojure.lang.Compile"
-             :fork "true"
+             :fork (param :clojure-compiler-fork)
              :failonerror "true"
              :classpath class-path}
             (ant-variable {:key "clojure.compile.path" :value dest-dir})
@@ -69,15 +71,19 @@
                     [:clojure-integrationtest-source-path "integrationtest"]
                     [:clojure-acceptancetest-source-path "acceptancetest"]])))
 
+(def clojure-config
+  {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
+            [:lib-dev-dir "${lib-dir}/dev"][:clojure-compiler-fork "${compiler-fork}"]
+            [:clojure-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
+            [:clojure-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
+            [:clojure-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
+            [:clojure-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]]
+   :functions [[:clean clojure-clean]
+               [:init clojure-init]
+               [:compile clojure-compile]]})
+
 (defn plugin-init []
   (log :info "initializing plugin clojure")
   (register-source-paths)
-  (register-vars [[:lib-runtime-dir "${lib-dir}/runtime"]
-                  [:lib-dev-dir "${lib-dir}/dev"]])
-  (register-vars [[:clojure-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
-                  [:clojure-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
-                  [:clojure-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
-                  [:clojure-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]])
-  (register-fns [[:clean clojure-clean]
-                 [:init clojure-init]
-                 [:compile clojure-compile]]))
+  (register-vars (:params clojure-config))
+  (register-fns (:functions clojure-config)))

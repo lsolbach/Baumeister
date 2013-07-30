@@ -3,7 +3,7 @@
         [clojure.string :only [join split]]
         [org.soulspace.clj file]
         [org.soulspace.build.baumeister.utils ant-utils files log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 (def cobertura-classpath (lib-path ["cobertura" "asm" "asm-tree" "jakarta-oro"])) ; log4j?
 (ant-taskdef {:classpath cobertura-classpath :resource "tasks.properties"})
@@ -67,13 +67,21 @@
   (log :info "post-coverage cobertura...")
   (report-task))
 
+(def cobertura-config
+  {:params [[:build-cobertura-dir "${build-dir}/cobertura"]
+            [:cobertura-data-file "${build-cobertura-dir}/cobertura.ser"]
+            [:cobertura-report-dir "${build-report-dir}/cobertura"]]
+   :functions [[:clean cobertura-clean]
+               [:init cobertura-init]
+               [:pre-coverage cobertura-pre-coverage]
+               [:coverage cobertura-coverage]
+               [:post-coverage cobertura-post-coverage]]
+   :dependencies [[["net.sourceforge.cobertura" "cobertura" "1.9.4.1"]]
+                  [["asm" "asm" "3.3.1"]]
+                  [["asm" "asm-tree" "3.3.1"]]
+                  [["oro" "oro" "2.0.8"]]]})
+
 (defn plugin-init []
   (log :info "initializing plugin cobertura")
-  (register-vars [[:build-cobertura-dir "${build-dir}/cobertura"]
-                  [:cobertura-data-file "${build-cobertura-dir}/cobertura.ser"]
-                  [:cobertura-report-dir "${build-report-dir}/cobertura"]])
-  (register-fns [[:clean cobertura-clean]
-                 [:init cobertura-init]
-                 [:pre-coverage cobertura-pre-coverage]
-                 [:coverage cobertura-coverage]
-                 [:post-coverage cobertura-post-coverage]]))
+  (register-vars (:params cobertura-config))
+  (register-fns (:functions cobertura-config)))

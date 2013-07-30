@@ -1,7 +1,7 @@
 (ns org.soulspace.build.baumeister.plugins.sdeps
     (:use [clojure.java.io :only [as-file copy]]
         [org.soulspace.clj file file-search function]
-        [org.soulspace.build.baumeister.config registry]
+        [org.soulspace.build.baumeister.config registry plugin-registry]
         [org.soulspace.build.baumeister.repository repositories artifact distribution]
         [org.soulspace.build.baumeister.dependency dependency dependency-initialization]
         [org.soulspace.build.baumeister.utils ant-utils checks log]))
@@ -37,6 +37,15 @@
     (distribute-artifact (get-dev-repository (param :deps-repositories))
                          (new-artifact [(param :project) (param :module) (param :version) (param :mdsd-model-name) "xmi"]) (param :mdsd-model-dir))))
 
+(def sdeps-config
+  {:params [[:deps-report true]
+                  [:deps-transitive false]
+                  [:deps-report-dir "${build-report-dir}/dependencies"]]
+   :functions [[:clean sdeps-clean]
+                 [:init sdeps-init]
+                 [:dependencies sdeps-dependencies]
+                 [:distribute sdeps-distribute]]})
+
 ;
 ; plugin initialization
 ;
@@ -45,10 +54,5 @@
   (register-plugin "deps")
   (log :debug "creating repositories " (param :repositories))
   (register-val :deps-repositories (create-repositories (param :repositories)))
-  (register-vars [[:deps-report true]
-                  [:deps-transitive false]
-                  [:deps-report-dir "${build-report-dir}/dependencies"]])
-  (register-fns [[:clean sdeps-clean]
-                 [:init sdeps-init]
-                 [:dependencies sdeps-dependencies]
-                 [:distribute sdeps-distribute]]))
+  (register-vars (:params sdeps-config))
+  (register-fns (:functions sdeps-config)))

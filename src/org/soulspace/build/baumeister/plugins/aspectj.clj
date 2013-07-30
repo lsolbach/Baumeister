@@ -1,21 +1,25 @@
 (ns org.soulspace.build.baumeister.plugins.aspectj
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file function]
-        [org.soulspace.build.baumeister.config.registry]
+        [org.soulspace.build.baumeister.config registry plugin-registry]
         [org.soulspace.build.baumeister.utils ant-utils files checks log]))
 
 ; TODO think of a mechanism for specifing different aspectj versions?
-(def aspectj-home (get-env "ASPECTJ_HOME" (str home-dir "/devel/tools/aspectj")))
-; FIXME aspectjTaskdefs.properties doesn't exist anymore. xml config?
+(def aspectj-home (get-env "ASPECTJ_HOME" (str (param :user_home_dir) "/devel/tools/aspectj")))
 (ant-taskdef {:classpath (str aspectj-home "/lib/aspectjtools.jar:lib/runtime/ant.jar:lib/runtime/ant-launcher.jar")
               :resource "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"})
 (define-ant-task ant-iajc iajc)
 
 (defn aspectj-task [dest-dir src-path class-path in-path aspect-path]
   (log :debug "iajc" dest-dir src-path class-path in-path aspect-path)
-  (ant-iajc {:sourceRoots src-path  :destdir dest-dir :classpath class-path
-             :inpath in-path :aspectpath aspect-path :source (get-var :aspectj-version "1.6")
-             :debug (get-var :debug "false") :encoding (param :source-encoding "UTF-8") ;:verbose "true"
+  (ant-iajc {:fork (param :aspectj-compiler-fork)
+             :sourceRoots src-path
+             :destdir dest-dir
+             :classpath class-path
+             :inpath in-path :aspectpath aspect-path
+             :source (param :aspectj-source-version "1.6")
+             :debug (param :aspectj-compile-debug)
+             :encoding (param :aspectj-source-encoding) ;:verbose "true"
              :sourceRootCopyFilter "**/CVS/*,**/*.java,**/*.aj,**/.clj"
              :inpathDirCopyFilter "**/CVS/*,**/*.java,**/*.aj,**/.clj,**/*.class,**/*.jar,**/*.txt"}))
 
@@ -74,27 +78,36 @@
                     [:aspectj-integrationtest-source-path "integrationtest"]
                     [:aspectj-acceptancetest-source-path "acceptancetest"]])))
 
+(def aspectj-config
+  {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
+            [:lib-dev-dir "${lib-dir}/dev"]
+            [:lib-aspect-dir "${lib-dir}/aspect"]
+            [:lib-aspectin-dir "${lib-dir}/aspectin"]
+            [:aspectj-compiler-fork "${compiler-fork}"]
+            [:aspectj-compile-debug "${compile-debug}"]
+            [:aspectj-source-encoding "${source-encoding}"]
+            [:aspectj-source-version "${source-version}"]
+            [:aspectj-target-version "${target-version}"]
+            [:aspectj-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
+            [:aspectj-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
+            [:aspectj-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
+            [:aspectj-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
+            [:aspectj-aspect-path "${lib-aspect-dir}"]
+            [:aspectj-unittest-aspect-path "${lib-aspect-dir}"]
+            [:aspectj-integrationtest-aspect-path "${lib-aspect-dir}"]
+            [:aspectj-acceptancetest-aspect-path "${lib-aspect-dir}"]
+            [:aspectj-aspectin-path "${lib-aspectin-dir}"]
+            [:aspectj-unittest-aspectin-path "${lib-aspectin-dir}"]
+            [:aspectj-integrationtest-aspectin-path "${lib-aspectin-dir}"]
+            [:aspectj-acceptancetest-aspectin-path "${lib-aspectin-dir}"]]
+   :functions [[:clean aspectj-clean]
+               [:init aspectj-init]
+               [:pre-compile aspectj-pre-compile]
+               [:compile aspectj-compile]]})
+
 (defn plugin-init []
   (log :info "initializing plugin aspectj")
   ; FIXME compute classpath after deps and before compilation
-  (register-vars [[:lib-runtime-dir "${lib-dir}/runtime"]
-                  [:lib-dev-dir "${lib-dir}/dev"]
-                  [:lib-aspect-dir "${lib-dir}/aspect"]
-                  [:lib-aspectin-dir "${lib-dir}/aspectin"]
-                  [:aspectj-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
-                  [:aspectj-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
-                  [:aspectj-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
-                  [:aspectj-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
-                  [:aspectj-aspect-path "${lib-aspect-dir}"]
-                  [:aspectj-unittest-aspect-path "${lib-aspect-dir}"]
-                  [:aspectj-integrationtest-aspect-path "${lib-aspect-dir}"]
-                  [:aspectj-acceptancetest-aspect-path "${lib-aspect-dir}"]
-                  [:aspectj-aspectin-path "${lib-aspectin-dir}"]
-                  [:aspectj-unittest-aspectin-path "${lib-aspectin-dir}"]
-                  [:aspectj-integrationtest-aspectin-path "${lib-aspectin-dir}"]
-                  [:aspectj-acceptancetest-aspectin-path "${lib-aspectin-dir}"]])
+  (register-vars (:params aspectj-config))
   (register-source-paths)
-  (register-fns [[:clean aspectj-clean]
-                 [:init aspectj-init]
-                 [:pre-compile aspectj-pre-compile]
-                 [:compile aspectj-compile]]))
+  (register-fns (:functions aspectj-config)))

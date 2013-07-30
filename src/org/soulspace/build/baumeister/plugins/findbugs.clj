@@ -4,7 +4,7 @@
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
         [org.soulspace.build.baumeister.utils ant-utils files checks log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 (def findbugs-classpath (lib-path ["findbugs" "findbugs-ant" "asm" "asm-tree" "bcel" "dom4j" "jaxen"])) ;  ...
 (ant-taskdef {:name "findbugs" :classname "edu.umd.cs.findbugs.anttask.FindBugsTask" :classpath findbugs-classpath})
@@ -39,17 +39,21 @@
   (log :info "analyzing code with findbugs...")
   (findbugs-task))
 
+(def findbugs-config
+  {:params [[:findbugs-home ""]
+            [:findbugs-plugin-list ""]
+            [:findbugs-report-dir "${build-report-dir}/findbugs"]
+            [:findbugs-output-file "${findbugs-report-dir}/findbugs.xml"]
+            [:findbugs-output "xml:withMessages"]
+            [:findbugs-report-level "medium"]
+            [:findbugs-max-memory "256m"]
+            [:findbugs-jvm-args "-Xmx${findbugs-max-memory}"]]
+   :functions [[:clean findbugs-clean]
+               [:init findbugs-init]
+               [:analyse findbugs-analyse]]})
+
 (defn plugin-init []
   (log :info "initializing plugin findbugs")
-  (register-vars [[:findbugs-home ""]
-                  [:findbugs-plugin-list ""]
-                  [:findbugs-report-dir "${build-report-dir}/findbugs"]
-                  [:findbugs-output-file "${findbugs-report-dir}/findbugs.xml"]
-                  [:findbugs-output "xml:withMessages"]
-                  [:findbugs-report-level "medium"]
-                  [:findbugs-max-memory "256m"]
-                  [:findbugs-jvm-args "-Xmx${findbugs-max-memory}"]])
-  (register-fns [[:clean findbugs-clean]
-                 [:init findbugs-init]
-                 [:analyse findbugs-analyse]]))
+  (register-vars (:params findbugs-config))
+  (register-fns (:functions findbugs-config)))
 

@@ -6,6 +6,7 @@
 
 ; replace "${build-dir}/report" with (str (get-var (keyword build-dir) "${build-dir}") "/dir") (TODO: recursivly?)
 (defn replace-properties
+  "Replaces properties of the form ${property} in strings contained in value."
   ([prop-map value]
     (cond
       (string? value)

@@ -14,6 +14,17 @@ Guidelines
 * Multi project builds
 
 
+Overall
+=======
+* move dist and lib to build/dist and build/lib?
+
+MDSD
+====
+* use src/model for input models?
+* use xmi directly by default, add config parameters for extraction from zargo
+* extract model xmi to build/model instead of model?
+
+
 Think About
 ===========
 

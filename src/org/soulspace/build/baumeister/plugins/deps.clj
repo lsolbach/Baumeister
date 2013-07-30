@@ -3,7 +3,7 @@
         [org.soulspace.clj file file-search function]
         [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-processing dependency-dot]
         [org.soulspace.build.baumeister.utils checks log ant-utils]
-        [org.soulspace.build.baumeister.config registry]
+        [org.soulspace.build.baumeister.config registry plugin-registry]
         [org.soulspace.build.baumeister.repository artifact repositories distribution]))
 
 ;
@@ -41,6 +41,15 @@
     (distribute-artifact (get-dev-repository (param :deps-repositories))
                          (new-artifact (param :project) (param :module) (param :version) (param :mdsd-model-name) "xmi") (param :mdsd-model-dir))))
 
+(def deps-config
+  {:params [[:deps-report true]
+            [:deps-transitive false]
+            [:deps-report-dir "${build-report-dir}/dependencies"]]
+   :functions [[:clean deps-clean]
+               [:init deps-init]
+               [:dependencies deps-dependencies]
+               [:distribute deps-distribute]]})
+
 ;
 ; plugin initialization
 ;
@@ -49,10 +58,5 @@
   (log :debug "creating repositories " (create-repositories (param :repositories)))
   (register-plugin "deps")
   (register-val :deps-repositories (create-repositories (param :repositories)))
-  (register-vars [[:deps-report true]
-                  [:deps-transitive false]
-                  [:deps-report-dir "${build-report-dir}/dependencies"]])
-  (register-fns [[:clean deps-clean]
-                 [:init deps-init]
-                 [:dependencies deps-dependencies]
-                 [:distribute deps-distribute]]))
+  (register-vars (:params deps-config))
+  (register-fns (:functions deps-config)))

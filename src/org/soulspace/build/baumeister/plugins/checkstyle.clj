@@ -4,7 +4,7 @@
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
         [org.soulspace.build.baumeister.utils ant-utils files checks log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 (def checkstyle-jar (str (get-lib-dir) "/checkstyle-all.jar"))
 (ant-taskdef {:classpath checkstyle-jar :resource "checkstyletask.properties"})
@@ -37,13 +37,16 @@
   (log :info "analyzing code with checkstyle...")
   (checkstyle-task))
 
+(def checkstyle-config
+  {:params [[:checkstyle-config (str (param :baumeister_home_dir) "/config/checkstyle/sun_checks.xml")]
+            [:checkstyle-report-dir "${build-report-dir}/checkstyle"]
+            [:checkstyle-report-file "${checkstyle-report-dir}/checkstyle.xml"]
+            [:checkstyle-fail-on-violation "false"]]
+   :functions [[:clean checkstyle-clean]
+               [:init checkstyle-init]
+               [:analyse checkstyle-analyse]]})
+
 (defn plugin-init []
   (log :info "initializing plugin checkstyle")
-  (register-vars [[:checkstyle-config (str (get-home) "/config/checkstyle/sun_checks.xml")]
-                  [:checkstyle-report-dir "${build-report-dir}/checkstyle"]
-                  [:checkstyle-report-file "${checkstyle-report-dir}/checkstyle.xml"]
-                  [:checkstyle-fail-on-violation "false"]])
-  (register-fns [[:clean checkstyle-clean]
-                 [:init checkstyle-init]
-                 [:analyse checkstyle-analyse]]))
-
+  (register-vars (:params checkstyle-config))
+  (register-fns (:functions checkstyle-config)))

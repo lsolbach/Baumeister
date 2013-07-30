@@ -3,7 +3,7 @@
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
         [org.soulspace.build.baumeister.utils ant-utils files checks log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 (defn junit [class-path test-dir report-dir]
   (log :debug "calling junit with parameters" class-path test-dir report-dir)
@@ -74,18 +74,22 @@
                      (class-path [(param :build-acceptancetest-classes-dir) (param :build-classes-dir)
                                   (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))])]])))
 
+(def junit-config 
+  {:params [[:unittest-report-dir "${build-report-dir}/junit/unittest"]
+            [:integrationtest-report-dir "${build-report-dir}/junit/integrationtest"]
+            [:acceptancetest-report-dir "${build-report-dir}/junit/acceptancetest"]
+            [:junit-fork "true"]
+            [:junit-fork-mode "once"]
+            [:junit-max-memory "512m"]
+            [:junit-print-summary "false"]]
+   :functions [[:clean junit-clean]
+               [:init junit-init]
+               [:unittest junit-unittest]
+               [:integrationtest junit-integrationtest]
+               [:acceptancetest junit-acceptancetest]]})
+
 (defn plugin-init []
   (log :info  "initializing plugin junit")
-  (register-vars [[:unittest-report-dir "${build-report-dir}/junit/unittest"]
-                  [:integrationtest-report-dir "${build-report-dir}/junit/integrationtest"]
-                  [:acceptancetest-report-dir "${build-report-dir}/junit/acceptancetest"]
-                  [:junit-fork "true"]
-                  [:junit-fork-mode "once"]
-                  [:junit-max-memory "512m"]
-                  [:junit-print-summary "false"]])
+  (register-vars (:params junit-config))
   (register-paths)
-  (register-fns [[:clean junit-clean]
-                 [:init junit-init]
-                 [:unittest junit-unittest]
-                 [:integrationtest junit-integrationtest]
-                 [:acceptancetest junit-acceptancetest]]))
+  (register-fns (:functions junit-config)))

@@ -3,20 +3,18 @@
 ; These settings are merged with the settings in the module.clj files
 ;
 [
- :module "DefaultModule"
- :project "DefaultProject"
- :version "0.1.0"
+ ;
  ; default project directory layout
+ ;
  :module-dir "."
  :build-dir "${module-dir}/build"
  :build-classes-dir "${build-dir}/classes"
- :dist-dir "${module-dir}/dist"
- :lib-dir "${module-dir}/lib"
- :log-level :warn
+ :build-report-dir "${build-dir}/report"
+ :dist-dir "${build-dir}/dist"
+ :lib-dir "${build-dir}/lib"
  ;
- ; Sets of architectural module type classifications
+ ; sets of architectural module type classifications
  ;
- ; TODO use keywords for module-types?
  :module-types #{:library :framework :component :application :domain :integration :presentation
                   :webservice :webfrontend :consolefrontend :appfrontend :data}
  :code-module-types #{:library :framework :component :application :domain :integration :presentation
@@ -32,6 +30,15 @@
  ; Set of test classifications
  ;
  :test-types #{:unittest :integrationtest :acceptancetest}
+ ;
+ ; default compiler config
+ ;
+ :compiler-fork "true"
+ :compiler-maxmem "256m"
+ :compile-debug "true"
+ :source-encoding "UTF-8"
+ :source-version "1.6"
+ :target-version "1.6"
  ;
  ; default repository config
  ;
@@ -98,20 +105,22 @@
  ;
  ; definition of the default workflows
  ;
- :workflow-definitions {
-                        :clean-workflow [:clean]
-                        :init-workflow [:clean :init]
-                        :compile-workflow [:init :dependencies :generate :compile]
-                        :package-workflow [:build-workflow :package]
-                        :release-workflow [:build-workflow :release :distribute-release]
-                        :integrationtest-workflow [:integrationtest]
-                        :acceptancetest-workflow [:acceptancetest]
-                        :build-workflow [:clean :compile-workflow :unittest :package
-                                         :coverage :analyse :distribute]
-                        :unittest-workflow [:unittest]
+ :workflow-definitions {:prerequisites-workflow [:prerequisites] ; verify prerequisites for the build
+                        :clean-workflow [:clean] ; remove any build artifats and directories from the module
+                        :init-workflow [:init :dependencies] ; initialize the module, create required directories for a build and resolve dependencies
+                        :compile-workflow [:init-workflow :generate :compile]
+                        :package-workflow [:compile-workflow :unittest :sourcedoc :package]
+                        :integrationtest-workflow [:package-workflow :integrationtest]
+                        :acceptancetest-workflow [:package-workflow :acceptancetest]
+                        :unittest-workflow [:compile-workflow :unittest]
                         :architecture-workflow [:clean :init :dependencies :generate-architecture]
-                        :coverage-workflow [:coverage] 
-                        :analyse-workflow [:analyse]
+                        :coverage-workflow [:package-workflow :coverage]
+                        :analyse-workflow [:package-workflow :analyse]
+                        :build-workflow [:clean :package-workflow :unittest :package
+                                         :coverage :analyse :distribute]
+                        :release-workflow [:build-workflow :generate-release :package-release :distribute-release]
                         ; :create-module-workflow [:create-module]
                         }
+ ; default log-level
+ :log-level :info
  ]

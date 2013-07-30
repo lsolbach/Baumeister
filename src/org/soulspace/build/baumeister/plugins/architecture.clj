@@ -3,7 +3,7 @@
         [org.soulspace.clj file file-search]
         [org.soulspace.clj.modelgenerator.generator]
         [org.soulspace.build.baumeister.utils ant-utils log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 ; TODO better align with mdsd plugin?
 
@@ -68,24 +68,29 @@
     (ant-zip {:destFile (str (param :dist-dir) "/" module ".zip")
               :basedir (str (param :architecture-generated-modules-dir) "/" module)})))
 
+; TODO when handling plugins as dependencies, move to plugin module.clj
+(def architecture-config
+  {:params [[:lib-generator-dir "${lib-dir}/generator"]
+            [:lib-model-dir "${lib-dir}/model"]
+            [:architecture-model-dir "${module-dir}/model"]
+            [:architecture-model-name "${module}"]
+            [:architecture-generation-dir "${module-dir}/generated"]
+            [:architecture-backup-dir "${module-dir}/backup"]
+            [:architecture-config-dir "${lib-generator-dir}/config"]
+            [:architecture-config-file "architecture_generators.clj"]
+            [:architecture-template-path ["${lib-generator-dir}/std-templates2" "${lib-generator-dir}/templates2"]]
+            [:architecture-profile-dir "${lib-generator-dir}/profiles"]
+            [:architecture-profiles ["argouml/default-uml14.xmi" "MDSDProfile.xmi"]]
+            [:architecture-generated-models-dir "${architecture-generation-dir}/models"]
+            [:architecture-generated-modules-dir "${architecture-generation-dir}/modules"]]
+   :functions [[:clean architecture-clean]
+               [:pre-init architecture-pre-init]
+               [:init architecture-init]
+               [:pre-generate-architecture architecture-pre-generate]
+               [:generate-architecture architecture-generate]
+               [:post-generate-architecture architecture-post-generate]]})
+
 (defn plugin-init []
   (log :info "initializing plugin architecture")
-  (register-vars [[:lib-generator-dir "${lib-dir}/generator"]
-                  [:lib-model-dir "${lib-dir}/model"]
-                  [:architecture-model-dir "${module-dir}/model"]
-                  [:architecture-model-name "${module}"]
-                  [:architecture-generation-dir "${module-dir}/generated"]
-                  [:architecture-backup-dir "${module-dir}/backup"]
-                  [:architecture-config-dir "${lib-generator-dir}/config"]
-                  [:architecture-config-file "architecture_generators.clj"]
-                  [:architecture-template-path ["${lib-generator-dir}/std-templates2" "${lib-generator-dir}/templates2"]]
-                  [:architecture-profile-dir "${lib-generator-dir}/profiles"]
-                  [:architecture-profiles ["argouml/default-uml14.xmi" "MDSDProfile.xmi"]]
-                  [:architecture-generated-models-dir "${architecture-generation-dir}/models"]
-                  [:architecture-generated-modules-dir "${architecture-generation-dir}/modules"]])
-  (register-fns [[:clean architecture-clean]
-                 [:pre-init architecture-pre-init]
-                 [:init architecture-init]
-                 [:pre-generate-architecture architecture-pre-generate]
-                 [:generate-architecture architecture-generate]
-                 [:post-generate-architecture architecture-post-generate]]))
+  (register-vars (:params architecture-config))
+  (register-fns (:functions architecture-config)))

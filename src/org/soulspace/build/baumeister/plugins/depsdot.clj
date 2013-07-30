@@ -1,6 +1,6 @@
 (ns org.soulspace.build.baumeister.plugins.depsdot
   (:use [org.soulspace.build.baumeister.utils log]
-        [org.soulspace.build.baumeister.config registry]
+        [org.soulspace.build.baumeister.config registry plugin-registry]
         [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-dot]
         ))
 
@@ -14,12 +14,16 @@
     (dependencies-dot writer root)
     (spit (param "${deps-report-dir}/dependencies.dot") (str writer))))
 
+(def depsdot-config
+  {:params [[:deps-report true]
+            [:deps-report-dir "${build-report-dir}/dependencies"]]
+   :functions [[:dependencies depsdot-dependencies]]})
+
 ;
 ; plugin initialization
 ;
 (defn plugin-init []
   (log :info "initializing plugin depsdot")
   (register-plugin "depsdot")
-  (register-vars [[:deps-report true]
-                  [:deps-report-dir "${build-report-dir}/dependencies"]])
-  (register-fns [[:dependencies depsdot-dependencies]]))
+  (register-vars (:params depsdot-config))
+  (register-fns (:functions depsdot-config)))

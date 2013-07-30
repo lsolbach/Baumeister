@@ -1,7 +1,8 @@
 (ns org.soulspace.build.baumeister.plugins.xslt
   (:use [org.soulspace.build.baumeister.utils log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
+; TODO implement natively or with ant?
 
 (defn transform [xsl in out]
   )

@@ -2,7 +2,7 @@
   (:use [clojure.java.io :exclude [delete-file]] 
         [org.soulspace.clj file]
         [org.soulspace.build.baumeister.utils ant-utils log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 (defn global-clean []
   (log :info "cleaning globally...")
@@ -21,16 +21,20 @@
   (create-dir (as-file (param :lib-dir)))
   (create-dir (as-file (param :dist-dir))))
 
+(def global-config
+  {:params [[:module-dir "."]
+            [:build-dir "${module-dir}/build"]
+            [:lib-dir "${build-dir}/lib"]
+            [:dist-dir "${build-dir}/dist"]
+            [:build-classes-dir "${build-dir}/classes"]
+            [:build-unittest-classes-dir "${build-dir}/unittest/classes"]
+            [:build-integrationtest-classes-dir "${build-dir}/integrationtest/classes"]
+            [:build-acceptancetest-classes-dir "${build-dir}/acceptancetest/classes"]
+            [:build-report-dir "${build-dir}/report"]]
+   :functions [[:clean global-clean]
+               [:init global-init]]})
+
 (defn plugin-init []
   (log :info "initializing plugin global")
-  (register-vars [[:module-dir "."]
-                  [:lib-dir "${module-dir}/lib"]
-                  [:dist-dir "${module-dir}/dist"]
-                  [:build-dir "${module-dir}/build"]
-                  [:build-classes-dir "${build-dir}/classes"]
-                  [:build-unittest-classes-dir "${build-dir}/unittest/classes"]
-                  [:build-integrationtest-classes-dir "${build-dir}/integrationtest/classes"]
-                  [:build-acceptancetest-classes-dir "${build-dir}/acceptancetest/classes"]
-                  [:build-report-dir "${build-dir}/report"]])
-  (register-fns [[:clean global-clean]
-                 [:init global-init]]))
+  (register-vars (:params global-config))
+  (register-fns (:functions global-config)))

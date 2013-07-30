@@ -4,7 +4,7 @@
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
         [org.soulspace.build.baumeister.utils ant-utils files checks log]
-        [org.soulspace.build.baumeister.config registry]))
+        [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 (def pmd-jar (str (get-lib-dir) "/pmd.jar"))
 
@@ -44,29 +44,33 @@
            (map #(ant-fileset {:dir % :includes (param :cpd-source-pattern)}) (split (source-path) #":"))))
 
 (defn pmd-clean []
-  (log :info  "cleaning pmd...")
+  (log :debug  "cleaning pmd...")
   (delete-dir (as-file (param :pmd-report-dir)))
   (delete-dir (as-file (param :cpd-report-dir))))
 
 (defn pmd-init []
-  (log :info  "initializing pmd...")
+  (log :debug  "initializing pmd...")
   (create-dir (as-file (param :pmd-report-dir)))
   (create-dir (as-file (param :cpd-report-dir))))
 
 (defn pmd-analyse []
-  (log :info  "analyzing code with pmd and cpd...")
+  (log :debug  "analyzing code with pmd and cpd...")
   (cpd-task)
   (pmd-task))
 
+(def pmd-config
+  {:params [[:pmd-report-dir "${build-report-dir}/pmd"]
+            [:pmd-report-file "${pmd-report-dir}/pmd.xml"]
+            [:pmd-rule-sets ["java/basic" "java/braces" "java/unusedcode"]]
+            [:pmd-source-pattern "**/*.java,**/*.aj,**/*.clj"]
+            [:cpd-report-dir "${build-report-dir}/cpd"]
+            [:cpd-source-pattern "**/*.java,**/*.aj,**/*.clj"]
+            [:cpd-minimum-token-count 50]]
+   :functions [[:clean pmd-clean]
+               [:init pmd-init]
+               [:analyse pmd-analyse]]})
+
 (defn plugin-init []
-  (log :info  "initializing plugin pmd")
-  (register-vars [[:pmd-report-dir "${build-report-dir}/pmd"]
-                  [:pmd-report-file "${pmd-report-dir}/pmd.xml"]
-                  [:pmd-rule-sets ["java/basic" "java/braces" "java/unusedcode"]]
-                  [:pmd-source-pattern "**/*.java,**/*.aj,**/*.clj"]
-                  [:cpd-report-dir "${build-report-dir}/cpd"]
-                  [:cpd-source-pattern "**/*.java,**/*.aj,**/*.clj"]
-                  [:cpd-minimum-token-count 50]])
-  (register-fns [[:clean pmd-clean]
-                 [:init pmd-init]
-                 [:analyse pmd-analyse]]))
+  (log :debug  "initializing plugin pmd")
+  (register-vars (:params pmd-config))
+  (register-fns (:functions pmd-config)))
