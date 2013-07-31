@@ -11,8 +11,7 @@
 
 (defn reset-param-registry []
   "Resets the parameter registry."
-  (def param-registry {})
-  (println "PARAM REGISTRY" param-registry))
+  (def param-registry {}))
 
 (declare replace-vars)
 

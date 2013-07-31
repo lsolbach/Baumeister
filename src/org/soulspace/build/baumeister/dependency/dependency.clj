@@ -13,27 +13,22 @@
   {:aspectj :runtime
    :aspectin :dev})
 
-(defn compatible-dependency? [this other]
-  (let [this-artifact (:artifact this)
-        other-artifact (:artifact other)]
-    (and (same-artifact-apart-from-version? this-artifact other-artifact)
-         ;(= (contains-version? (:version a1) (:version a2)))
-         (or (= (:target this) (:target other))
-             (= (compatible-targets (:target this)) (:target other))))))
-
 ;
 ; Dependency Protocol 
 ;
 (defprotocol Dependency
-  (is-compatible? [d1 d2] "Returns true if ")
-  ; TODO functions
-  )
+  (compatible-dependency? [this other] "Returns true if both dependencies are compatible."))
 
 ; Part of the dependency: artifact target scope dependencies exclusions
 (defrecord DependencyImpl [artifact target optional scope exclusions]
   Dependency
-  ; TODO functions
-  )
+  (compatible-dependency? [this other]
+    (let [this-artifact (:artifact this)
+          other-artifact (:artifact other)]
+      (and (same-artifact-apart-from-version? this-artifact other-artifact)
+           ;(= (contains-version? (:version a1) (:version a2)))
+           (or (= (:target this) (:target other))
+               (= (compatible-targets (:target this)) (:target other)))))))
 
 ; TODO add required signatures
 (defn new-dependency
