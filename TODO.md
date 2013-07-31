@@ -13,11 +13,6 @@ Guidelines
 * Implement repositories (initially implemented, use an HTTP client library for proxy support in HTTP requests)
 * Multi project builds
 
-
-Overall
-=======
-* move dist and lib to build/dist and build/lib?
-
 MDSD
 ====
 * use src/model for input models?
@@ -67,13 +62,4 @@ Listener/Notifier plugin to register functions on build phases?
 
 Global initialization (apart from plugins)?
 build-dir
-dist-dir
-lib-dir
 
-
-Rethink the registries!
-How to store module variables?
-prefixed with "module-", eg. "module-name"?
-unprefixed?
-store in var registry?
-store in global config?

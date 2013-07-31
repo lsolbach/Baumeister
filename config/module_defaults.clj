@@ -33,7 +33,7 @@
  ;
  ; default compiler config
  ;
- :compiler-fork "true"
+ :compiler-fork "true" ; TODO string because it is fed into ant, but true/false should work too
  :compiler-maxmem "256m"
  :compile-debug "true"
  :source-encoding "UTF-8"
@@ -53,7 +53,7 @@
  ;
  ; dependency management configuration
  ;
- :dependency-transitive false ; TODO "true"/"false" strings should work, too
+ :dependency-transitive true ; TODO "true"/"false" strings should work, too
  ; :dependency-targets defines the valid dependency targets
  :dependency-targets #{:root ; root project dependency, not a target!
                        :runtime ; runtime dependency, used on compile and runtime classpaths

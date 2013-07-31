@@ -69,23 +69,6 @@
   ([dependency target included excluded]
     (DependencyNodeImpl. dependency target included excluded)))
 
-;
-; dependency zipper tree editing
-;
-(defn depnode-branch? [node]
-  true)
-
-(defn depnode-children [node]
-  (:included node))
-
-(defn depnode-make [node children]
-  (assoc node :included children)
-  )
-
-(defn depnode-zipper [node]
-  (zip/zipper depnode-branch? depnode-children depnode-make node))
-
-
 (defn find-or-build-node [dependency target included]
   (if-let [node (find-node dependency target)]
     (do
