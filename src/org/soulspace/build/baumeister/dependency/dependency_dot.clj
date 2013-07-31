@@ -2,6 +2,8 @@
   (:use [org.soulspace.build.baumeister.repository artifact]
         [org.soulspace.build.baumeister.dependency dependency dependency-node]))
 
+(def ^:dynamic processed-edges #{})
+
 ;
 ; create dot graph of the dependencies TODO use writer instead of println (re-bind *out*?!)
 ;
@@ -27,39 +29,30 @@
 
 (defn dependency-dot-edge [parent child]
   "render an edge in the dot representation of the dependency tree"
-  (str (dependency-dot-edge-end parent) " -> " (dependency-dot-edge-end child)
-       " " (edge-style (:target (:dependency child))) ";"))
-
-(defn dependency-dot-edge-excluded [parent child]
-  "render an excluded edge in the dot representation of the dependency tree"
-  (str (dependency-dot-edge-end parent) " -> " (dependency-dot-edge-end child)
-       " [style=dotted color=red];"))
+  (let [dot-edge (str (dependency-dot-edge-end parent) " -> " (dependency-dot-edge-end child)
+                      " " (edge-style (:target (:dependency child))) ";")]
+    (if-not (contains? processed-edges dot-edge)
+      (do (def processed-edges (conj processed-edges dot-edge))
+        dot-edge)
+      "")))
 
 (defn dependency-vertices [node]
   "render a dot representation of the node"
   (println (dependency-dot-vertex node))
   (if (seq (:included node))
     (doseq [include (:included node)]
-      (dependency-vertices include)))
-;  (if (seq (:excluded node))
-;    (doseq [exclude (:excluded node)]
-;      (dependency-excluded-vertices exclude)))
-  )
+      (dependency-vertices include))))
 
 (defn dependency-edges [node]
   "recursively render the edges of the dependency graph"
   (if (seq (:included node))
     (doseq [include (:included node)]
       (println (dependency-dot-edge node include))
-      (dependency-edges include)))
-;  (if (seq (excluded node))
-;    (doseq [exclude (excluded node)]
-;      (print (dependency-dot-edge node exclude))
-;      (dependency-dot exclude)))
-  )
+      (dependency-edges include))))
 
 (defn dependencies-dot [writer root-node]
   "render a dot representation of the dependency tree"
+  (def processed-edges #{})
   (binding [*out* writer]
     (println "digraph Dependencies {
     outputmode=nodefirst;

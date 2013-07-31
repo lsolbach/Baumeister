@@ -11,13 +11,25 @@
 ; Transitive dependency functions 
 ;
 (def ^:dynamic loaded #{})
-(def ^:dynamic built-nodes #{})
+(def ^:dynamic built-nodes [])
+
+(defn print-dependency
+  ([dependency]
+    (print-dependency dependency (:target dependency)))
+  ([dependency target]
+    (let [artifact (:artifact dependency)]
+      (str "[" 
+           (clojure.string/join  ", " 
+                                 [(:project artifact) (:module artifact) (artifact-version artifact) (:name artifact) (:type artifact) target])
+           "]"))))
+  
+(defn print-node [node]
+  (print-dependency (:dependency node) (:target node)))
 
 (defn matches-node? [dependency target node]
-  (and (=(:dependency node) dependency) (= (:target node) target)))
+  (and (= (:dependency node) dependency) (= (:target node) target)))
 
 (defn find-node [dependency target]
-;  (println "Searching node for" dependency ":" target "in" built-nodes)
   (first (filter (partial matches-node? dependency target) built-nodes)))
 
 (defn is-built? [dependency target]
@@ -67,86 +79,8 @@
   ([dependency target included excluded]
     (DependencyNodeImpl. dependency target included excluded)))
 
-
 ;
-; dependency tree functions
-;
-(defn build-dependency-node [target excluded dependency]
-  "Recursively build dependency nodes depth first."
-   ; add the current dependency to the loaded set
-  (def loaded (conj loaded (new-artifact-pattern (:artifact dependency))))
-   ; get transitive dependency data for the current dependency from its module descriptor
-   ; and convert it to transitive dependencies
-  (let [transitive-dep-data (get-transitive-dependency-data dependency)
-        transitive-deps (map #(apply new-dependency %) transitive-dep-data)
-        included
-        (loop [deps transitive-deps
-               inclusions []]
-          ; build a list of dependency nodes as inclusions, for all children that are not already loaded or excluded
-          (if (seq deps)
-            (let [dep (first deps)
-                  exclusions (union excluded (:exclusions dep))
-                  node-target (map-target target (:target dep))]
-              ; already loaded dep-nodes are not added to the included list of this dependency
-              (if (or (is-excluded? excluded dep)
-                      ;(is-loaded? dep)
-                      (nil? node-target) (:optional dep))
-                (recur (rest deps) inclusions)
-                (recur (rest deps)
-                       (conj inclusions (build-dependency-node
-                                          node-target exclusions dep)))))
-            inclusions))]
-    (new-dependency-node dependency target included excluded)))
-
-(defn build-dependency-node2 [target excluded dependency]
-  "Recursively build dependency nodes depth first."
-  ; add the current dependency to the loaded set
-  (def loaded (conj loaded (new-artifact-pattern (:artifact dependency))))
-  ; get transitive dependency data for the current dependency from its module descriptor
-  ; and convert it to transitive dependencies
-  (let [transitive-dep-data (get-transitive-dependency-data dependency)
-        transitive-deps (map #(apply new-dependency %) transitive-dep-data)
-        included
-        (loop [deps transitive-deps
-               inclusions []]
-          ; build a list of dependency nodes as inclusions, for all children that are not already loaded or excluded
-          (if (seq deps)
-            (let [dep (first deps)
-                  exclusions (union excluded (:exclusions dep))
-                  ;node-target (map-target target (:target dep))
-                  node-target (:target dep)
-                  node (find-node dep node-target)
-                  ]
-              ; already loaded dep-nodes are not added to the included list of this dependency
-              (if (or (is-excluded? excluded dep)
-                      ;(is-loaded? dep)
-                      ;(nil? (map-target target (:target dep)))
-                      (:optional dep)
-                      )
-                (recur (rest deps) inclusions)
-                (if (not (nil? node))
-                  (recur (rest deps) (conj inclusions node))
-                  (recur (rest deps)
-                         (conj inclusions (build-dependency-node2
-                                          node-target exclusions dep))))))
-            inclusions))]
-    (let [node (new-dependency-node dependency target included excluded)]
-      (def built-nodes (conj built-nodes node))
-      node
-      )))
-
-
-(defn root-dependency []
-  (new-dependency [(param :project) (param :module) (param :version)] :root))
-
-(defn build-dependency-tree []
-  (log :debug "doing build-dependency-tree")
-  (def loaded #{}) ; reset loaded set
-  (build-dependency-node2 :root #{} (root-dependency)))
-
-
-;
-; zipper tree editing
+; dependency zipper tree editing
 ;
 (defn depnode-branch? [node]
   true)
@@ -161,6 +95,66 @@
 (defn depnode-zipper [node]
   (zip/zipper depnode-branch? depnode-children depnode-make node))
 
-(defn depnode-build-tree [zipper dependency]
+
+(defn find-or-build-node [dependency target included]
+  (if-let [node (find-node dependency target)]
+    (do
+      ;(println "FOUND" (print-node node))
+      node)
+    (let [node (new-dependency-node dependency target included)]
+      ;(println "BUILT" (print-node node))
+      ;(println "NOT FOUND IN " (str (clojure.string/join ",\n" (map print-node built-nodes))))
+      (def built-nodes (conj built-nodes node))
+      node)))
+
+(defn build-dependency-node 
+  "Recursively build dependency nodes depth first, use built-nodes set as cache."  
+  ([target excluded dependency]
+    (build-dependency-node target excluded dependency false))
+  ([target excluded dependency follow-optional]
+    ; get transitive dependency data for the current dependency from its module descriptor and convert it to transitive dependencies
+    (let [transitive-dep-data (get-transitive-dependency-data dependency)
+          transitive-deps (map #(apply new-dependency %) transitive-dep-data)
+          included
+          (loop [deps transitive-deps inclusions []]
+            ; build a list of dependency nodes as inclusions, for all children that are not already loaded or excluded
+            (if (seq deps)
+              (let [dep (first deps)
+                    node-target (map-target target (:target dep))] ; compute the nodes target, which depends on the parent target (e.g. :aspect -> :runtime)
+                ; excluded or optional dependencies are are not added to the included list of this dependency
+                (if (or (is-excluded? excluded dep) ; dependency is excluded
+                        (and (:optional dep) (not follow-optional)) ; don't include transitive optional dependencies
+                        (nil? node-target)) ; dependency has not to be included (e.g. transitive :aspectin)
+                  (recur (rest deps) inclusions)
+                  (recur (rest deps) (conj inclusions (build-dependency-node node-target (union excluded (:exclusions dep)) dep)))))
+              inclusions))]
+      (find-or-build-node dependency target included))))
   
+(defn root-dependency []
+  (new-dependency [(param :project) (param :module) (param :version)] :root))
+
+(defn set-dependency-target [dependency target]
+  (assoc dependency :target target))
+
+(defn process-tree [queue dependencies]
+  "Generate a sequence of dependencies by processing the dependency tree in breadth first order."
+  (if (seq queue)
+    (let [node (first queue)
+          node-dependency (set-dependency-target (:dependency node) (:target node))]
+      (if (or
+            (= (:target node) :root) ; don't include root, it's the module itself
+            (seq (filter #(compatible-dependency? node-dependency %) dependencies))) ; already included
+        (recur (concat (rest queue) (:included node)) dependencies) ; concat included children anyway, they can have new transitive dependencies
+        (recur (concat (rest queue) (:included node)) (conj dependencies node-dependency)))) ; not yet included, include dependency and add children
+    dependencies) ; return the processed dependencies
   )
+
+(defn build-dependency-tree []
+  (log :debug "doing build-dependency-tree")
+  (def loaded #{}) ; reset loaded set
+  (def built-nodes []) ; reset loaded set
+  (let [tree (build-dependency-node :root (into #{} (map new-artifact-pattern (param :dependency-excludes))) (root-dependency))]
+    ;(println "DEPENDENCIES")
+    ;(println (str (clojure.string/join ",\n" (map print-dependency (process-tree [tree] [])))))
+    tree))
+

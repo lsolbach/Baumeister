@@ -23,17 +23,11 @@
         pa (get module-map (artifact-module-key a))]
     (log :warn "version conflict for" (artifact-module-key pa) (:version pa) (:version a))))
 
-
 ; TODO unneccessary postprocessing of the dependency tree, handle checks on tree building
 ; TODO remove this method, replace with tree traversal on included dependencies of the dependency tree without enqueueing
 ;
 ; builds sequences of included and excluded dependencies/artifacts in tree order
 ; finds and handles version conflicts (somehow)
-; used for debug output in deps.dependencies()
-; the dependencies of the current node are enqueued to the queue for the preservation of the tree order
-; mm is used as module map to store visited dependencies?!
-; included set
-; excluded set
 (defn process-dependency-tree [queue module-map included excluded]
   "process the nodes of the dependency tree"
   (if-not (seq queue)

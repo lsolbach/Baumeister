@@ -32,7 +32,7 @@
       (= pattern version)))
 
 ;
-;
+; Version abstractions
 ;
 (defprotocol Version
   "Protocol for a version (of an artifact)."

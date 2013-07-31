@@ -53,6 +53,7 @@
  ;
  ; dependency management configuration
  ;
+ :dependency-transitive false ; TODO "true"/"false" strings should work, too
  ; :dependency-targets defines the valid dependency targets
  :dependency-targets #{:root ; root project dependency, not a target!
                        :runtime ; runtime dependency, used on compile and runtime classpaths

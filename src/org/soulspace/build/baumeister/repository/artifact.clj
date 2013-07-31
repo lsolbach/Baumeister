@@ -5,15 +5,22 @@
         [org.soulspace.build.baumeister.repository version]))
 
 ;
-; Part of the artifact: project module version name type
+; Artifact abstractions
 ;
 (defprotocol Artifact
   (artifact-name [artifact] "Returns the name of the artifact.")
-  (artifact-version [artifact])
+  (artifact-version [artifact] "Returns the version string of the artifact.")
   (artifact-name-version [artifact])
-  (artifact-key [artifact])
-  (artifact-module-key [artifact])
-  (artifact-module-version-key [artifact]))
+  (artifact-key [artifact] "Returns a canonical string representation of the artifact.")
+  (artifact-module-key [artifact] "Returns a canonical string representation of the artifacts project and module.")
+  (artifact-module-version-key [artifact] "Returns a canonical string representation of the artifacts project, module and version.")
+  (same-module? [this other] "Returns true, if the project and module of both artifacts are the same.")
+  (same-module-version? [this other] "Returns true, if the project and module of both artifacts are the same.")
+  (same-artifact? [this other] "Returns true, both artifacts are equal.")
+  (same-artifact-apart-from-version? [this other] "Returns true, both artifacts are equal apart from the version.")
+  (compatible-artifact-version? [this other] "Returns true, if project, module and version of both artifacts are the same.")
+  ;(conflicting-version? [this other] "Returns true, if version of both artifacts is not the same.")
+  )
 
 (defrecord ArtifactImpl [project module version name type]
   Artifact
@@ -30,6 +37,17 @@
     (str (:project artifact) "/" (:module artifact)))
   (artifact-module-version-key [artifact]
     (str (:project artifact) "/" (:module artifact) "/" (artifact-version artifact)))
+  (same-module? [this other]
+    (and (= (:project this) (:project other)) (= (:module this) (:module other))))
+  (same-module-version? [this other]
+    (and (same-version? (:version this) (:version other))))
+  (same-artifact? [this other]
+    (= this other))
+  (same-artifact-apart-from-version? [this other]
+    (and (same-module? this other)
+         (= (:name this) (:name other)) (= (:type this) (:type other))))
+  (compatible-artifact-version? [this other] 
+    (and (same-module? this other) (same-version? (:version this) (:version other))))
   )
 
 ;
@@ -108,6 +126,8 @@
 ; A 'nil' in a field means unspecified for an artifact pattern
 ; (e.g. a 'nil' module in the pattern will match every module in the project)
 (defn create-artifact-pattern
+  ([project]
+    (ArtifactPatternImpl. project nil (new-version-range) nil nil))
   ([project module]
     (ArtifactPatternImpl. project module (new-version-range) module nil))
   ([project module range]
@@ -116,7 +136,6 @@
     (ArtifactPatternImpl. project module (new-version-range range) name nil))
   ([project module range name type]
     (ArtifactPatternImpl. project module (new-version-range range) name type)))
-
 
 (def artifact-hierarchy (make-hierarchy))
 

@@ -3,8 +3,15 @@
         [org.soulspace.clj file file-search function]
         [org.soulspace.build.baumeister.config registry plugin-registry]
         [org.soulspace.build.baumeister.repository repositories artifact distribution]
-        [org.soulspace.build.baumeister.dependency dependency dependency-initialization]
+        [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-initialization]
         [org.soulspace.build.baumeister.utils ant-utils checks log]))
+
+(defn get-dependencies []
+  (if (or (param :dependeny-transitive) (= true (param :dependeny-transitive)))
+    (let [root (build-dependency-tree)]
+      (register-val :dependencies-tree root)
+      (process-tree [root] []))
+    (map #(apply new-dependency %) (param :dependencies))))
 
 ;
 ; workflow functions
@@ -20,7 +27,8 @@
 (defn sdeps-dependencies []
   (log :info "initializing dependencies...")
   ; initialize dependencies
-  (let [dependencies (map #(apply new-dependency %) (param :dependencies))]
+  (let [dependencies (get-dependencies)]
+    (register-val :dependencies-processed dependencies)
     (doseq [dependency dependencies]
       (init-dependency dependency))))
 

@@ -9,9 +9,10 @@
 ;
 (defn depsdot-dependencies []
   (log :debug "doing depsdot-dependencies")
-  (let [root (build-dependency-tree)
-        writer (java.io.StringWriter.)]
-    (dependencies-dot writer root)
+  (let [writer (java.io.StringWriter.)]
+    (if-not (nil? (param :dependencies-tree))
+      (dependencies-dot writer (param :dependencies-tree))
+      (dependencies-dot writer (build-dependency-tree)))
     (spit (param "${deps-report-dir}/dependencies.dot") (str writer))))
 
 (def depsdot-config
