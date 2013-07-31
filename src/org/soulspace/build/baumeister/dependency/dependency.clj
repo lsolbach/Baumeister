@@ -13,6 +13,16 @@
   {:aspectj :runtime
    :aspectin :dev})
 
+(defn print-dependency
+  ([dependency]
+    (print-dependency dependency (:target dependency)))
+  ([dependency target]
+    (let [artifact (:artifact dependency)]
+      (str "[" 
+           (clojure.string/join  ", " 
+                                 [(:project artifact) (:module artifact) (artifact-version artifact) (:name artifact) (:type artifact) target])
+           "]"))))
+  
 ;
 ; Dependency Protocol 
 ;

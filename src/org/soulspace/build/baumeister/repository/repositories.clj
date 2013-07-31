@@ -41,7 +41,7 @@
 
 (defn query-dependencies [repositories dependency]
   "Query the configured repositories for transitive dependencies."
-  (log :debug "Querying transitive dependencies for dependency:" dependency)
+  (log :debug "Querying transitive dependencies for dependency:" (artifact-key (:artifact dependency)) (:target dependency))
   (if (seq repositories)
     ; Iterate through the configured repositories to find the dependencies file for this artifact
     (let [repo (first repositories)

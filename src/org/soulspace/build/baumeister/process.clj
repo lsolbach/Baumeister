@@ -13,8 +13,6 @@
    ["-h" "--help" "Display help (format -h)"]
    ["-v" "--version" "Display version"]])
 
-;(cli args ["-D" "--define-param" "Define a parameter"])
-
 (defn start-workflow
   "Start the Baumeister workflow."
   ([]
