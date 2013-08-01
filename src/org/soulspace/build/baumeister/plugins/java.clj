@@ -1,7 +1,7 @@
 (ns org.soulspace.build.baumeister.plugins.java
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file function]
-        [org.soulspace.build.baumeister.utils files ant-utils checks log]
+        [org.soulspace.build.baumeister.utils files ant-utils checks log message]
         [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 ; TODO generate javadoc from java plugin? I think so!
@@ -54,6 +54,7 @@
 
 (defn java-sourcedoc
   []
+  (message :fine "generating javadoc...")
   (ant-javadoc {:destdir (param "${java-javadoc-dir}")
                 :sourcepath (param :java-source-path)
                 }))
@@ -93,7 +94,7 @@
                     [:java-acceptancetest-source-path "acceptancetest"]])))
 
 (defn plugin-init []
-  (log :info "initializing plugin java")
+  (message :fine "initializing plugin java")
   (register-vars (:params java-config))
   (register-source-paths)
   (register-fns (:functions java-config)))

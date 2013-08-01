@@ -2,7 +2,7 @@
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
-        [org.soulspace.build.baumeister.utils ant-utils files checks log]
+        [org.soulspace.build.baumeister.utils ant-utils files checks log message]
         [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 (defn junit [class-path test-dir report-dir]
@@ -22,6 +22,7 @@
 (defn junit-clean
   "junit clean"
   []
+  (message :fine "cleaning junit...")
   (delete-file (as-file (param :acceptancetest-report-dir)))
   (delete-file (as-file (param :integrationtest-report-dir)))
   (delete-file (as-file (param :unittest-report-dir))))
@@ -29,23 +30,27 @@
 (defn junit-init
   "junit init"
   []
+  (message :fine "initializing junit...")
   (create-dir (as-file (param :unittest-report-dir)))
   (create-dir (as-file (param :integrationtest-report-dir)))
   (create-dir (as-file (param :acceptancetest-report-dir))))
 
 (defn junit-unittest
-  "junit unittest"
+  "Run JUnit unit tests."
   []
+  (message :fine "running junit unit tests...")
   (junit (param :unittest-class-path) (param :build-unittest-classes-dir) (param :unittest-report-dir)))
 
 (defn junit-integrationtest
-  "junit integrationtest"
+  "Run JUnit integration tests."
   []
+  (message :fine "running junit integration tests...")
   (junit (param :integrationtest-class-path) (param :build-integrationtest-classes-dir) (param :integrationtest-report-dir)))
 
 (defn junit-acceptancetest
-  "junit acceptancetest"
+  "Run JUnit acceptance tests."
   []
+  (message :fine "running junit acceptance tests...")
   (junit (param :acceptancetest-class-path) (param :build-acceptancetest-classes-dir) (param :acceptancetest-report-dir)))
 
 (defn register-paths []
