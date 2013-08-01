@@ -12,7 +12,7 @@
  :build-classes-dir "${build-dir}/classes"
  :build-report-dir "${build-dir}/report"
  :build-doc-dir "${build-dir}/doc"
- :build-javadoc-dir "${build-doc-dir}/javadoc"
+ :build-sourcedoc-dir "${build-doc-dir}/sourcedoc"
  :dist-dir "${build-dir}/dist"
  :lib-dir "${build-dir}/lib"
  :source-config-dir "${module-dir}/config"
@@ -28,9 +28,11 @@
  :library-module-types #{:library}
  :framework-module-types #{:framework}
  :component-module-types #{:component :application :domain :integration :presentation}
- :web-module-types #{:webfrontend :webservice}
- :console-module-types #{:consolefrontend}
- :app-module-types #{:appfrontend}
+ :web-module-types #{:presentation :webfrontend :webservice}
+ :frontend-types #{:consolefrontend :appfrontend :webfrontend :webservice}
+ :web-frontend-types #{:webfrontend :webservice}
+ :console-frontend-types #{:consolefrontend}
+ :app-frontend-types #{:appfrontend}
  :data-module-types #{:data}
  ;
  ; Set of test classifications

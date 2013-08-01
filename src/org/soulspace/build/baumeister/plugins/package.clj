@@ -1,5 +1,6 @@
 (ns org.soulspace.build.baumeister.plugins.package
-  (:use [org.soulspace.clj file function]
+  (:use [clojure.java.io :only [as-file]]
+        [org.soulspace.clj file function]
         [org.soulspace.build.baumeister.utils ant-utils checks log]
         [org.soulspace.build.baumeister.config registry plugin-registry]))
 
@@ -20,18 +21,25 @@
     (ant-jar {:destFile (str (param "${dist-dir}/${module}") jar-type "." archive-type) :manifest (str dir "/MANIFEST.MF")}
              (ant-fileset {:dir dir}))))
 
+(defn package-sourcedoc []
+  (ant-jar {:destFile (str (param "${dist-dir}/${module}") "Javadoc.jar")}
+            (ant-fileset {:dir (param :build-sourcedoc-dir)})))
+
 (defn package-war [dir environment additional-manifest-entries]
   (log :debug  "packaging war" dir " " environment)
   ; TODO generate environment specific configuration
   ; generate environment specific war file
-  (ant-war {:destFile (str dir "/" environment "/" (param :context-name (param :module)) ".war" )}
-           (ant-zipfileset {:dir (param :dist-dir) :includes (param "${dist-dir}/${module}.jar") :prefix "WEB-INF/lib"})
-           (ant-zipfileset {:dir (param :lib-runtime-dir) :prefix "WEB-INF/lib"})
-           (when (has-plugin? "aspectj")
-             (ant-zipfileset {:dir (param :lib-aspect-dir) :prefix "WEB-INF/lib"}))
-           (ant-fileset {:dir "WebContent"})
-           (when (has-plugin? "mdsd")
-             (ant-fileset {:dir (param "${mdsd-generation-dir}/WebContent")}))))
+  (apply (partial ant-war {:destFile (str dir "/" environment "/" (param :context-name (param :module)) ".war" )
+            :webxml (param "${source-webcontent-dir}/WEB-INF/web.xml")})
+         (filter (complement nil?)
+                 [(ant-zipfileset {:dir (param :dist-dir) :includes (param "${dist-dir}/${module}.jar") :prefix "WEB-INF/lib"})
+                  (ant-zipfileset {:dir (param :lib-runtime-dir) :prefix "WEB-INF/lib"})
+                  (when (has-plugin? "aspectj")
+                    (ant-zipfileset {:dir (param :lib-aspect-dir) :prefix "WEB-INF/lib"}))
+                  (ant-fileset {:dir "${source-webcontent-dir}"})
+                  (when (has-plugin? "mdsd")
+                    (ant-fileset {:dir (param "${mdsd-generation-dir}/WebContent")}))
+                  ])))
 
 (defn package-ear [dir environment additional-manifest-entries]
   (log :debug "packaging ear" dir " " environment))
@@ -50,6 +58,8 @@
     (package-jar (param :build-integrationtest-classes-dir) "Integrationtest" "jar" {}))
   (when (acceptancetest?)
     (package-jar (param :build-acceptancetest-classes-dir) "Acceptancetest" "jar" {}))
+  (when (is-dir? (as-file (param :build-sourcedoc-dir)))
+    (package-sourcedoc))
   (when (seq (param :package-additional-jars))
     (doseq [[dir archive-type] (param :package-additional-jars)]
       (package-jar dir archive-type)))
@@ -60,9 +70,12 @@
   []
   (when (code-module?)
     (package-jars))
-  (when (web-module?)
+  (when (and (web-module?) (package-war?))
     ; FIXME iterate over environments instead of using hardcoded "dev"
     (package-war (param :dist-dir) "dev" {}))
+  (when (package-ear?)
+    ; (package-ear)
+    )
   (when (app-module?)
     ; TODO package app with start scripts
     )
