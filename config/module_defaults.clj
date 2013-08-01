@@ -11,6 +11,8 @@
  :build-dir "${module-dir}/build"
  :build-classes-dir "${build-dir}/classes"
  :build-report-dir "${build-dir}/report"
+ :build-doc-dir "${build-dir}/doc"
+ :build-javadoc-dir "${build-doc-dir}/javadoc"
  :dist-dir "${build-dir}/dist"
  :lib-dir "${build-dir}/lib"
  :source-config-dir "${module-dir}/config"

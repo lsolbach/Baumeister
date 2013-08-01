@@ -52,6 +52,12 @@
     (compile-java (param :build-acceptancetest-classes-dir) (param :java-acceptancetest-source-path)
                   (str (param :build-classes-dir) ":" (jar-path (param :java-acceptancetest-lib-path))))))
 
+(defn java-sourcedoc
+  []
+  (ant-javadoc {:destdir (param "${java-javadoc-dir}")
+                :sourcepath (param :java-source-path)
+                }))
+
 ; TODO check if we compute classpath after deps and before compilation
 (def java-config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
@@ -67,10 +73,13 @@
             [:java-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
-            [:java-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]]
+            [:java-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
+            [:java-javadoc-dir "${build-javadoc-dir}"]
+            ]
    :functions [[:clean java-clean]
                [:init java-init]
-               [:compile java-compile]]})
+               [:compile java-compile]
+               [:sourcedoc java-sourcedoc]]})
 
 (defn register-source-paths []
   (if (has-plugin? "mdsd")

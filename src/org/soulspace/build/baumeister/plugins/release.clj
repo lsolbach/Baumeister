@@ -13,7 +13,7 @@
                (ant-zipfileset {:dir (param :lib-runtime-dir) :includes "*.jar" :prefix "/lib"})
                (when (plugin? "aspectj") (ant-zipfileset {:dir (param :lib-aspect-dir) :includes "*.jar" :prefix "/lib"}))
                (ant-zipfileset {:dir (param :source-config-dir) :prefix "/config"})
-               (ant-fileset {:dir (param :source-script-dir)})
+               (when (console-module?) (ant-fileset {:dir (param :source-script-dir)}))
                (ant-fileset {:dir (param :module-dir) :includes "module.clj"})
                (ant-fileset {:dir (param :module-dir) :includes "README.md"})])))
                
