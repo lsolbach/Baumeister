@@ -1,19 +1,90 @@
 (ns org.soulspace.build.baumeister.utils.cli
+  (:require [clojure.string :as str])
   (:use [org.soulspace.clj string file]))
 
 ; TODO move to application framework?
+(def spec-entry-format
+  {:name "define"
+   :option "--define"
+   :short "-D"
+   :doc "Define a var"
+   :parse-fn identity
+   :flag false
+   :default nil
+   })
+
+(defn flag-spec? [arg]
+  (starts-with "--[no-]" arg))
+
+(defn long-option? [arg]
+  "Tests if the string is a long option, which starts with the string '--'."
+  (starts-with "--" arg))
+
 (defn option? [arg]
   "Tests if the string is an option, which starts with the character '-'."
   (starts-with "-" arg))
 
-(defn parse-options [spec options]
-  "Parses a sequence of options."
+(defn matches-option? [arg spec]
+  "Returns true, if the arg starts with an option switch of this spec"
+  ;(println "ARG" arg)
+  ;(println "SPEC" spec)
+  (if (long-option? arg)
+    (and (not (nil? (:long spec))) (starts-with (:long spec) arg))
+    (and (not (nil? (:short spec))) (starts-with (:short spec) arg))))
+
+(defn option-name [opt]
+  (str/replace opt #"^--\[no\]-|^--no-|^--|^-" ""))
+
+(defn doc-for-spec [{:keys [option short doc default]}]
+  [(str/join ", " [option short])
+   (or doc "")
+   (or (str default) "")])
+
+(defn doc-for-specs [specs]
+  (map doc-for-spec specs))
+
+(defn build-specs [option-definitions]
+  "Build option specifications"
+  (if (seq option-definitions)
+    (loop [definitions option-definitions specs []]
+      (if (seq definitions)
+        (let [[opt short doc & options] (first definitions)
+              spec (merge {:name (option-name opt) :long opt :short short :doc doc :parse-fn identity :multi true}
+                          (apply hash-map options))]
+          (recur (rest definitions) (conj specs spec)))
+        specs))))
   
-  )
+(defn default-option-map [specs]
+  "Returns an option map initalized with the default values."
+  (reduce (fn [map spec] (assoc map (keyword (:name spec)) (:default spec))) {} (filter #(:default %) specs)))
 
-(defn parse-args [args]
+(defn add-result [option-map [spec value]]
+  "Add the value for an option to the option map. Handles multiple values per option."
+  (let [option-key (keyword (:name spec))
+        multi (true? (:multi spec))]
+    (if-let [old-value (option-map option-key)]
+      (cond 
+        (and multi (coll? old-value)) (assoc option-map option-key (conj old-value value))
+        multi (assoc option-map option-key [old-value value]))
+      (assoc option-map option-key value))))
+
+(defn parse-option-arg [specs arg]
+  "Returns the option spec and the parsed value in a vector, if a matching option is found."
+  (if-let [spec (first (filter (partial matches-option? arg) specs))]
+    (if (long-option? arg)
+      [spec ((:parse-fn spec) (str/replace arg (re-pattern (str "^" (:long spec))) ""))]
+      [spec ((:parse-fn spec) (str/replace arg (re-pattern (str "^" (:short spec))) ""))])))
+
+(defn parse-option-args [specs option-args]
+  "Parses a sequence of options."
+  (loop [args option-args option-map (default-option-map specs)]
+    (if-let [arg (first args)]
+      (if-let [result (parse-option-arg specs arg)]
+        (recur (rest args) (add-result option-map result)) ; find option value and assoc [option value] to option map 
+        (recur (rest args) option-map))
+      option-map)))
+
+(defn parse-args [args option-definitions]
   "Parses the args sequence into a vector of options and arguments."
-  [(filter option? args) (filter (complement option?) args)])
-
-
-
+  (if-let [specs (build-specs option-definitions)]
+    [(filter (complement option?) args) (parse-option-args specs (filter option? args))]))

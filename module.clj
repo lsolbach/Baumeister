@@ -12,7 +12,7 @@
  :repository-root-dir "/home/soulman/devel/repositories" ; FIXME use $HOME here
  ; :extra-repositories [[:maven-proxy :thirdparty "http://maven.alfresco.com/nexus/content/groups/public" "${baumeister-home-dir}/../repositories/maven.alfresco.com"]]
  :dependency-transitive true
- :dependencies [[["org.clojure" "clojure" "1.5.1"]]
+ :dependencies [[["org.clojure" "clojure" "1.5.1"] :runtime]
                 [["org.tcrawley" "dynapath" "0.2.3"]] ; dynamic classpath support
                 [["org.clojure" "data.xml" "0.0.7"]] ; maven support
                 [["org.clojure" "data.zip" "0.1.1"]] ; maven support

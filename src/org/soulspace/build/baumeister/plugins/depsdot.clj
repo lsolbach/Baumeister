@@ -1,5 +1,5 @@
 (ns org.soulspace.build.baumeister.plugins.depsdot
-  (:use [org.soulspace.build.baumeister.utils log]
+  (:use [org.soulspace.build.baumeister.utils log exec]
         [org.soulspace.build.baumeister.config registry plugin-registry]
         [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-dot]
         ))
@@ -13,7 +13,9 @@
     (if-not (nil? (param :dependencies-tree))
       (dependencies-dot writer (param :dependencies-tree))
       (dependencies-dot writer (build-dependency-tree)))
-    (spit (param "${deps-report-dir}/dependencies.dot") (str writer))))
+    (spit (param "${deps-report-dir}/dependencies.dot") (str writer))
+    ;(execute "dot" (str "-Tpng -o" (param "${deps-report-dir}/dependencies.png") " " (param "${deps-report-dir}/dependencies.dot")))
+    ))
 
 (def depsdot-config
   {:params [[:deps-report true]

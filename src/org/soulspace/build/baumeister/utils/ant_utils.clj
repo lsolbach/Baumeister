@@ -7,8 +7,8 @@
            [org.apache.tools.ant.taskdefs Manifest$Attribute]
            [java.util Map]))
 
-(def #^{:doc "Dummy ant project to keep Ant tasks happy"}
-  ant-project
+(def ant-project
+  "Dummy ant project to keep Ant tasks happy"
   (let [proj (org.apache.tools.ant.Project.)
         logger (org.apache.tools.ant.NoBannerLogger.)]
     (doto logger
@@ -28,10 +28,13 @@
 
 (def ant-task-hierarchy
   (atom (-> (make-hierarchy)
+          (derive ::jar ::zip)
+          (derive ::war ::zip)
+          (derive ::ear ::zip)
+          (derive ::zip ::takes-fileset)
           (derive ::exec ::has-args)
           (derive ::java ::has-args)
-          (derive ::war ::zip)
-          (derive ::ear ::zip))))
+          )))
 
 ;(def ant-task-hierarchy
 ;  (atom (-> (make-hierarchy)
@@ -73,9 +76,14 @@ The default behaviour is to add an element as a fileset."
   [_ task patternset]
   (.addPatternset task patternset))
 
+(defmethod add-nested [::takes-fileset org.apache.tools.ant.types.FileSet]
+  [_ task fileset]
+  (.addFileset task fileset))
+
 (defmethod add-nested :default [_ task nested] 
-  ;(println task nested)
-  (.addFileset task nested))
+  (println "ADD-NESTED default" task nested)
+  ;(.addFileset task nested)
+  )
 
 (defn instantiate-task [project name props & nested]
   (let [task (.createTask project name)]
@@ -158,15 +166,16 @@ The default behaviour is to add an element as a fileset."
   (org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$SummaryAttribute/getInstance
     org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$SummaryAttribute str))
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/junit org.apache.tools.ant.types.Path]
+(defmethod add-nested [::junit org.apache.tools.ant.types.Path]
   [_ task path] (doto (.createClasspath task) (.add path)))
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/junit org.apache.tools.ant.types.Environment$Variable]
+(defmethod add-nested [::junit org.apache.tools.ant.types.Environment$Variable]
   [_ task variable] (.addSysproperty task variable))
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/junit org.apache.tools.ant.taskdefs.optional.junit.FormatterElement]
+(defmethod add-nested [::junit org.apache.tools.ant.taskdefs.optional.junit.FormatterElement]
   [_ task formatter] (.addFormatter task formatter))
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/junit java.util.Map]
+(defmethod add-nested [::junit java.util.Map]
   [_ task props] (doto (.createBatchTest task) (.setTodir (as-file (:todir props))) (.addFileSet (:fileset props))))
+
 

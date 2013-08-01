@@ -3,7 +3,7 @@
   (:use [org.soulspace.clj function]
         [org.soulspace.build.baumeister.config parameter-registry function-registry plugin-registry]))
 
-; TODO still needed? if so, choose new fn name
+; TODO returns a parameter as-is without property replacement. still needed? if so, choose new fn name
 (defn get-var 
   "Get parameter without replacements."
   ([name] (get (get-param-registry) name ""))
@@ -56,22 +56,47 @@
   ([] (read-module "./module.clj"))
   ([file] (partition 2 (load-file file))))
 
-; TODO add param-map from options parsing
-(defn init-config []
+(defn get-params [options]
+  (let [define (:define options)
+        params (cond
+                 (nil? define) []
+                 (string? define) (let [[key value] (clojure.string/split define  #"=")]
+                                    [(keyword key) (read-string value)])
+                 (coll? define) (loop [defs define params []]
+                                  (if-not (seq defs)
+                                    (let [def (first defs)
+                                          [key value] (clojure.string/split def  #"=")]
+                                      (recur (rest defs) (conj params [(keyword key) (read-string value)])))
+                                    params))
+                 :default [])]
+    (partition 2 params)))
+
+(defn set-params [params]
+  (doseq [[key value] params]
+    (when (= key :plugins)
+      (init-plugins value))
+    (register-var key value)))
+
+(defn init-config [options]
   (reset-registries) ; for use with repl's
+  ;(println "Options" options)
   
   (register-var :baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")) ; register baumeister-home-dir
   (register-var :user-home-dir (get-env "HOME")) ; register baumeister-home-dir
-
-  (doseq [[key value] (read-module (str (param :baumeister-home-dir) "/config/module_defaults.clj"))]
-    (register-var key value))
+  (register-var :log-level :error) ; initial log level for intialization
+  
+  ; set module defaults
+  (set-params (read-module (str (param :baumeister-home-dir) "/config/module_defaults.clj")))
   ; TODO get config path and read configs from path for e.g. user settings
   
-  ; read module.clj from current module ; TODO get parent module.clj's and merge them first, requires repository access
-  (doseq [[key value] (read-module)]
-    (when (= key :plugins)
-      (init-plugins value))
-    (register-var key value))
-
-  ; TODO add command line parameters
+  (try
+    (set-params (read-module (str (param :user-home-dir) "/.Baumeister/module_defaults.clj")))
+    (catch java.io.IOException e))
+  
+  ; read module.clj (or the file specified with --file or -f) from current module
+  ; TODO get parent module.clj's and merge them first, requires repository access
+  (set-params (read-module (:file options)))
+  
+  ; add command line parameters (defined by --define or -D)
+  (set-params (get-params options))
   )

@@ -3,6 +3,7 @@
 ; These settings are merged with the settings in the module.clj files
 ;
 [
+ :system-version "0.3.0"
  ;
  ; default project directory layout
  ;
@@ -12,6 +13,8 @@
  :build-report-dir "${build-dir}/report"
  :dist-dir "${build-dir}/dist"
  :lib-dir "${build-dir}/lib"
+ :source-config-dir "${module-dir}/config"
+ :source-script-dir "${module-dir}/scripts"
  ;
  ; sets of architectural module type classifications
  ;

@@ -4,7 +4,7 @@
         [org.soulspace.build.baumeister.config registry plugin-registry]
         [org.soulspace.build.baumeister.repository repositories artifact distribution]
         [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-initialization]
-        [org.soulspace.build.baumeister.utils ant-utils checks log]))
+        [org.soulspace.build.baumeister.utils ant-utils checks log message]))
 
 (defn get-dependencies []
   (if (or (param :dependeny-transitive) (= true (param :dependeny-transitive)))
@@ -17,15 +17,15 @@
 ; workflow functions
 ;
 (defn sdeps-clean []
-  (log :info "cleaning dependencies...")
+  (message :fine "cleaning dependencies...")
   (delete-dir (as-file (param :deps-report-dir))))
 
 (defn sdeps-init []
-  (log :info "initializing dependencies...")
+  (message :fine "initializing dependencies...")
   (create-dir (as-file (param :deps-report-dir))))
 
 (defn sdeps-dependencies []
-  (log :info "initializing dependencies...")
+  (message :fine "resolving dependencies...")
   ; initialize dependencies
   (let [dependencies (get-dependencies)]
     (register-val :dependencies-processed dependencies)
@@ -33,7 +33,7 @@
       (init-dependency dependency))))
 
 (defn sdeps-distribute []
-  (log :info "distributing artifacts...")
+  (message :fine "distributing artifacts...")
   (when (code-module?)
     (deps-distribute-jars (get-dev-repository (param :deps-repositories))))
   (when (web-module?)
@@ -58,7 +58,7 @@
 ; plugin initialization
 ;
 (defn plugin-init []
-  (log :info "initializing plugin deps")
+  (message :fine "initializing plugin deps")
   (register-plugin "deps")
   (log :debug "creating repositories " (param :repositories))
   (register-val :deps-repositories (create-repositories (param :repositories)))

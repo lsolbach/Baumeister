@@ -4,13 +4,17 @@
         [org.soulspace.build.baumeister.utils ant-utils log]
         [org.soulspace.build.baumeister.config registry plugin-registry]))
 
-(defn global-clean []
+(defn global-clean
+  "Global clean"
+  []
   (log :info "cleaning globally...")
   (delete-dir (as-file (param :lib-dir)))
   (delete-dir (as-file (param :dist-dir)))
   (delete-dir (as-file (param :build-dir))))
 
-(defn global-init []
+(defn global-init
+  "Global initialization"
+  []
   (log :info "initializing globally...")
   (create-dir (as-file (param :build-dir)))
   (create-dir (as-file (param :build-classes-dir)))
