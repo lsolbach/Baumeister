@@ -4,8 +4,6 @@
         [org.soulspace.build.baumeister.utils files ant-utils checks log message]
         [org.soulspace.build.baumeister.config registry plugin-registry]))
 
-; TODO generate javadoc from java plugin? I think so!
-
 ; TODO is at least access to the dependency tree needed?
 ; TODO think of a mechanism for specifing different java versions?
 (def java-home (get-env "JAVA_HOME" (str (param :user_home_dir) "/devel/java/jdk1.6.0")))
@@ -57,13 +55,18 @@
   (message :fine "generating javadoc...")
   (ant-javadoc {:destdir (param "${java-javadoc-dir}")
                 :sourcepath (param :java-source-path)
+                :windowtitle (param :java-javadoc-windowtitle)
+                :doctitle (param :java-javadoc-doctitle)
+                :header (param :java-javadoc-header)
+                :footer (param :java-javadoc-footer)
+                :source (param :java-source-version)
                 }))
 
 ; TODO check if we compute classpath after deps and before compilation
 (def java-config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
             [:lib-dev-dir "${lib-dir}/dev"]
-            [:java-home java-home] ; FIXME externalize
+            [:java-home "${java-home}"]
             [:java-compiler "${java-home}/bin/javac"]
             [:java-source-encoding "${source-encoding}"]
             [:java-source-version "${source-version}"]
@@ -76,6 +79,11 @@
             [:java-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-javadoc-dir "${build-javadoc-dir}"]
+            [:java-javadoc-windowtitle "${module} ${version}"]
+            [:java-javadoc-doctitle "<h1>${module} ${version}</h1>"]
+            [:java-javadoc-header "${module} ${version}"]
+            [:java-javadoc-footer "Copyright 2013 Ludger Solbach"]
+            [:java-javadoc-header "${build-javadoc-dir}"]
             ]
    :functions [[:clean java-clean]
                [:init java-init]

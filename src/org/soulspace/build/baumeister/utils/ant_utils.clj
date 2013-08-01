@@ -31,14 +31,12 @@
           (derive ::jar ::zip)
           (derive ::war ::zip)
           (derive ::ear ::zip)
+          (derive ::delete ::takes-fileset)
+          (derive ::copy ::takes-fileset)
           (derive ::zip ::takes-fileset)
           (derive ::exec ::has-args)
           (derive ::java ::has-args)
           )))
-
-;(def ant-task-hierarchy
-;  (atom (-> (make-hierarchy)
-;            (derive ::exec ::has-args))))
 
 (defmulti add-nested
   "Adds a nested element to ant task.

@@ -4,7 +4,7 @@
  :project-lead "Ludger Solbach"
  :description "Baumeister Build System"
  :type :consolefrontend
- :version "0.4.0"
+ :version "0.4.1"
  :author "Ludger Solbach"
  :provider "soulspace.org"
  :plugins ["global" "sdeps" "depsdot" "clojure" "package" "release"]

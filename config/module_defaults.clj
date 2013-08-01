@@ -3,7 +3,7 @@
 ; These settings are merged with the settings in the module.clj files
 ;
 [
- :system-version "0.4.0"
+ :system-version "0.4.1"
  ;
  ; default project directory layout
  ;
@@ -17,6 +17,7 @@
  :lib-dir "${build-dir}/lib"
  :source-config-dir "${module-dir}/config"
  :source-script-dir "${module-dir}/scripts"
+ :source-webcontent-dir "${module-dir}/WebContent"
  ;
  ; sets of architectural module type classifications
  ;
@@ -54,7 +55,9 @@
                 [:file :development "${repository-root-dir}/development"]
                 [:file :thirdparty "${repository-root-dir}/thirdparty"]
                 [:maven-proxy :thirdparty "http://repo1.maven.org/maven2" "${repository-root-dir}/repo1.maven.org"]
-                [:maven-proxy :thirdparty "http://clojars.org/repo" "${repository-root-dir}/clojars.org"]]
+                [:maven-proxy :thirdparty "http://clojars.org/repo" "${repository-root-dir}/clojars.org"]
+                [:maven-proxy :thirdparty "https://maven.java.net/content/repositories/releases/" "${repository-root-dir}/java.net"]
+                ]
  ;
  ; dependency management configuration
  ;
@@ -111,22 +114,24 @@
  ;
  ; definition of the default workflows
  ;
- :workflow-definitions {:prerequisites-workflow [:prerequisites] ; verify prerequisites for the build
-                        :clean-workflow [:clean] ; remove any build artifats and directories from the module
-                        :init-workflow [:init :dependencies] ; initialize the module, create required directories for a build and resolve dependencies
-                        :compile-workflow [:init-workflow :generate :compile]
-                        :package-workflow [:compile-workflow :unittest :sourcedoc :package]
-                        :integrationtest-workflow [:package-workflow :integrationtest]
-                        :acceptancetest-workflow [:package-workflow :acceptancetest]
-                        :unittest-workflow [:compile-workflow :unittest]
-                        :architecture-workflow [:clean :init :dependencies :generate-architecture]
-                        :coverage-workflow [:package-workflow :coverage]
-                        :analyse-workflow [:package-workflow :analyse]
-                        :build-workflow [:clean :package-workflow :unittest :package
-                                         :coverage :analyse :distribute]
-                        :release-workflow [:build-workflow :generate-release :package-release :distribute-release]
-                        ; :create-module-workflow [:create-module]
-                        }
+ :workflow-definitions
+ {
+  :prerequisites-workflow [:prerequisites] ; verify prerequisites for the build
+  :clean-workflow [:clean] ; remove any build artifats and directories from the module
+  :init-workflow [:init :dependencies] ; initialize the module, create required directories for a build and resolve dependencies
+  :compile-workflow [:init-workflow :generate :compile] ; compile the module
+  :package-workflow [:compile-workflow :unittest :sourcedoc :package] ; package the module
+  :integrationtest-workflow [:package-workflow :integrationtest] ; run the integration tests
+  :acceptancetest-workflow [:package-workflow :acceptancetest] ; run the acceptance test
+  :unittest-workflow [:compile-workflow :unittest] ; run the unit tests
+  :coverage-workflow [:package-workflow :coverage] ; run tests with code coverage
+  :analyse-workflow [:package-workflow :analyse] ; perform static code analysis
+  :build-workflow [:clean :package-workflow :unittest :package :coverage :analyse :distribute]
+  :release-workflow [:build-workflow :generate-release :package-release :distribute-release] ; build distribution packages
+  :architecture-workflow [:clean :init :dependencies :generate-architecture] ; generate modules from an architecture model
+  :module-workflow [:create-module]
+  }
  ; default log-level
  :log-level :info
+ :message-level :normal
  ]

@@ -44,7 +44,6 @@
 (defn register-vars [vars]
   (register-params vars))
 
-
 (defn- reset-registries []
   "Reset the registries."
   (reset-plugin-registry)
@@ -83,12 +82,14 @@
   
   (register-var :baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")) ; register baumeister-home-dir
   (register-var :user-home-dir (get-env "HOME")) ; register baumeister-home-dir
+  (register-var :java-home (get-env "JAVA_HOME")) ; register JAVA_HOME
+  (register-var :aspectj-home (get-env "ASPECTJ_HOME")) ; register ASPECTJ_HOME
   (register-var :log-level :error) ; initial log level for intialization
   
   ; set module defaults
   (set-params (read-module (str (param :baumeister-home-dir) "/config/module_defaults.clj")))
-  ; TODO get config path and read configs from path for e.g. user settings
-  
+
+  ; get config path and read configs from path for e.g. user settings
   (try
     (set-params (read-module (str (param :user-home-dir) "/.Baumeister/module_defaults.clj")))
     (catch java.io.IOException e))
