@@ -39,45 +39,28 @@
   "Run JUnit unit tests."
   []
   (message :fine "running junit unit tests...")
-  (junit (param :unittest-class-path) (param :build-unittest-classes-dir) (param :unittest-report-dir)))
+  (let [unittest-classpath (class-path [(param :build-unittest-classes-dir) (param :build-classes-dir)
+                                         (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))
+                                         (jar-path (param :lib-aspect-dir))])]
+    (junit unittest-classpath (param :build-unittest-classes-dir) (param :unittest-report-dir))))
 
 (defn junit-integrationtest
   "Run JUnit integration tests."
   []
   (message :fine "running junit integration tests...")
-  (junit (param :integrationtest-class-path) (param :build-integrationtest-classes-dir) (param :integrationtest-report-dir)))
+  (let [integrationtest-classpath (class-path [(param :build-integrationtest-classes-dir) (param :build-classes-dir)
+                                  (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))
+                                  (jar-path (param :lib-aspect-dir))])]
+    (junit integrationtest-classpath (param :build-integrationtest-classes-dir) (param :integrationtest-report-dir))))
 
 (defn junit-acceptancetest
   "Run JUnit acceptance tests."
   []
   (message :fine "running junit acceptance tests...")
-  (junit (param :acceptancetest-class-path) (param :build-acceptancetest-classes-dir) (param :acceptancetest-report-dir)))
-
-(defn register-paths []
-  ; FIXME do not build classpaths at plugin initialization time but at junit call time
-  ; FIXME otherwise new dependencies won't get picked up (see java plugin)
-  (if (has-plugin? "aspectj")
-    (register-vars [[:unittest-class-path
-                     (class-path [(param :build-unittest-classes-dir) (param :build-classes-dir)
+  (let [acceptancetest-classpath (class-path [(param :build-acceptancetest-classes-dir) (param :build-classes-dir)
                                   (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))
                                   (jar-path (param :lib-aspect-dir))])]
-                    [:integrationtest-class-path
-                     (class-path [(param :build-integrationtest-classes-dir) (param :build-classes-dir)
-                                  (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))
-                                  (jar-path (param :lib-aspect-dir))])]
-                    [:acceptancetest-class-path
-                     (class-path [(param :build-acceptancetest-classes-dir) (param :build-classes-dir)
-                                  (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))
-                                  (jar-path (param :lib-aspect-dir))])]])
-    (register-vars [[:unittest-class-path
-                     (class-path [(param :build-unittest-classes-dir) (param :build-classes-dir)
-                                  (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))])]
-                    [:integrationtest-class-path
-                     (class-path [(param :build-integrationtest-classes-dir) (param :build-classes-dir)
-                                  (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))])]
-                    [:acceptancetest-class-path
-                     (class-path [(param :build-acceptancetest-classes-dir) (param :build-classes-dir)
-                                  (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))])]])))
+    (junit acceptancetest-classpath (param :build-acceptancetest-classes-dir) (param :acceptancetest-report-dir))))
 
 (def config 
   {:params [[:unittest-report-dir "${build-report-dir}/junit/unittest"]
@@ -96,5 +79,4 @@
 (defn plugin-init []
   (log :info  "initializing plugin junit")
   (register-vars (:params config))
-  (register-paths)
   (register-fns (:functions config)))

@@ -1,6 +1,10 @@
 ;
-; In this file all the default settings for Baumeister are defined 
-; These settings are merged with the settings in the module.clj files
+; Don't change this file!
+;
+; This file defines the default configuration for Baumeister. 
+; These settings are merged with the settings in other the module.clj files
+;
+; If you want to override configuration parameters, use $(HOME)/.Baumeister/settings.clj or module.clj
 ;
 [
  :system-version "0.4.2"
@@ -15,6 +19,7 @@
  :build-sourcedoc-dir "${build-doc-dir}/sourcedoc"
  :dist-dir "${build-dir}/dist"
  :lib-dir "${build-dir}/lib"
+ :generation-dir "${build-dir}/generated"
  :source-dir "${module-dir}/src"
  :source-unittest-dir "${module-dir}/unittest"
  :source-integrationtest-dir "${module-dir}/integrationtest"
@@ -106,7 +111,7 @@
  ;
  ; maven dependency management compatibility
  ;
- ; :maven-scopes-to-targets contains the mapping of maven scopes to Baumeister targets
+ ; maven-scopes-to-targets contains the mapping of maven scopes to Baumeister targets
  :maven-scope-to-target {"runtime" :runtime
                          "compile" :runtime
                          "test" :dev

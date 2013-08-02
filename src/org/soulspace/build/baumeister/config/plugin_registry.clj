@@ -20,12 +20,16 @@
   (str "src/" plugin-path "/" name ".clj"))
 
 ; TODO load plugin as dependency? yes, when the build framework is stable
-; load-file or use? (use compiled classes in Baumeister.jar and load-file user plugins from file system?)
+; load-file or require? (use compiled classes in Baumeister.jar and load-file user plugins from file system?)
 (defn init-plugin [name]
   (let [plugin (symbol (plugin-ns-string name))]
     (when-not (has-plugin? plugin)
       (println "loading plugin" name)
       (require (symbol (plugin-ns-string name))) ; import plugin namespace
+      ; TODO register fns and vars from here by config instead of calling the plugin init method
+      (let [config-var (ns-resolve plugin (symbol "config"))]
+        ; (println @config-var)
+        )
       (call-by-ns-name (plugin-ns-string name) "plugin-init") ; call plugin init in plugin namespace
       (register-plugin name)))) ; register plugin in plugin registry
   

@@ -26,8 +26,6 @@
 
 (defn matches-option? [arg spec]
   "Returns true, if the arg starts with an option switch of this spec"
-  ;(println "ARG" arg)
-  ;(println "SPEC" spec)
   (if (long-option? arg)
     (and (not (nil? (:long spec))) (starts-with (:long spec) arg))
     (and (not (nil? (:short spec))) (starts-with (:short spec) arg))))
@@ -35,6 +33,17 @@
 (defn option-name [opt]
   (str/replace opt #"^--\[no\]-|^--no-|^--|^-" ""))
 
+(defn build-specs [option-defs]
+  "Build option specifications"
+  (if (seq option-defs)
+    (loop [defs option-defs specs []]
+      (if (seq defs)
+        (let [[opt short doc & options] (first defs)
+              spec (merge {:name (option-name opt) :long opt :short short :doc doc :parse-fn identity :multi true}
+                          (apply hash-map options))]
+          (recur (rest defs) (conj specs spec)))
+        specs))))
+  
 (defn doc-for-spec [{:keys [option short doc default]}]
   [(str/join ", " [option short])
    (or doc "")
@@ -43,17 +52,9 @@
 (defn doc-for-specs [specs]
   (map doc-for-spec specs))
 
-(defn build-specs [option-definitions]
-  "Build option specifications"
-  (if (seq option-definitions)
-    (loop [definitions option-definitions specs []]
-      (if (seq definitions)
-        (let [[opt short doc & options] (first definitions)
-              spec (merge {:name (option-name opt) :long opt :short short :doc doc :parse-fn identity :multi true}
-                          (apply hash-map options))]
-          (recur (rest definitions) (conj specs spec)))
-        specs))))
-  
+(defn doc-option-definitions [option-defs]
+  (map doc-for-spec (build-specs option-defs)))
+
 (defn default-option-map [specs]
   "Returns an option map initalized with the default values."
   (reduce (fn [map spec] (assoc map (keyword (:name spec)) (:default spec))) {} (filter #(:default %) specs)))

@@ -1,6 +1,8 @@
 (ns org.soulspace.build.baumeister.plugins.maven
   (:require [org.soulspace.build.baumeister.maven.pom-dsl :as pom])
   (:use [clojure.data.xml]
+        [clojure.java.io :exclude [delete-file]]
+        [org.soulspace.clj file]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.utils log message property xml]
         [org.soulspace.build.baumeister.dependency dependency]))
@@ -47,14 +49,25 @@
         {}
         (build-pom-dependencies dependencies)))))
 
+(defn maven-clean 
+  []
+  (delete-file (as-file (param :maven-build-dir))))
+
+(defn maven-init
+  []
+  (create-dir (as-file (param :maven-build-dir))))
+
 (defn maven-post-dependencies []
-  (println (indent-str (build-pom))))
+  (spit (param "${maven-build-dir}/pom.xml") (indent-str (build-pom))))
 
 
 (def config
-  {:params []
-   :functions [[:post-dependencies maven-post-dependencies]]})
+  {:params [[:maven-build-dir "${build-dir}/maven"]]
+   :functions [[:clean maven-clean]
+               [:init maven-init]
+               [:post-dependencies maven-post-dependencies]]})
 
 (defn plugin-init []
+  (register-vars (:params config))
   (register-fns (:functions config))
   )

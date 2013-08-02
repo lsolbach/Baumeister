@@ -1,4 +1,4 @@
-(ns org.soulspace.build.baumeister.plugins.sdeps
+(ns org.soulspace.build.baumeister.plugins.dependencies
     (:use [clojure.java.io :only [as-file copy]]
         [org.soulspace.clj file file-search function]
         [org.soulspace.build.baumeister.config registry plugin-registry]
@@ -13,18 +13,29 @@
       (process-tree [root] []))
     (map #(apply new-dependency %) (param :dependencies))))
 
+(defn generate-dot
+  "Generate dot graphs for the configured dependency tree."
+  [dependency-tree]
+  (let [writer (java.io.StringWriter.)]
+    (if-not (nil? (param :dependencies-tree))
+      (dependencies-dot writer (param :dependencies-tree))
+      (dependencies-dot writer (build-dependency-tree)))
+    (spit (param "${deps-report-dir}/dependencies.dot") (str writer))
+    ;(execute "dot" (str "-Tpng -o" (param "${deps-report-dir}/dependencies.png") " " (param "${deps-report-dir}/dependencies.dot")))
+    ))
+
 ;
 ; workflow functions
 ;
-(defn sdeps-clean []
+(defn dependencies-clean []
   (message :fine "cleaning dependencies...")
   (delete-dir (as-file (param :deps-report-dir))))
 
-(defn sdeps-init []
+(defn dependencies-init []
   (message :fine "initializing dependencies...")
   (create-dir (as-file (param :deps-report-dir))))
 
-(defn sdeps-dependencies []
+(defn dependencies-dependencies []
   (message :fine "resolving dependencies...")
   ; initialize dependencies
   (let [dependencies (get-dependencies)]
@@ -32,20 +43,15 @@
     (doseq [dependency dependencies]
       (init-dependency dependency))))
 
-(defn sdeps-post-dependencies 
-  "Generate dot graphs for the configured dependency tree."
+(defn dependencies-post-dependencies 
+  "Post dependencies step."
   []
   (when (param :deps-report)
-    (log :debug "doing sdeps-post-dependencies")
-    (let [writer (java.io.StringWriter.)]
-      (if-not (nil? (param :dependencies-tree))
-        (dependencies-dot writer (param :dependencies-tree))
-        (dependencies-dot writer (build-dependency-tree)))
-      (spit (param "${deps-report-dir}/dependencies.dot") (str writer))
-      ;(execute "dot" (str "-Tpng -o" (param "${deps-report-dir}/dependencies.png") " " (param "${deps-report-dir}/dependencies.dot")))
-      )))
+    (if-not (nil? (param :dependencies-tree))
+      (generate-dot (param :dependencies-tree))
+      (generate-dot (build-dependency-tree)))))
 
-(defn sdeps-distribute
+(defn dependencies-distribute
   "Distribute generated artifacts to the dev repository."
   []
   (message :fine "distributing artifacts...")
@@ -64,11 +70,11 @@
   {:params [[:deps-report true]
             [:deps-transitive false]
             [:deps-report-dir "${build-report-dir}/dependencies"]]
-   :functions [[:clean sdeps-clean]
-                 [:init sdeps-init]
-                 [:dependencies sdeps-dependencies]
-                 [:post-dependencies sdeps-post-dependencies]
-                 [:distribute sdeps-distribute]]})
+   :functions [[:clean dependencies-clean]
+               [:init dependencies-init]
+               [:dependencies dependencies-dependencies]
+               [:post-dependencies dependencies-post-dependencies]
+               [:distribute dependencies-distribute]]})
 
 ;
 ; plugin initialization

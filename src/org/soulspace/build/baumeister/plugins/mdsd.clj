@@ -36,35 +36,23 @@
 ;   :profiles (profile-files (param :mdsd-profile-path) (param :mdsd-std-profiles))})
    :profiles (filter not-nil? (concat (std-profiles) (profiles)))})
 
-; TODO don't hardcode the project type to generator mapping, use configuration or convention 
+(def type-generator-mapping 
+  {:data [:doc-generators]
+   :library [:doc-generators :standard-generators]
+   :framework [:doc-generators :standard-generators]
+   :component [:doc-generators :standard-generators]
+   :application [:doc-generators :standard-generators :application-generators]
+   :domain [:doc-generators :standard-generators :domain-generators]
+   :integration [:doc-generators :standard-generators :integration-generators]
+   :presentation [:doc-generators :standard-generators :presentation-generators]
+   :webservice [:doc-generators :standard-generators :web-service-generators]
+   :webfrontend [:doc-generators :standard-generators :web-frontend-generators]
+   :consolefrontend [:doc-generators :standard-generators]
+   :appfrontend [:doc-generators :standard-generators]})
+
 (defn generators []
   (let [gen-config (load-file (str (param "${mdsd-config-dir}/${mdsd-config-file}")))]
-    (cond
-      (= (keyword (param :type)) :data)
-      (remove nil? (flatten [(:doc-generators gen-config)]))
-      (= (keyword (param :type)) :library)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
-      (= (keyword (param :type)) :framework)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
-      (= (keyword (param :type)) :component)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
-      (= (keyword (param :type)) :application)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:application-generators gen-config)]))
-      (= (keyword (param :type)) :domain)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:domain-generators gen-config)]))
-      (= (keyword (param :type)) :integration)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:integration-generators gen-config)]))
-      (= (keyword (param :type)) :presentation)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:presentation-generators gen-config)]))
-      (= (keyword (param :type)) :webservice)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:web-service-generators gen-config)]))
-      (= (keyword (param :type)) :webfrontend)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config) (:web-frontend-generators gen-config)]))
-      (= (keyword (param :type)) :consolefrontend)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
-      (= (keyword (param :type)) :appfrontend)
-      (remove nil? (flatten [(:doc-generators gen-config) (:standard-generators gen-config)]))
-      )))
+    (remove nil? (flatten (map #(% gen-config) (type-generator-mapping (param :type)))))))
 
 (defn mdsd-clean []
   (delete-dir (as-file (param :mdsd-backup-dir)))
@@ -106,9 +94,9 @@
             [:lib-model-dir "${lib-dir}/model"]
             [:mdsd-model-dir "${module-dir}/model"]
             [:mdsd-model-name "${module}"]
-            [:mdsd-generation-dir "${module-dir}/generated"]
-            [:mdsd-backup-dir "${module-dir}/backup"]
-            [:mdsd-config-dir "${lib-generator-dir}/config"]
+            [:mdsd-generation-dir "${generation-dir}"]
+            [:mdsd-backup-dir "${build-dir}/backup"]
+            [:mdsd-config-dir "${module-dir}/config"]
             [:mdsd-config-file "generators.clj"]
             [:mdsd-template-path "${lib-generator-dir}/templates"]
             [:mdsd-profile-path "${lib-generator-dir}/profiles:${lib-model-dir}"]

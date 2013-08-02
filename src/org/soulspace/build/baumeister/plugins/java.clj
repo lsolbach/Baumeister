@@ -1,5 +1,6 @@
 (ns org.soulspace.build.baumeister.plugins.java
   (:use [clojure.java.io :exclude [delete-file]]
+        [clojure.string :only [split join]]
         [org.soulspace.clj file function]
         [org.soulspace.build.baumeister.utils files ant-utils checks log message]
         [org.soulspace.build.baumeister.config registry plugin-registry]))
@@ -36,30 +37,32 @@
   "java compile"
   []
   ; compute classpaths before compilation after dependencies have been initialized
-  (compile-java (param :build-classes-dir) (param :java-source-path) (jar-path (param :java-lib-path)))
-  (when (unittest?)
-    (compile-java (param :build-unittest-classes-dir) (param :java-unittest-source-path)
+  ; (remove #(not (exists? %)) source-dirs)
+  (when-let [source-dirs (seq (source-dirs :java-source-dir))]
+    (compile-java (param :build-classes-dir) (dir-path source-dirs) (jar-path (param :java-lib-path))))
+  (when-let [source-dirs (seq (source-dirs :java-source-unittest-dir))]
+    (compile-java (param :build-unittest-classes-dir) (dir-path source-dirs)
                   (str (param :build-classes-dir) ":" (jar-path (param :java-unittest-lib-path)))))
-  (when (integrationtest?)
-    (compile-java (param :build-integrationtest-classes-dir) (param :java-integrationtest-source-path)
+  (when-let [source-dirs (seq (source-dirs :java-source-integrationtest-dir))]
+    (compile-java (param :build-integrationtest-classes-dir) (dir-path source-dirs)
                   (str (param :build-classes-dir) ":" (jar-path (param :java-integrationtest-lib-path)))))
-  (when (acceptancetest?)
-    (compile-java (param :build-acceptancetest-classes-dir) (param :java-acceptancetest-source-path)
+  (when-let [source-dirs (seq (source-dirs :java-source-acceptancetest-dir))]
+    (compile-java (param :build-acceptancetest-classes-dir) (dir-path source-dirs)
                   (str (param :build-classes-dir) ":" (jar-path (param :java-acceptancetest-lib-path))))))
 
 (defn java-sourcedoc
   []
-  (message :fine "generating javadoc...")
-  (ant-javadoc {:destdir (param "${java-javadoc-dir}")
-                :sourcepath (param :java-source-path)
+  (when-let [source-dirs (seq (source-dirs :java-source-dir))]
+    (message :fine "generating javadoc...")
+    (ant-javadoc {:destdir (param "${java-javadoc-dir}")
+                :sourcepath (dir-path source-dirs)
                 :windowtitle (param :java-javadoc-windowtitle)
                 :doctitle (param :java-javadoc-doctitle)
                 :header (param :java-javadoc-header)
                 :footer (param :java-javadoc-footer)
                 :source (param :java-source-version)
-                }))
+                })))
 
-; TODO check if we compute classpath after deps and before compilation
 (def config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
             [:lib-dev-dir "${lib-dir}/dev"]
@@ -71,34 +74,28 @@
             [:java-compiler-fork "${compiler-fork}"]
             [:java-compiler-maxmem "${compiler-maxmem}"]
             [:java-compile-debug "${compile-debug}"]
+            [:java-source-dir "${source-dir}"]
+            [:java-source-unittest-dir "${source-unittest-dir}"]
+            [:java-source-integrationtest-dir "${source-integrationtest-dir}"]
+            [:java-source-acceptancetest-dir "${source-acceptancetest-dir}"]
             [:java-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-javadoc-dir "${build-sourcedoc-dir}/java"]
+
             ;[:java-javadoc-windowtitle "${module} ${version}"]
             ;[:java-javadoc-doctitle "${module} ${version}"]
             ;[:java-javadoc-header "${module} ${version}"]
             ;[:java-javadoc-footer ""]
+
             ]
    :functions [[:clean java-clean]
                [:init java-init]
                [:compile java-compile]
                [:sourcedoc java-sourcedoc]]})
 
-(defn register-source-paths []
-  (if (has-plugin? "mdsd")
-    (register-vars [[:java-source-path "src:generated/src"]
-                    [:java-unittest-source-path "unittest:${mdsd-generation-dir}/unittest"]
-                    [:java-integration-test-source-path "integrationtest:${mdsd-generation-dir}/integrationtest"]
-                    [:java-acceptancetest-source-path "acceptancetest:${mdsd-generation-dir}/acceptancetest"]])
-    (register-vars [[:java-source-path "src"]
-                    [:java-unittest-source-path "unittest"]
-                    [:java-integration-test-source-path "integrationtest"]
-                    [:java-acceptancetest-source-path "acceptancetest"]])))
-
 (defn plugin-init []
   (message :fine "initializing plugin java")
   (register-vars (:params config))
-  (register-source-paths)
   (register-fns (:functions config)))

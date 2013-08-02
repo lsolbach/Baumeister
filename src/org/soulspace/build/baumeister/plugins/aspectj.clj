@@ -5,8 +5,6 @@
         [org.soulspace.build.baumeister.utils ant-utils files checks log]))
 
 ; TODO fix classpath, add aspectjtools.jar to plugin dependencies
-(def baumeister-classpath (get-env "BAUMEISTER_CLASSPATH"))
-(println "ASPECTJ CP" (param "${aspectj-home}/lib/aspectjtools.jar"))
 (ant-taskdef {:classpath (param "${aspectj-home}/lib/aspectjtools.jar")
               :resource "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"})
 (define-ant-task ant-iajc iajc)
@@ -49,36 +47,30 @@
 (defn aspectj-compile []
   "aspectj compile"
   ; compute classpaths before compilation after dependencies have been initialized
-  (aspectj-task (param :build-classes-dir) (param :aspectj-source-path)
-                (jar-path (param :aspectj-lib-path))
-                (jar-path (param :aspectj-aspectin-path)) (jar-path (param :aspectj-aspect-path)))
-  (when (unittest?)
-    (aspectj-task (param :build-unittest-classes-dir) (param :aspectj-unittest-source-path)
+  (when-let [source-dirs (seq (source-dirs :aspectj-source-dir))]
+    (println source-dirs)
+    (aspectj-task (param :build-classes-dir) (dir-path source-dirs)
+                  (jar-path (param :aspectj-lib-path))
+                  (jar-path (param :aspectj-aspectin-path)) (jar-path (param :aspectj-aspect-path))))
+  
+  (when-let [source-dirs (seq (source-dirs :aspectj-source-unittest-dir))]
+    (aspectj-task (param :build-unittest-classes-dir) (dir-path source-dirs)
                 (jar-path (param :aspectj-unittest-lib-path))
                 (jar-path (param :aspectj-unittest-aspectin-path))
                 (str (param :build-classes-dir) ":" (jar-path (param :aspectj-unittest-aspect-path)))))
-  (when (integrationtest?)
-    (aspectj-task (param :build-integrationtest-classes-dir) (param :aspectj-integrationtest-source-path)
+
+  (when-let [source-dirs (seq (source-dirs :aspectj-source-integrationtest-dir))]
+    (aspectj-task (param :build-integrationtest-classes-dir) (dir-path source-dirs)
                 (jar-path (param :aspectj-integrationtest-lib-path))
                 (jar-path (param :aspectj-integrationtest-aspectin-path))
                 (str (param :build-classes-dir) ":" (jar-path (param :aspectj-integrationtest-aspect-path)))))
-  (when (acceptancetest?)
-    (aspectj-task (param :build-acceptancetest-classes-dir) (param :aspectj-acceptancetest-source-path)
+
+  (when-let [source-dirs (seq (source-dirs :aspectj-source-acceptancetest-dir))]
+    (aspectj-task (param :build-acceptancetest-classes-dir) (dir-path source-dirs)
                 (jar-path (param :aspectj-acceptancetest-lib-path))
                 (jar-path (param :aspectj-acceptancetest-aspectin-path))
                 (str (param :build-classes-dir) ":" (jar-path (param :aspectj-acceptancetest-aspect-path))))))
-
-(defn register-source-paths []
-  (if (has-plugin? "mdsd")
-    (register-vars [[:aspectj-source-path "src:${mdsd-generation-dir}/src"]
-                    [:aspectj-unittest-source-path "unittest:${mdsd-generation-dir}/unittest"]
-                    [:aspectj-integrationtest-source-path "integrationtest:${mdsd-generation-dir}/integrationtest"]
-                    [:aspectj-acceptancetest-source-path "acceptancetest:${mdsd-generation-dir}/acceptancetest"]])
-    (register-vars [[:aspectj-source-path "src"]
-                    [:aspectj-unittest-source-path "unittest"]
-                    [:aspectj-integrationtest-source-path "integrationtest"]
-                    [:aspectj-acceptancetest-source-path "acceptancetest"]])))
-
+  
 (def config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
             [:lib-dev-dir "${lib-dir}/dev"]
@@ -89,6 +81,10 @@
             [:aspectj-source-encoding "${source-encoding}"]
             [:aspectj-source-version "${source-version}"]
             [:aspectj-target-version "${target-version}"]
+            [:aspectj-source-dir "${source-dir}"]
+            [:aspectj-source-unittest-dir "${source-unittest-dir}"]
+            [:aspectj-source-integrationtest-dir "${source-integrationtest-dir}"]
+            [:aspectj-source-acceptancetest-dir "${source-acceptancetest-dir}"]
             [:aspectj-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:aspectj-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:aspectj-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
@@ -108,7 +104,5 @@
 
 (defn plugin-init []
   (log :info "initializing plugin aspectj")
-  ; FIXME compute classpath after deps and before compilation
   (register-vars (:params config))
-  (register-source-paths)
   (register-fns (:functions config)))

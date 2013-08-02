@@ -56,7 +56,6 @@
   (let [zipper (zip/xml-zip (xml/parse-str cpxml))
         ;zipper (xml-zipper (param "${module-dir}/data/.classpath"))
         conts (zx/xml-> zipper :classpath :classpathentry [(zx/attr= :kind "con")])]
-    (println "ZIPPER" zipper)
     (println "ROOT" (zx/xml-> zipper))
     (println "CP" (zx/xml-> zipper :classpath))
     (println "CONTS" conts)

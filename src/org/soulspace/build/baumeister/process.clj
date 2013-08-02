@@ -24,14 +24,15 @@
   (let [start (System/currentTimeMillis)
         [arguments options] (parse-args args option-defs)]
     (init-config options)
-    (if (and (nil? (:help options)) (nil? (:version options)))
-      (do
+    (if (and (nil? (:help options)) (nil? (:version options)))      
+      (do ; Workflow
         (message :normal "Started at" (Date. start))
         (apply start-workflow arguments)
         (let [end (System/currentTimeMillis)] (message :important (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds."))))
-      (do 
+      (do ; Version/Help options
         (if-not (nil? (:version options))
           (message :very-important "Baumeister version" (param :system-version)))
         (if-not (nil? (:help options))
-          (message :very-important "Baumeister usage:")))))
+          (message :very-important "Baumeister usage:")
+          (message :very-important )))))
   0)
