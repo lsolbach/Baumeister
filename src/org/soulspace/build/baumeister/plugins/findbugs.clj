@@ -39,7 +39,7 @@
   (log :info "analyzing code with findbugs...")
   (findbugs-task))
 
-(def findbugs-config
+(def config
   {:params [[:findbugs-home ""]
             [:findbugs-plugin-list ""]
             [:findbugs-report-dir "${build-report-dir}/findbugs"]
@@ -54,6 +54,6 @@
 
 (defn plugin-init []
   (log :info "initializing plugin findbugs")
-  (register-vars (:params findbugs-config))
-  (register-fns (:functions findbugs-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))
 

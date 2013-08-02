@@ -85,12 +85,12 @@
   (when (data-module?)
     (package-data)))
 
-(def package-config
+(def config
   {:params [[:package-environment-dir "${module-dir}/env"]
             [:package-additional-jars []]]
    :functions [[:package package-package]]})
 
 (defn plugin-init []
   (log :info  "initializing plugin package")
-  (register-vars (:params package-config))
-  (register-fns (:functions package-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

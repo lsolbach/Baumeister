@@ -101,7 +101,7 @@
 (defn mdsd-post-generate []
   (log :info  "postprocessing generation from model..."))
 
-(def mdsd-config 
+(def config 
   {:params [[:lib-generator-dir "${lib-dir}/generator"]
             [:lib-model-dir "${lib-dir}/model"]
             [:mdsd-model-dir "${module-dir}/model"]
@@ -122,5 +122,5 @@
 
 (defn plugin-init []
   (log :info  "initializing plugin mdsd")
-  (register-vars (:params mdsd-config))
-  (register-fns (:functions mdsd-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

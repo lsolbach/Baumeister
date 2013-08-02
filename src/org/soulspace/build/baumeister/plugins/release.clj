@@ -24,7 +24,7 @@
     ; FIXME copy binary release package to some useful repository
     (copy (as-file (str (param :dist-dir) "/" filename)) (as-file (str "../" filename)))))
 
-(def release-config
+(def config
   {:params [[:release-name "${module}-${version}"]
             [:release-file "${release-name}.zip"]]
    :functions [[:package-release release-package]
@@ -32,5 +32,5 @@
 
 (defn plugin-init []
   (message :fine  "initializing plugin release")
-  (register-vars (:params release-config))
-  (register-fns (:functions release-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

@@ -3,7 +3,7 @@
 ; These settings are merged with the settings in the module.clj files
 ;
 [
- :system-version "0.4.1"
+ :system-version "0.4.2"
  ;
  ; default project directory layout
  ;

@@ -1,17 +1,20 @@
-(ns org.soulspace.build.baumeister.maven.pom-builder
-  (:require [clojure.data.xml :as xml]
-            [org.soulspace.build.baumeister.maven.pom-dsl :as pom])
-  (:use [org.soulspace.build.baumeister.config registry]))
+(ns org.soulspace.build.baumeister.plugins.maven
+  (:require [org.soulspace.build.baumeister.maven.pom-dsl :as pom])
+  (:use [clojure.data.xml]
+        [org.soulspace.build.baumeister.config registry]
+        [org.soulspace.build.baumeister.utils log message property xml]
+        [org.soulspace.build.baumeister.dependency dependency]))
 
-; TODO move to config file
+; maven support plugin
+
 (def target-to-maven-scope
   "map all targets to maven scopes"
-  {"runtime" "compile"
-   "dev" "test"
-   "aspect" "compile"
-   "aspectin" "provided"
-   "model" "compile"
-   "generator" "compile"
+  {:runtime "compile"
+   :dev "test"
+   :aspect "compile"
+   :aspectin "provided"
+   :model "compile"
+   :generator "compile"
    })
 
 ;
@@ -32,8 +35,8 @@
 (defn build-pom-dependencies [dependencies]
   (map build-pom-dependency dependencies))
 
-(defn build-pom [dependencies]
-  (xml/indent-str
+(defn build-pom []
+  (let [dependencies (map #(apply new-dependency %) (param :dependencies))]
     (pom/project
       {}
       (pom/modelversion {} "4.0.0")
@@ -43,3 +46,15 @@
       (pom/dependencies
         {}
         (build-pom-dependencies dependencies)))))
+
+(defn maven-post-dependencies []
+  (println (indent-str (build-pom))))
+
+
+(def config
+  {:params []
+   :functions [[:post-dependencies maven-post-dependencies]]})
+
+(defn plugin-init []
+  (register-fns (:functions config))
+  )

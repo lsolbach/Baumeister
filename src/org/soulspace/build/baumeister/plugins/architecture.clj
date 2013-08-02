@@ -69,7 +69,7 @@
               :basedir (str (param :architecture-generated-modules-dir) "/" module)})))
 
 ; TODO when handling plugins as dependencies, move to plugin module.clj
-(def architecture-config
+(def config
   {:params [[:lib-generator-dir "${lib-dir}/generator"]
             [:lib-model-dir "${lib-dir}/model"]
             [:architecture-model-dir "${module-dir}/model"]
@@ -92,5 +92,5 @@
 
 (defn plugin-init []
   (log :info "initializing plugin architecture")
-  (register-vars (:params architecture-config))
-  (register-fns (:functions architecture-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

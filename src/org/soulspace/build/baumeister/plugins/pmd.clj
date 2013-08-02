@@ -58,7 +58,7 @@
   (cpd-task)
   (pmd-task))
 
-(def pmd-config
+(def config
   {:params [[:pmd-report-dir "${build-report-dir}/pmd"]
             [:pmd-report-file "${pmd-report-dir}/pmd.xml"]
             [:pmd-rule-sets ["java/basic" "java/braces" "java/unusedcode"]]
@@ -72,5 +72,5 @@
 
 (defn plugin-init []
   (log :debug  "initializing plugin pmd")
-  (register-vars (:params pmd-config))
-  (register-fns (:functions pmd-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

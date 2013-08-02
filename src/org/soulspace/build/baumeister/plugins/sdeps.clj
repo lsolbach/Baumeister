@@ -3,7 +3,7 @@
         [org.soulspace.clj file file-search function]
         [org.soulspace.build.baumeister.config registry plugin-registry]
         [org.soulspace.build.baumeister.repository repositories artifact distribution]
-        [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-initialization]
+        [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-initialization  dependency-dot]
         [org.soulspace.build.baumeister.utils ant-utils checks log message]))
 
 (defn get-dependencies []
@@ -32,7 +32,22 @@
     (doseq [dependency dependencies]
       (init-dependency dependency))))
 
-(defn sdeps-distribute []
+(defn sdeps-post-dependencies 
+  "Generate dot graphs for the configured dependency tree."
+  []
+  (when (param :deps-report)
+    (log :debug "doing sdeps-post-dependencies")
+    (let [writer (java.io.StringWriter.)]
+      (if-not (nil? (param :dependencies-tree))
+        (dependencies-dot writer (param :dependencies-tree))
+        (dependencies-dot writer (build-dependency-tree)))
+      (spit (param "${deps-report-dir}/dependencies.dot") (str writer))
+      ;(execute "dot" (str "-Tpng -o" (param "${deps-report-dir}/dependencies.png") " " (param "${deps-report-dir}/dependencies.dot")))
+      )))
+
+(defn sdeps-distribute
+  "Distribute generated artifacts to the dev repository."
+  []
   (message :fine "distributing artifacts...")
   (when (code-module?)
     (deps-distribute-jars (get-dev-repository (param :deps-repositories))))
@@ -45,13 +60,14 @@
     (distribute-artifact (get-dev-repository (param :deps-repositories))
                          (new-artifact [(param :project) (param :module) (param :version) (param :mdsd-model-name) "xmi"]) (param :mdsd-model-dir))))
 
-(def sdeps-config
+(def config
   {:params [[:deps-report true]
-                  [:deps-transitive false]
-                  [:deps-report-dir "${build-report-dir}/dependencies"]]
+            [:deps-transitive false]
+            [:deps-report-dir "${build-report-dir}/dependencies"]]
    :functions [[:clean sdeps-clean]
                  [:init sdeps-init]
                  [:dependencies sdeps-dependencies]
+                 [:post-dependencies sdeps-post-dependencies]
                  [:distribute sdeps-distribute]]})
 
 ;
@@ -60,6 +76,7 @@
 (defn plugin-init []
   (message :fine "initializing plugin sdeps")
   (log :debug "creating repositories " (param :repositories))
+  ; TODO move repository creation into another plugin
   (register-val :deps-repositories (create-repositories (param :repositories)))
-  (register-vars (:params sdeps-config))
-  (register-fns (:functions sdeps-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

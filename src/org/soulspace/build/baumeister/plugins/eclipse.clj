@@ -33,11 +33,32 @@
     [{:name "owner.project.facets" :value "jst.web"}]]
    ])
 
+(def cpxml
+  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<classpath>
+	<classpathentry kind=\"src\" path=\"src\"/>
+	<classpathentry kind=\"src\" path=\"unittest\"/>
+	<classpathentry kind=\"con\" path=\"org.eclipse.jdt.launching.JRE_CONTAINER\"/>
+	<classpathentry kind=\"lib\" path=\"build/lib/runtime/ant-jdepend.jar\"/>
+	<classpathentry kind=\"lib\" path=\"build/lib/runtime/ant-junit.jar\"/>
+	<classpathentry kind=\"lib\" path=\"build/lib/runtime/ant-launcher.jar\"/>
+	<classpathentry kind=\"output\" path=\"bin\"/>
+</classpath>
+")
+
+(def cpzip (zip/xml-zip (xml/parse-str cpxml)))
+
+(println "ROOT" (zx/xml-> cpzip))
+(println "CP" (zx/xml-> cpzip :classpath))
+
 (defn build-container-entries []
   ; TODO zip from .classpath and include again?
-  (let [zipper (xml-zipper (param "${module-dir}/.classpath"))
+  (let [zipper (zip/xml-zip (xml/parse-str cpxml))
+        ;zipper (xml-zipper (param "${module-dir}/data/.classpath"))
         conts (zx/xml-> zipper :classpath :classpathentry [(zx/attr= :kind "con")])]
-    (println "CPE" (zx/xml-> zipper :classpath))
+    (println "ZIPPER" zipper)
+    (println "ROOT" (zx/xml-> zipper))
+    (println "CP" (zx/xml-> zipper :classpath))
     (println "CONTS" conts)
     )
   )

@@ -71,7 +71,7 @@
                     [:clojure-integrationtest-source-path "integrationtest"]
                     [:clojure-acceptancetest-source-path "acceptancetest"]])))
 
-(def clojure-config
+(def config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
             [:lib-dev-dir "${lib-dir}/dev"][:clojure-compiler-fork "${compiler-fork}"]
             [:clojure-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
@@ -85,5 +85,5 @@
 (defn plugin-init []
   (log :info "initializing plugin clojure")
   (register-source-paths)
-  (register-vars (:params clojure-config))
-  (register-fns (:functions clojure-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

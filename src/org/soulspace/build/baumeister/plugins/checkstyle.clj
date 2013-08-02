@@ -37,7 +37,7 @@
   (log :info "analyzing code with checkstyle...")
   (checkstyle-task))
 
-(def checkstyle-config
+(def config
   {:params [[:checkstyle-config (str (param :baumeister_home_dir) "/config/checkstyle/sun_checks.xml")]
             [:checkstyle-report-dir "${build-report-dir}/checkstyle"]
             [:checkstyle-report-file "${checkstyle-report-dir}/checkstyle.xml"]
@@ -48,5 +48,5 @@
 
 (defn plugin-init []
   (log :info "initializing plugin checkstyle")
-  (register-vars (:params checkstyle-config))
-  (register-fns (:functions checkstyle-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

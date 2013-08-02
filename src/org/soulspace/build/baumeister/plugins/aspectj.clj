@@ -79,7 +79,7 @@
                     [:aspectj-integrationtest-source-path "integrationtest"]
                     [:aspectj-acceptancetest-source-path "acceptancetest"]])))
 
-(def aspectj-config
+(def config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
             [:lib-dev-dir "${lib-dir}/dev"]
             [:lib-aspect-dir "${lib-dir}/aspect"]
@@ -109,6 +109,6 @@
 (defn plugin-init []
   (log :info "initializing plugin aspectj")
   ; FIXME compute classpath after deps and before compilation
-  (register-vars (:params aspectj-config))
+  (register-vars (:params config))
   (register-source-paths)
-  (register-fns (:functions aspectj-config)))
+  (register-fns (:functions config)))

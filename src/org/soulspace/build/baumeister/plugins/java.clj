@@ -5,9 +5,6 @@
         [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 ; TODO is at least access to the dependency tree needed?
-; TODO think of a mechanism for specifing different java versions?
-(def java-home (get-env "JAVA_HOME" (str (param :user_home_dir) "/devel/java/jdk1.6.0")))
-
 (defn compile-java [destdir srcdir class-path]
   (log :debug "java compile classpath" class-path) ; FIXME needs ${build-*-dirs}:(jar-path ${lib-*-dirs})
   (if (has-plugin? "aspectj")
@@ -63,7 +60,7 @@
                 }))
 
 ; TODO check if we compute classpath after deps and before compilation
-(def java-config
+(def config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
             [:lib-dev-dir "${lib-dir}/dev"]
             [:java-home "${java-home}"]
@@ -102,6 +99,6 @@
 
 (defn plugin-init []
   (message :fine "initializing plugin java")
-  (register-vars (:params java-config))
+  (register-vars (:params config))
   (register-source-paths)
-  (register-fns (:functions java-config)))
+  (register-fns (:functions config)))

@@ -4,9 +4,10 @@
         [org.soulspace.build.baumeister.utils log]))
 
 (defn bmdebug-init []
-  (pprint (get-param-registry)))
+  (spit (param "${build-dir}/debug")
+        (with-out-str (pprint (get-param-registry)))))
 
-(def bmdebug-config
+(def config
   {:params []
    :functions [[:init bmdebug-init]]})
 
@@ -16,5 +17,5 @@
 (defn plugin-init []
   (log :info "initializing plugin depsdot")
   (register-plugin "bmdebug")
-  (register-vars (:params bmdebug-config))
-  (register-fns (:functions bmdebug-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

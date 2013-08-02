@@ -4,11 +4,11 @@
  :project-lead "Ludger Solbach"
  :description "Baumeister Build System"
  :type :consolefrontend
- :version "0.4.1"
+ :version "0.4.2"
  :author "Ludger Solbach"
  :provider "soulspace.org"
  :inception-year 2012
- :plugins ["global" "sdeps" "depsdot" "eclipse" "clojure" "package" "release"]
+ :plugins ["global" "sdeps" "maven" "eclipse" "clojure" "package" "release" "bmdebug"]
  ; :license ["Eclipse Public License 1.0" "http://www.eclipse.org/legal/epl-v10.html"]
  :repository-root-dir "/home/soulman/devel/repositories" ; FIXME use $HOME here
  ; :extra-repositories [[:maven-proxy :thirdparty "http://maven.alfresco.com/nexus/content/groups/public" "${baumeister-home-dir}/../repositories/maven.alfresco.com"]]

@@ -25,7 +25,7 @@
   (create-dir (as-file (param :lib-dir)))
   (create-dir (as-file (param :dist-dir))))
 
-(def global-config
+(def config
   {:params [[:module-dir "."]
             [:build-dir "${module-dir}/build"]
             [:lib-dir "${build-dir}/lib"]
@@ -40,5 +40,5 @@
 
 (defn plugin-init []
   (log :info "initializing plugin global")
-  (register-vars (:params global-config))
-  (register-fns (:functions global-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

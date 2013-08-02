@@ -40,7 +40,7 @@
                (ant-path (param :build-classes-dir))
                (param :jdepend-excludes)))
 
-(def jdepend-config
+(def config
   {:params [[:jdepend-report-dir "${build-report-dir}/jdepend"]
             [:jdepend-excludes #{"java.*" "javax.*" }]]
    :functions [[:clean jdepend-clean]
@@ -49,5 +49,5 @@
 
 (defn plugin-init []
   (log :info "initializing plugin jdepend")
-  (register-vars (:params jdepend-config))
-  (register-fns (:functions jdepend-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))

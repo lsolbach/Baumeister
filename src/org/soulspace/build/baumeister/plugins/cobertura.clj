@@ -67,7 +67,7 @@
   (log :info "post-coverage cobertura...")
   (report-task))
 
-(def cobertura-config
+(def config
   {:params [[:build-cobertura-dir "${build-dir}/cobertura"]
             [:cobertura-data-file "${build-cobertura-dir}/cobertura.ser"]
             [:cobertura-report-dir "${build-report-dir}/cobertura"]]
@@ -83,5 +83,5 @@
 
 (defn plugin-init []
   (log :info "initializing plugin cobertura")
-  (register-vars (:params cobertura-config))
-  (register-fns (:functions cobertura-config)))
+  (register-vars (:params config))
+  (register-fns (:functions config)))
