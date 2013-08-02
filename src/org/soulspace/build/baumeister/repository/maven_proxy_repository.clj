@@ -3,7 +3,7 @@
         [org.soulspace.clj file file-search function net]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository repository-protocol artifact version]
-        [org.soulspace.build.baumeister.utils log]
+        [org.soulspace.build.baumeister.utils log xml]
         [org.soulspace.build.baumeister.maven maven-utils]))
 
 (defrecord MavenProxyArtifactRepositoryImpl [usage url path]
@@ -40,7 +40,7 @@
   (get-pom [repo artifact]
     (let [pom-file (get-artifact repo (pom-artifact repo artifact))]
       (if (exists? pom-file)
-        (let [zipped (pom-zipper pom-file)]
+        (let [zipped (xml-zipper pom-file)]
           (if (pom-parent? zipped)
             (let [parent-artifact (new-artifact (parse-pom-parent {} zipped))
                   parent-pom (get-pom repo parent-artifact)]

@@ -1,10 +1,18 @@
 ;
 ; This settings.clj file contains the user specific settings for Baumeister.
 ; These settings override the defaults in $BAUMEISTER_HOME/config/module_defaults.clj
-; and are merged with the settings in the module.clj files
+; and are merged with the settings in the module.clj files.
+;
+; The format is <key> <value> where keys start with a colon and values are strings or numbers.
+; 
+; You can use the variables that are defined in $BAUMEISTER_HOME/config/module_defaults.clj
+; but especially these variables should be useful:
+;
+; ${user-home-dir} - the home directory  of the user ($HOME) 
+; ${baumeister-home-dir} - the root directory of the running Baumeister instance ($BAUMEISTER_HOME)
 ;
 ; Copy this file to the directory $HOME/.Baumeister/ and customize it as needed
-;
+; 
 [
  ; uncomment and set to the Java installation dir, if the JAVA_HOME environment variable is not set 
  ;:java-home ""

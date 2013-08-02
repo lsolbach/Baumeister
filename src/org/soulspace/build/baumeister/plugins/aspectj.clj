@@ -4,9 +4,10 @@
         [org.soulspace.build.baumeister.config registry plugin-registry]
         [org.soulspace.build.baumeister.utils ant-utils files checks log]))
 
-; TODO think of a mechanism for specifing different aspectj versions?
-(def aspectj-home (get-env "ASPECTJ_HOME" (str (param :user_home_dir) "/devel/tools/aspectj")))
-(ant-taskdef {:classpath (str aspectj-home "/lib/aspectjtools.jar:lib/runtime/ant.jar:lib/runtime/ant-launcher.jar")
+; TODO fix classpath, add aspectjtools.jar to plugin dependencies
+(def baumeister-classpath (get-env "BAUMEISTER_CLASSPATH"))
+(println "ASPECTJ CP" (param "${aspectj-home}/lib/aspectjtools.jar"))
+(ant-taskdef {:classpath (param "${aspectj-home}/lib/aspectjtools.jar")
               :resource "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"})
 (define-ant-task ant-iajc iajc)
 

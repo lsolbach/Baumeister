@@ -8,20 +8,12 @@
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository artifact]
         [org.soulspace.build.baumeister.dependency dependency]
-        [org.soulspace.build.baumeister.utils log property]
+        [org.soulspace.build.baumeister.utils log property xml]
         [org.soulspace.build.baumeister.maven pom-model]))
 
 ;
 ; pom parsing
 ;
-(defmulti pom-zipper class)
-(defmethod pom-zipper java.io.File [pom-file]
-  (zip/xml-zip (xml/parse (reader pom-file))))
-(defmethod pom-zipper String [str]
-  (if (starts-with "<" str)
-    (zip/xml-zip (xml/parse-str str)) ; handle as xml string
-    (zip/xml-zip (xml/parse (reader str))))); haandle as file name
-
 (defn replace-value
   ([value]
     value)

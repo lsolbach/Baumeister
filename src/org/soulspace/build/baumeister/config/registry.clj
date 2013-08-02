@@ -91,7 +91,7 @@
 
   ; get config path and read configs from path for e.g. user settings
   (try
-    (set-params (read-module (str (param :user-home-dir) "/.Baumeister/module_defaults.clj")))
+    (set-params (read-module (str (param :user-home-dir) "/.Baumeister/settings.clj")))
     (catch java.io.IOException e))
   
   ; read module.clj (or the file specified with --file or -f) from current module

@@ -15,6 +15,10 @@
  :build-sourcedoc-dir "${build-doc-dir}/sourcedoc"
  :dist-dir "${build-dir}/dist"
  :lib-dir "${build-dir}/lib"
+ :source-dir "${module-dir}/src"
+ :source-unittest-dir "${module-dir}/unittest"
+ :source-integrationtest-dir "${module-dir}/integrationtest"
+ :source-acceptancetest-dir "${module-dir}/acceptancetest"
  :source-config-dir "${module-dir}/config"
  :source-script-dir "${module-dir}/scripts"
  :source-webcontent-dir "${module-dir}/WebContent"
@@ -97,6 +101,7 @@
  ; :dependency-actions defines the actions for the initialization of the dependencies in the build process
  :dependency-actions {:copy #{:runtime :dev :aspect :aspectin :model} ; copy the artifact to the specified lib target dir
                       :unzip #{:generator} ; unzip the artifact to ${lib-dir}
+                      :follow #{:root} ; just follow
                       }
  ;
  ; maven dependency management compatibility

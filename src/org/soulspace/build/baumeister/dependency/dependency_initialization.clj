@@ -20,6 +20,8 @@
         (copy src (as-file (str tgt "/" (artifact-name artifact))))
         (unzip? dependency)
         (ant-unzip {:src src :dest tgt :overwrite "true"})
+        (follow? dependency)
+        nil ; do nothing in initalization 
         :default
         (log :error "Could not handle dependency " dependency)))))
 

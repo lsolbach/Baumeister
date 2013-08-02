@@ -9,6 +9,9 @@
 (defn unzip? [dependency]
   (contains? (:unzip (param :dependency-actions)) (:target dependency)))
 
+(defn follow? [dependency]
+  (contains? (:follow (param :dependency-actions)) (:target dependency)))
+
 (def compatible-targets
   {:aspectj :runtime
    :aspectin :dev})

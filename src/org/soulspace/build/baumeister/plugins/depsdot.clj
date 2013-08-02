@@ -27,6 +27,5 @@
 ;
 (defn plugin-init []
   (log :info "initializing plugin depsdot")
-  (register-plugin "depsdot")
   (register-vars (:params depsdot-config))
   (register-fns (:functions depsdot-config)))

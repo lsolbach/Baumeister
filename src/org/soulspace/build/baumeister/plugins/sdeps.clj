@@ -58,8 +58,7 @@
 ; plugin initialization
 ;
 (defn plugin-init []
-  (message :fine "initializing plugin deps")
-  (register-plugin "deps")
+  (message :fine "initializing plugin sdeps")
   (log :debug "creating repositories " (param :repositories))
   (register-val :deps-repositories (create-repositories (param :repositories)))
   (register-vars (:params sdeps-config))

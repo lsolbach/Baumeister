@@ -15,10 +15,10 @@
 
 (defn code-module? [] (contains? (param :code-module-types) (keyword (param :type))))
 (defn web-module? [] (contains? (param :web-module-types) (keyword (param :type))))
-(defn app-module? [] (contains? (param :app-module-types) (keyword (param :type))))
-(defn console-module? [] (contains? (param :console-module-types) (keyword (param :type))))
+(defn app-module? [] (contains? (param :app-frontend-types) (keyword (param :type))))
+(defn console-module? [] (contains? (param :console-frontend-types) (keyword (param :type))))
 (defn data-module? [] (contains? (param :data-module-types) (keyword (param :type))))
 
 ;(defn package-jar? [] (contains? (param :package-type) :jar))
-(defn package-war? [] (contains? (param :package-type) :war))
-(defn package-ear? [] (contains? (param :package-type) :ear))
+(defn package-war? [] (contains? #{(param :package-type)} :war))
+(defn package-ear? [] (contains? #{(param :package-type)} :ear))
