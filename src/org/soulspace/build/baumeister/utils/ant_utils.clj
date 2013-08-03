@@ -31,9 +31,19 @@
           (derive ::jar ::zip)
           (derive ::war ::zip)
           (derive ::ear ::zip)
+          (derive ::unzip ::expand)
+          (derive ::unjar ::expand)
+          (derive ::unwar ::expand)
+          (derive ::gzip ::pack)
+          (derive ::bzip2 ::pack)
+          (derive ::gunzip ::unpack)
+          (derive ::bunzip2 ::unpack)
           (derive ::delete ::takes-fileset)
           (derive ::copy ::takes-fileset)
           (derive ::zip ::takes-fileset)
+          (derive ::expand ::takes-fileset)
+          (derive ::pack ::takes-fileset)
+          (derive ::unpack ::takes-fileset)
           (derive ::exec ::has-args)
           (derive ::java ::has-args)
           )))
@@ -80,7 +90,7 @@ The default behaviour is to add an element as a fileset."
 
 (defmethod add-nested :default [_ task nested] 
   (println "ADD-NESTED default" task nested)
-  ;(.addFileset task nested)
+  (.addFileset task nested)
   )
 
 (defn instantiate-task [project name props & nested]
@@ -145,6 +155,7 @@ The default behaviour is to add an element as a fileset."
 (define-ant-type ant-dirset org.apache.tools.ant.types.DirSet)
 (define-ant-type ant-patternset org.apache.tools.ant.types.PatternSet)
 (define-ant-type ant-zipfileset org.apache.tools.ant.types.ZipFileSet)
+(define-ant-type ant-propertyset org.apache.tools.ant.types.PropertySet)
 (define-ant-type ant-variable org.apache.tools.ant.types.Environment$Variable)
 (define-ant-type ant-arg org.apache.tools.ant.types.Commandline$Argument)
 

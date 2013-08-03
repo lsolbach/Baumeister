@@ -32,7 +32,7 @@
 
 (defn architecture-pre-init []
   "architecture pre-init"
-  (if-not (= (param :type) "architecture") ; validate module type
+  (if-not (= (param :type) :architecture) ; validate module type
     (throw (RuntimeException. (str "Module is not of type architecture but of type " + (param :type))))))
 
 (defn architecture-init []
