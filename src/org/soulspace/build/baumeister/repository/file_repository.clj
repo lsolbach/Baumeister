@@ -1,8 +1,10 @@
 (ns org.soulspace.build.baumeister.repository.file-repository
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function]
+        [org.soulspace.clj.version version]
+        [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.repository repository-protocol artifact version]
+        [org.soulspace.build.baumeister.repository repository-protocol]
         [org.soulspace.build.baumeister.utils log]))
 ;
 ; Repository implementations
@@ -14,6 +16,8 @@
   (artifact-folder [repo artifact]
     (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (artifact-version artifact)))
   (get-artifact [repo artifact]
+    (println "LATEST" (latest-version repo artifact))
+    (println "ARTIFACT" (latest-artifact repo artifact))
     (artifact-file repo artifact))
   (get-dependencies-for-artifact [repo artifact]
     (let [module-file (get-artifact repo (module-artifact repo artifact))]
@@ -25,8 +29,14 @@
     (copy artifact-src (artifact-file repo artifact))) ; TODO copy artifact
 
   VersionedArtifactRepository
-  (get-versions-for-artifact [repo artifact]
+  (versions [repo artifact]
     (map new-version (map file-name (files (module-dir repo artifact)))))
+  (latest? [repo artifact]
+    (same-version? (:version artifact) (latest-version repo artifact)))
+  (latest-version [repo artifact]
+    (first (reverse (sort compare-version (versions repo artifact)))))
+  (latest-artifact [repo artifact]
+    (new-artifact-version artifact (latest-version repo artifact)))
   
   BaumeisterArtifactRepository
   (module-artifact [repo artifact]

@@ -78,7 +78,7 @@
             [:architecture-backup-dir "${module-dir}/backup"]
             [:architecture-config-dir "${lib-generator-dir}/config"]
             [:architecture-config-file "architecture_generators.clj"]
-            [:architecture-template-path ["${lib-generator-dir}/std-templates2" "${lib-generator-dir}/templates2"]]
+            [:architecture-template-path ["${lib-generator-dir}/templates" "templates"]]
             [:architecture-profile-dir "${lib-generator-dir}/profiles"]
             [:architecture-profiles ["argouml/default-uml14.xmi" "MDSDProfile.xmi"]]
             [:architecture-generated-models-dir "${architecture-generation-dir}/models"]

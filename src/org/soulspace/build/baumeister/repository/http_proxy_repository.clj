@@ -1,8 +1,10 @@
 (ns org.soulspace.build.baumeister.repository.http-proxy-repository
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function net]
+        [org.soulspace.clj.version version]
+        [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.repository repository-protocol artifact version]
+        [org.soulspace.build.baumeister.repository repository-protocol]
         [org.soulspace.build.baumeister.utils log]))
 
 (defrecord HttpProxyArtifactRepositoryImpl [usage url path]
@@ -14,7 +16,10 @@
     (when (and (not (local-hit? repo artifact)) (remote-hit? repo artifact))
       (cache-artifact repo artifact))
     (if (local-hit? repo artifact)
-      (artifact-file repo artifact)
+      (do
+        (println "LATEST" (latest-version repo artifact))
+        (println "ARTIFACT" (latest-artifact repo artifact))
+        (artifact-file repo artifact))
       nil))
   (get-dependencies-for-artifact [repo artifact]
     (let [module-file (get-artifact repo (module-artifact repo artifact))]
@@ -26,9 +31,15 @@
     (copy artifact-src (artifact-file repo artifact))) ; TODO synchronize with remote?
 
   VersionedArtifactRepository
-  (get-versions-for-artifact [repo artifact] ; TODO queries local filesystem, use module-dir-url and HTTP lookup?
+  (versions [repo artifact]
     (map new-version (map file-name (files (module-dir repo artifact)))))
-  
+  (latest? [repo artifact]
+    (same-version? (:version artifact) (latest-version repo artifact)))
+  (latest-version [repo artifact]
+    (first (reverse (sort compare-version (versions repo artifact)))))
+  (latest-artifact [repo artifact]
+    (new-artifact-version artifact (latest-version repo artifact)))
+
   BaumeisterArtifactRepository
   (module-artifact [repo artifact]
     (new-artifact [(:project artifact) (:module artifact) (artifact-version artifact) "module" "clj"]))

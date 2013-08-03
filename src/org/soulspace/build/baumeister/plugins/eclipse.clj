@@ -6,9 +6,9 @@
             [org.soulspace.build.baumeister.eclipse.classpath-dsl :as cp])
   (:use [clojure.java.io :only [as-file]]
         [org.soulspace.clj file]
+        [org.soulspace.clj.artifact artifact]
         [org.soulspace.clj.xml dsl-builder xml-util]
         [org.soulspace.build.baumeister.config registry plugin-registry]
-        [org.soulspace.build.baumeister.repository artifact]
         [org.soulspace.build.baumeister.utils checks log message xml]
         ))
 

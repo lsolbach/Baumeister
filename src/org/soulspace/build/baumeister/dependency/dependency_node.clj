@@ -1,9 +1,10 @@
 (ns org.soulspace.build.baumeister.dependency.dependency-node
   (:require [clojure.zip :as zip])
   (:use [clojure.set :only [union]]
+        [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.utils log]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.repository repositories artifact]
+        [org.soulspace.build.baumeister.repository repositories]
         [org.soulspace.build.baumeister.dependency dependency]
         ))
 
@@ -44,7 +45,7 @@
   "get the transitive dependencies configuration for the specified dependency"
   (if (= (:target dependency) :root)
     (param :dependencies) ; current module, use config
-    (query-dependencies (param :deps-repositories) dependency)))
+    (query-dependencies dependency)))
 
 ;
 ; Dependency node

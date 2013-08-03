@@ -22,6 +22,8 @@
 ;
 ; pom creation
 ;
+; TODO don't create th xml directly, create a Pom model and ask for the xml
+;
 (defn build-pom-dependency [dependency]
   (let [artifact (:artifact dependency)]
     (pom/dependency 

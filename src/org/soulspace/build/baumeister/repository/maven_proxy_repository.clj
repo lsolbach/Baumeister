@@ -1,11 +1,23 @@
 (ns org.soulspace.build.baumeister.repository.maven-proxy-repository
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function net]
+        [org.soulspace.clj.version version]
+        [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.repository repository-protocol artifact version]
+        [org.soulspace.build.baumeister.repository repository-protocol]
         [org.soulspace.build.baumeister.utils log xml]
         [org.soulspace.build.baumeister.maven maven-utils]))
 
+;
+; repository metadata handling
+;
+(defn metadata [zipper]
+  
+  )
+
+;
+; Maven Proxy Artifact Repository
+;
 (defrecord MavenProxyArtifactRepositoryImpl [usage url path]
   ArtifactRepository
   (artifact-folder [repo artifact]
@@ -16,7 +28,10 @@
       ; local miss but remote hit, cache from remote
       (cache-artifact repo artifact))
     (if (local-hit? repo artifact)
-      (artifact-file repo artifact)
+      (do
+        (println "LATEST" (latest-version repo artifact))
+        (println "ARTIFACT" (latest-artifact repo artifact))
+        (artifact-file repo artifact))
       nil))
   
   (get-dependencies-for-artifact [repo artifact]
@@ -27,11 +42,17 @@
     (copy artifact-src (artifact-file repo artifact))) ; TODO synchronize with remote?
   
   VersionedArtifactRepository
-  (get-versions-for-artifact [repo artifact] ; TODO queries local filesystem, use module-dir-url and HTTP lookup?
+  (versions [repo artifact]
     (map new-version (map file-name (files (module-dir repo artifact)))))
+  (latest? [repo artifact]
+    (same-version? (:version artifact) (latest-version repo artifact)))
+  (latest-version [repo artifact]
+    (first (reverse (sort compare-version (versions repo artifact)))))
+  (latest-artifact [repo artifact]
+    (new-artifact-version artifact (latest-version repo artifact)))
 
   MavenArtifactRepository
-  (artifact-mvn-name [repo artifact]
+  (maven-name [repo artifact]
     (str (:name artifact) "-" (artifact-version artifact) "." (:type artifact)))
 
   (pom-artifact [repo artifact]
@@ -39,6 +60,7 @@
 
   (get-pom [repo artifact]
     (let [pom-file (get-artifact repo (pom-artifact repo artifact))]
+      ;(println "POM" (artifact-key artifact))
       (if (exists? pom-file)
         (let [zipped (xml-zipper pom-file)]
           (if (pom-parent? zipped)
@@ -47,7 +69,11 @@
               (parse-pom zipped parent-pom))
             (parse-pom zipped)))
         nil)))
-  
+  (metadata-folder [repo artifact]
+    (str (ns-to-path (:project artifact) "/" (:module artifact))))
+  (get-metadata [repo artifact]
+    (let [md-file ()]))
+
   FileArtifactRepository
   (project-dir [repo artifact]
     (as-file (str  path "/" (ns-to-path (:project artifact)))))
@@ -60,7 +86,7 @@
 
   (artifact-file [repo artifact]
     ;(log :trace (str (absolute-path (artifact-dir repo artifact)) "/" (artifact-mvn-name repo artifact)))
-    (as-file (str (absolute-path (artifact-dir repo artifact)) "/" (artifact-mvn-name repo artifact))))
+    (as-file (str (absolute-path (artifact-dir repo artifact)) "/" (maven-name repo artifact))))
   
   HttpArtifactRepository
   (project-dir-url [repo artifact]
@@ -73,7 +99,7 @@
     (as-url (str url "/" (artifact-folder repo artifact))))
 
   (artifact-file-url [repo artifact]
-    (as-url (str url "/" (artifact-folder repo artifact) "/" (artifact-mvn-name repo artifact))))
+    (as-url (str url "/" (artifact-folder repo artifact) "/" (maven-name repo artifact))))
   
   ProxyArtifactRepository
   (cache-artifact [repo artifact]

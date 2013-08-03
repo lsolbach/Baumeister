@@ -34,25 +34,24 @@
   (cache-artifact [repo artifact] "Copies the artifact from the remote site to the local cache."))
 
 (defprotocol BaumeisterArtifactRepository
+  "Protocol for a Baumeister artifact repository."
   (module-artifact [repo artifact] "Get the module artifact for this artifact."))
 
 (defprotocol MavenArtifactRepository
   "Protocol for a maven2 artifact repository."
-  (artifact-mvn-name [repo artifact] "Get the maven name of this artifact.")
+  (maven-name [repo artifact] "Get the maven name of this artifact.")
   (pom-artifact [repo artifact] "Create the maven POM artifact for this artifact.")
   (get-pom [repo artifact] "Get the POM with parent POMs if any.")
+  (metadata-folder [repo artifact] "Get the folder for the metadata of this artifact in this repository.")
+  (get-metadata [repo artifact] "Get the repositor metadata for this artifact.")
   )
 
 (defprotocol VersionedArtifactRepository
   "Protocol for a repository which stores versioned artifacts."
-  (get-versions-for-artifact [repo artifact] "Get all versions of this artifact.")
-  ;(newer-artifact-available? [repo artifact] "True, if a newer version of this artifact is available.")
-  ;(get-latest-version-of-artifact [repo artifact] "Get the latest version for this artifact, returns a version.")
-  ;(get-latest-version-of-artifact [repo artifact] "Get the latest version of this artifact, returns the artifact.")
+  (versions [repo artifact] "Get all versions of this artifact.")
+  (latest? [repo artifact] "True, if no newer version of this artifact is available.")
+  (latest-version [repo artifact] "Get the latest version for this artifact.")
+  (latest-artifact [repo artifact] "Get the artifact with the latest version, returns the artifact.")
   )
-
-;(defn newer-artifact-available? [repo artifact])
-;(defn get-latest-version-for-artifact [repo artifact])
-;(defn get-latest-version-of-artifact [repo artifact])
 
 (defmulti create-repository first)

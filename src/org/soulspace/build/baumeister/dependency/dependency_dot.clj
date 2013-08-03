@@ -1,5 +1,5 @@
 (ns org.soulspace.build.baumeister.dependency.dependency-dot
-  (:use [org.soulspace.build.baumeister.repository artifact]
+  (:use [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.dependency dependency dependency-node]))
 
 (def ^:dynamic processed-edges #{})

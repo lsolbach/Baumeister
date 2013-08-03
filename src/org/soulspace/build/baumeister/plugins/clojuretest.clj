@@ -4,7 +4,7 @@
         [clojure.string :only [split]]
         [clojure.java.io :only [as-file writer]]
         [org.soulspace.clj file file-search function]
-        [org.soulspace.build.baumeister.utils files log message]
+        [org.soulspace.build.baumeister.utils classpath files log message]
         [org.soulspace.build.baumeister.config registry]))
 
 (defn find-namespaces
@@ -49,7 +49,8 @@
   (message :fine "initializing test report dirs...")
   (create-dir (as-file (param :report-unittest-dir)))
   (create-dir (as-file (param :report-integrationtest-dir)))
-  (create-dir (as-file (param :report-acceptancetest-dir))))
+  (create-dir (as-file (param :report-acceptancetest-dir)))
+  )
 
 (defn clojuretest-unittest
   []
@@ -69,6 +70,7 @@
             [:report-acceptancetest-dir "${build-report-dir}/acceptancetest"]]
    :functions [[:clean clojuretest-clean]
                [:init clojuretest-init]
-               [:unittest clojuretest-unittest]
-               [:integrationtest clojuretest-integrationtest]
-               [:acceptancetest clojuretest-acceptancetest]]})
+               ; [:unittest clojuretest-unittest]
+               ; [:integrationtest clojuretest-integrationtest]
+               ; [:acceptancetest clojuretest-acceptancetest]
+               ]})

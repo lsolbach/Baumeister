@@ -4,6 +4,8 @@
         [org.soulspace.build.baumeister.utils ant-utils checks log]
         [org.soulspace.build.baumeister.config registry plugin-registry]))
 
+; TODO get file names from artifacts
+
 ; checks plugin mdsd, web-module-type, tests
 (defn get-environments []
   (files (param :package-environment-dir)))

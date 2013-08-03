@@ -1,7 +1,8 @@
 (ns org.soulspace.build.baumeister.dependency.dependency-initialization
   (:use [clojure.java.io :only [as-file copy]]
+        [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.repository repositories artifact]
+        [org.soulspace.build.baumeister.repository repositories]
         [org.soulspace.build.baumeister.dependency dependency dependency-initialization]
         [org.soulspace.build.baumeister.utils ant-utils checks log]))
 

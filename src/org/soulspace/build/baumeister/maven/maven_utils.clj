@@ -5,8 +5,8 @@
             [clojure.data.zip.xml :as zx])
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function string]
+        [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.repository artifact]
         [org.soulspace.build.baumeister.dependency dependency]
         [org.soulspace.build.baumeister.utils log property xml]
         [org.soulspace.build.baumeister.maven pom-model]))

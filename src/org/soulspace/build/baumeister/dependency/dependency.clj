@@ -1,6 +1,6 @@
 (ns org.soulspace.build.baumeister.dependency.dependency
   (:use [org.soulspace.clj file]
-        [org.soulspace.build.baumeister.repository artifact]
+        [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]))
 
 (defn copy? [dependency]
