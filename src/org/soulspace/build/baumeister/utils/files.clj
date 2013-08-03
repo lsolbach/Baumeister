@@ -26,7 +26,6 @@
   "Returns a list of source dirs for a given directory parameter key."
   [dir-key]
   (let [source-dir-name (param dir-key)]
-    (println "Source Dir Name" source-dir-name)
     (existing-dirs [source-dir-name (str (param :generation-dir) "/" source-dir-name)])))
 
 (defn source-path []

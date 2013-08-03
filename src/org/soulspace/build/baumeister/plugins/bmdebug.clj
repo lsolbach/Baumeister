@@ -10,12 +10,3 @@
 (def config
   {:params []
    :functions [[:init bmdebug-init]]})
-
-;
-; plugin initialization
-;
-(defn plugin-init []
-  (log :info "initializing plugin depsdot")
-  (register-plugin "bmdebug")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

@@ -2,7 +2,7 @@
     (:use [clojure.java.io :only [as-file copy]]
         [org.soulspace.clj file file-search function]
         [org.soulspace.build.baumeister.config registry plugin-registry]
-        [org.soulspace.build.baumeister.repository repositories artifact distribution]
+        [org.soulspace.build.baumeister.repository repository-protocol repositories artifact]
         [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-initialization  dependency-dot]
         [org.soulspace.build.baumeister.utils ant-utils checks log message]))
 
@@ -25,6 +25,30 @@
     ))
 
 ;
+; distribution of the built artifacts
+;
+(defn distribute-artifact
+  "distribute the artifact into the given repository"
+  ([repository artifact]
+    (distribute-artifact repository artifact (param :dist-dir)))
+  ([repository artifact src-dir]
+    (let [artifact-src (as-file (str src-dir "/" (artifact-name artifact)))]
+      (put-artifact repository artifact artifact-src))))
+
+(defn distribute-jars [repository]
+  "distribute the built jar artifacts"
+  (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) "module" "clj"]) (param :module-dir))
+  (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (param :module) "jar"]))
+  (when (unittest?)
+    (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) "Unittest") "jar"])))
+  (when (integrationtest?)
+    (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) "Integrationtest") "jar"])))
+  (when (acceptancetest?)
+    (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) "Acceptancetest") "jar"])))
+  (when (seq (param :package-additional-jars)) ; FIXME resolve dependency on package parameter
+    (doseq [[_ artifact-suffix] (param :package-additional-jars)]
+      (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) artifact-suffix) "jar"])))))
+;
 ; workflow functions
 ;
 (defn dependencies-clean []
@@ -33,7 +57,9 @@
 
 (defn dependencies-init []
   (message :fine "initializing dependencies...")
-  (create-dir (as-file (param :deps-report-dir))))
+  (create-dir (as-file (param :deps-report-dir)))
+  ; TODO move repository initalization into Baumeister repository registry or so
+  (register-val :deps-repositories (create-repositories (param :repositories))))
 
 (defn dependencies-dependencies []
   (message :fine "resolving dependencies...")
@@ -56,7 +82,7 @@
   []
   (message :fine "distributing artifacts...")
   (when (code-module?)
-    (deps-distribute-jars (get-dev-repository (param :deps-repositories))))
+    (distribute-jars (get-dev-repository (param :deps-repositories))))
   (when (web-module?)
     ) ; TODO distribute war files here or use publish?!?
   (when (data-module?)
@@ -75,14 +101,3 @@
                [:dependencies dependencies-dependencies]
                [:post-dependencies dependencies-post-dependencies]
                [:distribute dependencies-distribute]]})
-
-;
-; plugin initialization
-;
-(defn plugin-init []
-  (message :fine "initializing plugin sdeps")
-  (log :debug "creating repositories " (param :repositories))
-  ; TODO move repository creation into another plugin
-  (register-val :deps-repositories (create-repositories (param :repositories)))
-  (register-vars (:params config))
-  (register-fns (:functions config)))

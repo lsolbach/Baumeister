@@ -66,8 +66,3 @@
    :functions [[:clean maven-clean]
                [:init maven-init]
                [:post-dependencies maven-post-dependencies]]})
-
-(defn plugin-init []
-  (register-vars (:params config))
-  (register-fns (:functions config))
-  )

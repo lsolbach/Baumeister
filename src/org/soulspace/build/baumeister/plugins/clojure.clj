@@ -14,16 +14,10 @@
   (map file-to-ns (map remove-clj-ext (map (partial relative-path src-path) (existing-files-on-path "clj" src-path)))))
 
 (defn compile-clojure [dest-dir src-path class-path]
-  (log :debug "compile-clojure dest-dir" dest-dir)
-  (log :debug "compile-clojure src-path" src-path)
-  (log :debug "compile-clojure class-path" class-path)
-  (ant-java {:classname "clojure.lang.Compile"
-             :fork (param :clojure-compiler-fork)
-             :failonerror "true"
-             :classpath class-path}
+  (ant-java {:classname "clojure.lang.Compile" :fork (param :clojure-compiler-fork)
+             :failonerror "true" :classpath class-path}
             (ant-variable {:key "clojure.compile.path" :value dest-dir})
-            {:line (join " " (collect-namespaces src-path))}
-            ))
+            {:line (join " " (collect-namespaces src-path))}))
 
 (defn clojure-clean
   "clojure clean"
@@ -41,39 +35,37 @@
   "clojure compile"
   []
   ; compute classpaths before compilation after dependencies have been initialized
-  (compile-clojure (param :build-classes-dir) (param :clojure-source-path)
-                   (class-path [(param :build-classes-dir) (param :clojure-source-path)
-                                (jar-path (param :clojure-lib-path))]))
-  (when (unittest?)
-    (compile-clojure
-      (param :build-unittest-classes-dir) (param :clojure-unittest-source-path)
-      (class-path [(param :build-unittest-classes-dir) (param :clojure-unittest-source-path)
-                   (param :build-classes-dir) (jar-path (param :clojure-unittest-lib-path))])))
-  (when (integrationtest?)
-    (compile-clojure
-      (param :build-integrationtest-classes-dir) (param :clojure-integrationtest-source-path)
-      (class-path [(param :build-integrationtest-classes-dir) (param :clojure-integrationtest-source-path)
-                   (param :build-classes-dir) (jar-path (param :clojure-integrationtest-lib-path))])))
-  (when (acceptancetest?)
-    (compile-clojure
-      (param :build-acceptancetest-classes-dir) (param :clojure-acceptancetest-source-path)
-      (class-path [(param :build-acceptancetest-classes-dir) (param :clojure-acceptancetest-source-path)
-                   (param :build-classes-dir) (jar-path (param :clojure-acceptancetest-lib-path))]))))
+  (when-let [source-dirs (seq (source-dirs :clojure-source-dir))]
+    (let [source-path (dir-path source-dirs)]
+      (compile-clojure (param :build-classes-dir) source-path
+                       (class-path [(param :build-classes-dir) source-path
+                                    (jar-path (param :clojure-lib-path))]))))
 
-(defn register-source-paths []
-  (if (has-plugin? "mdsd")
-    (register-vars [[:clojure-source-path "src:${mdsd-generation-dir}/src"]
-                    [:clojure-unittest-source-path "unittest:${mdsd-generation-dir}/unittest"]
-                    [:clojure-integrationtest-source-path "integrationtest:${mdsd-generation-dir}/integrationtest"]
-                    [:clojure-acceptancetest-source-path "acceptancetest:${mdsd-generation-dir}/acceptancetest"]])
-    (register-vars [[:clojure-source-path "src"]
-                    [:clojure-unittest-source-path "unittest"]
-                    [:clojure-integrationtest-source-path "integrationtest"]
-                    [:clojure-acceptancetest-source-path "acceptancetest"]])))
+  (when-let [source-dirs (seq (source-dirs :clojure-source-unittest-dir))]
+    (let [source-path (dir-path source-dirs)]
+    (compile-clojure (param :build-unittest-classes-dir) source-path
+                     (class-path [(param :build-unittest-classes-dir) source-path
+                                  (param :build-classes-dir) (jar-path (param :clojure-unittest-lib-path))]))))
+
+  (when-let [source-dirs (seq (source-dirs :clojure-integrationtest-source-dir))]
+    (let [source-path (dir-path source-dirs)]
+    (compile-clojure (param :build-integrationtest-classes-dir) source-path
+                     (class-path [(param :build-integrationtest-classes-dir) source-path
+                                  (param :build-classes-dir) (jar-path (param :clojure-integrationtest-lib-path))]))))
+  
+  (when-let [source-dirs (seq (source-dirs :clojure-acceptancetest-source-dir))]
+    (let [source-path (dir-path source-dirs)]
+      (compile-clojure (param :build-acceptancetest-classes-dir) source-path
+                       (class-path [(param :build-acceptancetest-classes-dir) source-path
+                                    (param :build-classes-dir) (jar-path (param :clojure-acceptancetest-lib-path))])))))
 
 (def config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
             [:lib-dev-dir "${lib-dir}/dev"][:clojure-compiler-fork "${compiler-fork}"]
+            [:clojure-source-dir "${source-dir}"]
+            [:clojure-source-unittest-dir "${source-unittest-dir}"]
+            [:clojure-source-integrationtest-dir "${source-integrationtest-dir}"]
+            [:clojure-acceptancetest-source-dir "${source-acceptancetest-dir}"]
             [:clojure-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:clojure-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:clojure-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
@@ -81,9 +73,3 @@
    :functions [[:clean clojure-clean]
                [:init clojure-init]
                [:compile clojure-compile]]})
-
-(defn plugin-init []
-  (log :info "initializing plugin clojure")
-  (register-source-paths)
-  (register-vars (:params config))
-  (register-fns (:functions config)))

@@ -101,8 +101,3 @@
                [:init aspectj-init]
                [:pre-compile aspectj-pre-compile]
                [:compile aspectj-compile]]})
-
-(defn plugin-init []
-  (log :info "initializing plugin aspectj")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

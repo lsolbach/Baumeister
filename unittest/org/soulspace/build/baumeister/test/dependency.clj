@@ -3,4 +3,4 @@
           [org.soulspace.build.baumeister.dependency dependency]))
 
 
-(run-tests)
+;(run-tests)

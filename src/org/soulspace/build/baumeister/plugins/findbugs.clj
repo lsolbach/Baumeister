@@ -51,9 +51,3 @@
    :functions [[:clean findbugs-clean]
                [:init findbugs-init]
                [:analyse findbugs-analyse]]})
-
-(defn plugin-init []
-  (log :info "initializing plugin findbugs")
-  (register-vars (:params config))
-  (register-fns (:functions config)))
-

@@ -107,8 +107,3 @@
                [:pre-generate mdsd-pre-generate]
                [:generate mdsd-generate]
                [:generate mdsd-post-generate]]})
-
-(defn plugin-init []
-  (log :info  "initializing plugin mdsd")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

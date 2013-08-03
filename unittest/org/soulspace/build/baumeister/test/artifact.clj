@@ -38,4 +38,4 @@
   (is (false? (matches-artifact? (new-artifact-pattern ["org.soulspace" "module" "1.1.0"]) (new-artifact ["org.soulspace" "module" "1.0.0"]))))
   )
 
-(run-tests)
+;(run-tests)

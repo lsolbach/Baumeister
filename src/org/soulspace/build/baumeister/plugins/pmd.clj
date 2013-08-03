@@ -69,8 +69,3 @@
    :functions [[:clean pmd-clean]
                [:init pmd-init]
                [:analyse pmd-analyse]]})
-
-(defn plugin-init []
-  (log :debug  "initializing plugin pmd")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

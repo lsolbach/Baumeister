@@ -20,10 +20,10 @@
    :profiles (map #(str (param :architecture-profile-dir) "/" %) (param :architecture-profiles))})
 
 (defn models []
-  (map file-name (list-files (as-file (param :architecture-generated-models-dir)))))
+  (map file-name (files (as-file (param :architecture-generated-models-dir)))))
 
 (defn modules []
-  (map file-name (list-files (as-file (param :architecture-generated-modules-dir)))))
+  (map file-name (files (as-file (param :architecture-generated-modules-dir)))))
 
 (defn architecture-clean []
   "architecture clean"
@@ -89,8 +89,3 @@
                [:pre-generate-architecture architecture-pre-generate]
                [:generate-architecture architecture-generate]
                [:post-generate-architecture architecture-post-generate]]})
-
-(defn plugin-init []
-  (log :info "initializing plugin architecture")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

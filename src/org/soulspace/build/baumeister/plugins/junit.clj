@@ -23,17 +23,17 @@
   "junit clean"
   []
   (message :fine "cleaning junit...")
-  (delete-file (as-file (param :acceptancetest-report-dir)))
-  (delete-file (as-file (param :integrationtest-report-dir)))
-  (delete-file (as-file (param :unittest-report-dir))))
+  (delete-file (as-file (param :report-acceptancetest-dir)))
+  (delete-file (as-file (param :report-integrationtest-dir)))
+  (delete-file (as-file (param :report-unittest-dir))))
 
 (defn junit-init
   "junit init"
   []
   (message :fine "initializing junit...")
-  (create-dir (as-file (param :unittest-report-dir)))
-  (create-dir (as-file (param :integrationtest-report-dir)))
-  (create-dir (as-file (param :acceptancetest-report-dir))))
+  (create-dir (as-file (param :report-unittest-dir)))
+  (create-dir (as-file (param :report-integrationtest-dir)))
+  (create-dir (as-file (param :report-acceptancetest-dir))))
 
 (defn junit-unittest
   "Run JUnit unit tests."
@@ -42,7 +42,7 @@
   (let [unittest-classpath (class-path [(param :build-unittest-classes-dir) (param :build-classes-dir)
                                          (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))
                                          (jar-path (param :lib-aspect-dir))])]
-    (junit unittest-classpath (param :build-unittest-classes-dir) (param :unittest-report-dir))))
+    (junit unittest-classpath (param :build-unittest-classes-dir) (param :report-unittest-dir))))
 
 (defn junit-integrationtest
   "Run JUnit integration tests."
@@ -51,7 +51,7 @@
   (let [integrationtest-classpath (class-path [(param :build-integrationtest-classes-dir) (param :build-classes-dir)
                                   (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))
                                   (jar-path (param :lib-aspect-dir))])]
-    (junit integrationtest-classpath (param :build-integrationtest-classes-dir) (param :integrationtest-report-dir))))
+    (junit integrationtest-classpath (param :build-integrationtest-classes-dir) (param :report-integrationtest-dir))))
 
 (defn junit-acceptancetest
   "Run JUnit acceptance tests."
@@ -60,12 +60,12 @@
   (let [acceptancetest-classpath (class-path [(param :build-acceptancetest-classes-dir) (param :build-classes-dir)
                                   (jar-path (param :lib-runtime-dir)) (jar-path (param :lib-dev-dir))
                                   (jar-path (param :lib-aspect-dir))])]
-    (junit acceptancetest-classpath (param :build-acceptancetest-classes-dir) (param :acceptancetest-report-dir))))
+    (junit acceptancetest-classpath (param :build-acceptancetest-classes-dir) (param :report-acceptancetest-dir))))
 
 (def config 
-  {:params [[:unittest-report-dir "${build-report-dir}/junit/unittest"]
-            [:integrationtest-report-dir "${build-report-dir}/junit/integrationtest"]
-            [:acceptancetest-report-dir "${build-report-dir}/junit/acceptancetest"]
+  {:params [[:report-unittest-dir "${build-report-dir}/unittest"]
+            [:report-integrationtest-dir "${build-report-dir}/integrationtest"]
+            [:report-acceptancetest-dir "${build-report-dir}/acceptancetest"]
             [:junit-fork "true"]
             [:junit-fork-mode "once"]
             [:junit-max-memory "512m"]
@@ -75,8 +75,3 @@
                [:unittest junit-unittest]
                [:integrationtest junit-integrationtest]
                [:acceptancetest junit-acceptancetest]]})
-
-(defn plugin-init []
-  (log :info  "initializing plugin junit")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

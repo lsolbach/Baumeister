@@ -80,8 +80,3 @@
                   [["asm" "asm" "3.3.1"]]
                   [["asm" "asm-tree" "3.3.1"]]
                   [["oro" "oro" "2.0.8"]]]})
-
-(defn plugin-init []
-  (log :info "initializing plugin cobertura")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

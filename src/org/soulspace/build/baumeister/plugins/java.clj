@@ -83,19 +83,12 @@
             [:java-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-javadoc-dir "${build-sourcedoc-dir}/java"]
-
             ;[:java-javadoc-windowtitle "${module} ${version}"]
             ;[:java-javadoc-doctitle "${module} ${version}"]
             ;[:java-javadoc-header "${module} ${version}"]
             ;[:java-javadoc-footer ""]
-
             ]
    :functions [[:clean java-clean]
                [:init java-init]
                [:compile java-compile]
                [:sourcedoc java-sourcedoc]]})
-
-(defn plugin-init []
-  (message :fine "initializing plugin java")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

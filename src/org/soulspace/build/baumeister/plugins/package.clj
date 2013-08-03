@@ -6,7 +6,7 @@
 
 ; checks plugin mdsd, web-module-type, tests
 (defn get-environments []
-  (list-files (param :package-environment-dir)))
+  (files (param :package-environment-dir)))
 
 (defn manifest [dir additional-entries]
   (ant-manifest {:file (str dir "/MANIFEST.MF")}
@@ -89,8 +89,3 @@
   {:params [[:package-environment-dir "${module-dir}/env"]
             [:package-additional-jars []]]
    :functions [[:package package-package]]})
-
-(defn plugin-init []
-  (log :info  "initializing plugin package")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

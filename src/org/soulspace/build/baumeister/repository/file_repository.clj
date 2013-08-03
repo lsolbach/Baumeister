@@ -26,7 +26,7 @@
 
   VersionedArtifactRepository
   (get-versions-for-artifact [repo artifact]
-    (map new-version (map file-name (list-files (module-dir repo artifact)))))
+    (map new-version (map file-name (files (module-dir repo artifact)))))
   
   BaumeisterArtifactRepository
   (module-artifact [repo artifact]

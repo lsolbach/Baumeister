@@ -4,11 +4,11 @@
  :project-lead "Ludger Solbach"
  :description "Baumeister Build System"
  :type :consolefrontend
- :version "0.4.2"
+ :version "0.4.3"
  :author "Ludger Solbach"
  :provider "soulspace.org"
  :inception-year 2012
- :plugins ["global" "dependencies" "maven" "eclipse" "clojure" "package" "release" "bmdebug"]
+ :plugins ["global" "dependencies" "maven" "eclipse" "clojure" "clojuretest" "package" "release" "bmdebug"]
  ; :license ["Eclipse Public License 1.0" "http://www.eclipse.org/legal/epl-v10.html"]
  :repository-root-dir "/home/soulman/devel/repositories" ; FIXME use $HOME here
  ; :extra-repositories [[:maven-proxy :thirdparty "http://maven.alfresco.com/nexus/content/groups/public" "${baumeister-home-dir}/../repositories/maven.alfresco.com"]]
@@ -28,7 +28,7 @@
                 [["com.google.code.findbugs" "findbugs-ant" "2.0.0"]] ; findbugs plugin
                 [["com.google.code.findbugs" "jsr305" "2.0.0"]] ; findbugs plugin
                 [["com.puppycrawl.tools" "checkstyle" "5.5"]] ; checkstyle plugin
-                [["org.soulspace.clj" "CljJavaLibrary" "0.2.0"]]
+                [["org.soulspace.clj" "CljJavaLibrary" "0.3.0"]]
                 [["org.soulspace.clj" "CljXmlLibrary" "0.2.0"]] ; maven support
                 [["org.soulspace.clj" "CljModelGenerator" "0.4.0"]] ; mdsd/architecture plugins
                 ]

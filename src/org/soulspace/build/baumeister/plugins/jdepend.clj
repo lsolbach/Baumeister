@@ -46,8 +46,3 @@
    :functions [[:clean jdepend-clean]
                [:init jdepend-init]
                [:analyse jdepend-analyse]]})
-
-(defn plugin-init []
-  (log :info "initializing plugin jdepend")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

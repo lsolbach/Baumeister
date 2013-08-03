@@ -29,8 +29,3 @@
             [:release-file "${release-name}.zip"]]
    :functions [[:package-release release-package]
                [:distribute-release release-distribute]]})
-
-(defn plugin-init []
-  (message :fine  "initializing plugin release")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

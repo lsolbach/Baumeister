@@ -37,8 +37,3 @@
             [:build-report-dir "${build-dir}/report"]]
    :functions [[:clean global-clean]
                [:init global-init]]})
-
-(defn plugin-init []
-  (log :info "initializing plugin global")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

@@ -45,8 +45,3 @@
    :functions [[:clean checkstyle-clean]
                [:init checkstyle-init]
                [:analyse checkstyle-analyse]]})
-
-(defn plugin-init []
-  (log :info "initializing plugin checkstyle")
-  (register-vars (:params config))
-  (register-fns (:functions config)))

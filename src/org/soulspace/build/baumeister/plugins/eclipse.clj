@@ -115,10 +115,3 @@
   {:params [[:build-eclipse-dir "${build-dir}/eclipse"]]
    :functions [[:init eclipse-init]
                [:post-dependencies eclipse-post-dependencies]]})
-
-(defn plugin-init
-  []
-  (message :important "initializing plugin eclipse")
-  (register-vars (:params config))
-  (register-fns (:functions config))
-  )
