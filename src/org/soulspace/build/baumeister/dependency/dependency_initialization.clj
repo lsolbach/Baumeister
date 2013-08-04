@@ -1,5 +1,6 @@
 (ns org.soulspace.build.baumeister.dependency.dependency-initialization
-  (:use [clojure.java.io :only [as-file copy]]
+  (:use [clojure.java.io :only [as-file as-url copy]]
+        [org.soulspace.clj file]
         [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository repositories]
@@ -31,4 +32,13 @@
   (doseq [dependency dependencies]
     (init-dependency dependency)))
 
-
+(defn dependency-urls
+  [dependencies]
+  (let [urls
+        (->>
+          (map :artifact dependencies)
+          (map (partial query-artifact (param :deps-repositories)))
+          (map canonical-file)
+          (map as-url))]
+    urls))
+  

@@ -49,6 +49,7 @@
   (when (seq (param :package-additional-jars)) ; FIXME resolve dependency on package parameter
     (doseq [[_ artifact-suffix] (param :package-additional-jars)]
       (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) artifact-suffix) "jar"])))))
+
 ;
 ; workflow functions
 ;
@@ -67,6 +68,8 @@
   ; initialize dependencies
   (let [dependencies (get-dependencies)]
     (register-val :dependencies-processed dependencies)
+    (doseq [url (dependency-urls dependencies)] ; Add to classpath some time
+      (println url)) 
     (doseq [dependency dependencies]
       (init-dependency dependency))))
 

@@ -6,7 +6,7 @@
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository protocol]
         [org.soulspace.build.baumeister.utils log xml]
-        [org.soulspace.build.baumeister.maven maven-utils metadata-model]))
+        [org.soulspace.build.baumeister.maven pom-model metadata-model]))
 
 ;
 ; repository metadata handling

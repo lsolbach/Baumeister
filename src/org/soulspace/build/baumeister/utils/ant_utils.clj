@@ -55,7 +55,7 @@ Task name keywords are connected into a hierarchy which can
 be used to extensively add other types to this method.
 The default behaviour is to add an element as a fileset."
   (fn [name task nested]
-    (log :debug "dispatch" (keyword "org.soulspace.build.baumeister.utils.ant-utils" name) (class nested))
+    (println "dispatch" (keyword "org.soulspace.build.baumeister.utils.ant-utils" name) (class nested))
     [(keyword "org.soulspace.build.baumeister.utils.ant-utils" name) (class nested)])
   :hierarchy ant-task-hierarchy)
 

@@ -7,7 +7,7 @@
 ; If you want to override configuration parameters, use $(HOME)/.Baumeister/settings.clj or module.clj
 ;
 [
- :system-version "0.5.0"
+ :system-version "0.5.1"
  ;
  ; default project directory layout
  ;

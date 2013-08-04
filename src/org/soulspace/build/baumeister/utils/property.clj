@@ -2,7 +2,8 @@
 
 ; concatenate the tokens matched by the pattern of replace-properties
 ; if no property is found, replace with
-(defn- concat-property-tokens [prop-map [_ t1 t2 t3]]
+(defn- concat-property-tokens
+  [prop-map [_ t1 t2 t3]]
   (str t1 (get prop-map (keyword t2) (str "${" t2 "}")) t3))
 
 ; replace "${build-dir}/report" with (str (get-var (keyword build-dir) "${build-dir}") "/dir") (TODO: recursivly?)

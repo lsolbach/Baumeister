@@ -4,8 +4,7 @@
         [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository protocol file httpproxy mavenproxy]
-        [org.soulspace.build.baumeister.utils log]
-        [org.soulspace.build.baumeister.maven maven-utils])
+        [org.soulspace.build.baumeister.utils log])
   (:import [org.soulspace.build.baumeister.repository.file FileArtifactRepositoryImpl]
            [org.soulspace.build.baumeister.repository.httpproxy HttpProxyArtifactRepositoryImpl]
            [org.soulspace.build.baumeister.repository.mavenproxy MavenProxyArtifactRepositoryImpl])
