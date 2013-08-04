@@ -17,7 +17,7 @@
                 [["org.soulspace.clj" "CljVersionLibrary" "0.4.3"]] ; transitive CljArtifactLibrary
                 [["org.soulspace.clj" "CljJavaLibrary" "0.3.0"]]
                 [["org.tcrawley" "dynapath" "0.2.3"]] ; dynamic classpath support
-                [["org.soulspace.clj" "CljXmlLibrary" "0.2.0"]] ; maven support
+                [["org.soulspace.clj" "CljXmlLibrary" "0.3.0"]] ; xml generation, maven, eclipse
                 [["org.clojure" "data.zip" "0.1.1"]] ; maven support
                 [["org.clojure" "tools.cli" "0.2.2"]] ; maven support
                 [["org.apache.ant" "ant" "1.8.3"]]
