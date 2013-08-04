@@ -31,8 +31,8 @@
         (let [end (System/currentTimeMillis)] (message :important (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds."))))
       (do ; Version/Help options
         (if-not (nil? (:version options))
-          (message :very-important "Baumeister version" (param :system-version)))
+          (println (param :system-version)))
         (if-not (nil? (:help options))
-          (message :very-important "Baumeister usage:")
-          (message :very-important )))))
+          (println "Baumeister usage:")
+          (println (doc-option-definitions option-defs))))))
   0)

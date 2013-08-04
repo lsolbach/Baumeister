@@ -49,7 +49,7 @@
     (if (seq repositories)
       ; Iterate through the configured repositories to find this artifact
       (let [repo (first repositories)
-            artifact-file (get-artifact repo artifact)]
+            artifact-file (find-artifact repo artifact)]
         (log :trace "querying repository" repo)
         (if (exists? artifact-file)
           artifact-file ; return artifact file

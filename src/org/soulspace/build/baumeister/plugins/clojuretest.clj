@@ -21,11 +21,12 @@
 (defn perform-test
   "Perform tests for the namespace and write the result to the report directory."
   [report-dir nspace]
+  (message :normal "Testing namspace" nspace)
   (require nspace)
   (with-open [writer (writer (str report-dir "/TEST-" (name nspace) ".xml"))]
     (binding [*test-out* writer]
       (with-junit-output
-        (run-tests nspace)))))
+          (message :normal (run-tests nspace))))))
 
 (defn perform-tests
   "Perform tests."

@@ -36,6 +36,10 @@
     (first (reverse (sort compare-version (versions repo artifact)))))
   (latest-artifact [repo artifact]
     (new-artifact-version artifact (latest-version repo artifact)))
+  (find-artifact [repo artifact]
+    (if (seq (artifact-version artifact))
+      (get-artifact repo artifact)
+      (get-artifact repo (latest-artifact repo artifact))))
 
   BaumeisterArtifactRepository
   (module-artifact [repo artifact]

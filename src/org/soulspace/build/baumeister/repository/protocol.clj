@@ -9,7 +9,6 @@
   "Protocol for an artifact repository."
   (artifact-folder [repo artifact] "Get the folder of this artifact in this repository.")
   (get-artifact [repo artifact] "Get an artifact from the artifact repository.")
-;  (module-definition [repo artifact] "Check for dependencies")
   (get-dependencies-for-artifact [repo artifact] "Get the dependencies for an artifact from the artifact repository.")
   (put-artifact [repo artifact artifact-src] "Put an artifact-src as an artifact into the artifact repository."))
 
@@ -52,4 +51,5 @@
   (latest? [repo artifact] "True, if no newer version of this artifact is available.")
   (latest-version [repo artifact] "Get the latest version for this artifact.")
   (latest-artifact [repo artifact] "Get the artifact with the latest version, returns the artifact.")
+  (find-artifact [repo artifact] "Find an artifact in the the artifact repository. Returns the artifact with the latest matching version.")
   )
