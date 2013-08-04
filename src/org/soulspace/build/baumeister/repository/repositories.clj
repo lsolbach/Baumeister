@@ -3,9 +3,24 @@
         [org.soulspace.clj file file-search function net]
         [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.repository repository-protocol file-repository http-proxy-repository maven-proxy-repository]
+        [org.soulspace.build.baumeister.repository protocol file httpproxy mavenproxy]
         [org.soulspace.build.baumeister.utils log]
-        [org.soulspace.build.baumeister.maven maven-utils]))
+        [org.soulspace.build.baumeister.maven maven-utils])
+  (:import [org.soulspace.build.baumeister.repository.file FileArtifactRepositoryImpl]
+           [org.soulspace.build.baumeister.repository.httpproxy HttpProxyArtifactRepositoryImpl]
+           [org.soulspace.build.baumeister.repository.mavenproxy MavenProxyArtifactRepositoryImpl])
+  )
+
+(defmulti create-repository first)
+(defmethod create-repository :file [opts]
+  (let [[_ usage path] opts]
+    (FileArtifactRepositoryImpl. usage (param path))))
+(defmethod create-repository :http-proxy [opts]
+  (let [[_ usage url path] opts] 
+    (HttpProxyArtifactRepositoryImpl. usage url (param path))))
+(defmethod create-repository :maven-proxy [opts]
+  (let [[_ usage url path] opts] 
+    (MavenProxyArtifactRepositoryImpl. usage url (param path))))
 
 ;
 ; repository functions

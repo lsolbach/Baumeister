@@ -132,13 +132,13 @@
   :clean-workflow [:clean] ; remove any build artifats and directories from the module
   :init-workflow [:init :dependencies] ; initialize the module, create required directories for a build and resolve dependencies
   :compile-workflow [:init-workflow :generate :compile] ; compile the module
-  :package-workflow [:compile-workflow :unittest :sourcedoc :package] ; package the module
+  :package-workflow [:compile-workflow :sourcedoc :package] ; package the module
   :integrationtest-workflow [:package-workflow :integrationtest] ; run the integration tests
   :acceptancetest-workflow [:package-workflow :acceptancetest] ; run the acceptance test
   :unittest-workflow [:compile-workflow :unittest] ; run the unit tests
   :coverage-workflow [:package-workflow :coverage] ; run tests with code coverage
   :analyse-workflow [:package-workflow :analyse] ; perform static code analysis
-  :build-workflow [:clean :package-workflow :unittest :package :coverage :analyse :distribute]
+  :build-workflow [:clean :package-workflow :unittest :coverage :analyse :distribute]
   :release-workflow [:build-workflow :generate-release :package-release :distribute-release] ; build distribution packages
   :architecture-workflow [:clean :init :dependencies :generate-architecture] ; generate modules from an architecture model
   :module-workflow [:create-module]

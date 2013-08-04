@@ -1,6 +1,7 @@
 (ns org.soulspace.build.baumeister.config.registry
   (:require [clojure.string :as str :only [join replace]])
-  (:use [org.soulspace.clj function]
+  (:use [org.soulspace.clj file function]
+        [clojure.java.io :only [as-file as-url]]
         [org.soulspace.build.baumeister.config parameter-registry function-registry plugin-registry]))
 
 ; TODO returns a parameter as-is without property replacement. still needed? if so, choose new fn name
@@ -44,6 +45,18 @@
 (defn register-vars [vars]
   (register-params vars))
 
+(defn get-classpath-urls
+  []
+  (classpath-urls))
+
+(defn register-classpath-entries
+  [cl-entries]
+  (let [urls (into #{} (get-classpath-urls))]
+    (doseq [entry cl-entries]
+      (let [url (as-url (canonical-file entry))]
+        (if-not (contains? urls url)
+          (add-classpath-url url))))))
+  
 (defn- reset-registries []
   "Reset the registries."
   (reset-plugin-registry)
@@ -77,6 +90,7 @@
     (register-var key value)))
 
 (defn init-config [options]
+  (set-dynamic-classloader) ; ensure an dynamic classloader
   (reset-registries) ; for use with repl's
   ;(println "Options" options)
   

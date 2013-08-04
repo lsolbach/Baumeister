@@ -4,7 +4,7 @@
         [org.soulspace.clj string file]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister workflow-engine]
-        [org.soulspace.build.baumeister.utils cli log message classpath])
+        [org.soulspace.build.baumeister.utils classpath cli log message classpath])
   (:import [java.util Date])
   (:gen-class))
 

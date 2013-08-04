@@ -2,7 +2,7 @@
   (:use [clojure.test]
         [clojure.test.junit]
         [clojure.string :only [split]]
-        [clojure.java.io :only [as-file writer]]
+        [clojure.java.io :only [as-file as-url writer]]
         [org.soulspace.clj file file-search function]
         [org.soulspace.build.baumeister.utils classpath files log message]
         [org.soulspace.build.baumeister.config registry]))
@@ -29,11 +29,13 @@
 
 (defn perform-tests
   "Perform tests."
-  [source-key report-dir]
+  [source-key class-dir report-dir]
   (when-let [source-dirs (source-dirs source-key)]
+    (register-classpath-entries [class-dir])
     (let [namespaces (flatten (map find-namespaces source-dirs))]
       (doseq [nspace namespaces]
-        (perform-test report-dir nspace)))))
+        (perform-test report-dir nspace)
+        ))))
 
 (defn clojuretest-clean
   "clojuretest clean"
@@ -47,6 +49,7 @@
   "clojuretest init"
   []
   (message :fine "initializing test report dirs...")
+  (println "CL URLS" (get-classpath-urls))
   (create-dir (as-file (param :report-unittest-dir)))
   (create-dir (as-file (param :report-integrationtest-dir)))
   (create-dir (as-file (param :report-acceptancetest-dir)))
@@ -54,15 +57,15 @@
 
 (defn clojuretest-unittest
   []
-  (perform-tests :clojure-source-unittest-dir (param :report-unittest-dir)))
+  (perform-tests :clojure-source-unittest-dir (param :build-unittest-classes-dir) (param :report-unittest-dir)))
 
 (defn clojuretest-integrationtest
   []
-  (perform-tests :clojure-source-integrationtest-dir (param :report-integrationtest-dir)))
+  (perform-tests :clojure-source-integrationtest-dir (param :build-integrationtest-classes-dir) (param :report-integrationtest-dir)))
 
 (defn clojuretest-acceptancetest
   []
-  (perform-tests :clojure-source-acceptancetest-dir (param :report-acceptancetest-dir)))
+  (perform-tests :clojure-source-acceptancetest-dir (param :build-acceptancetest-classes-dir) (param :report-acceptancetest-dir)))
 
 (def config
   {:params [[:report-unittest-dir "${build-report-dir}/unittest"]
@@ -70,7 +73,7 @@
             [:report-acceptancetest-dir "${build-report-dir}/acceptancetest"]]
    :functions [[:clean clojuretest-clean]
                [:init clojuretest-init]
-               ; [:unittest clojuretest-unittest]
-               ; [:integrationtest clojuretest-integrationtest]
-               ; [:acceptancetest clojuretest-acceptancetest]
+               [:unittest clojuretest-unittest]
+               [:integrationtest clojuretest-integrationtest]
+               [:acceptancetest clojuretest-acceptancetest]
                ]})

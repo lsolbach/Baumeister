@@ -1,4 +1,4 @@
-(ns org.soulspace.build.baumeister.repository.repository-protocol)
+(ns org.soulspace.build.baumeister.repository.protocol)
 
 ;
 ; Repository protocols
@@ -53,5 +53,3 @@
   (latest-version [repo artifact] "Get the latest version for this artifact.")
   (latest-artifact [repo artifact] "Get the artifact with the latest version, returns the artifact.")
   )
-
-(defmulti create-repository first)

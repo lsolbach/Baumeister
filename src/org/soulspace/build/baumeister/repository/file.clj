@@ -1,10 +1,10 @@
-(ns org.soulspace.build.baumeister.repository.file-repository
+(ns org.soulspace.build.baumeister.repository.file
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function]
         [org.soulspace.clj.version version]
         [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.repository repository-protocol]
+        [org.soulspace.build.baumeister.repository protocol]
         [org.soulspace.build.baumeister.utils log]))
 ;
 ; Repository implementations
@@ -16,8 +16,6 @@
   (artifact-folder [repo artifact]
     (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (artifact-version artifact)))
   (get-artifact [repo artifact]
-    (println "LATEST" (latest-version repo artifact))
-    (println "ARTIFACT" (latest-artifact repo artifact))
     (artifact-file repo artifact))
   (get-dependencies-for-artifact [repo artifact]
     (let [module-file (get-artifact repo (module-artifact repo artifact))]
@@ -52,7 +50,3 @@
   (artifact-file [repo artifact]
     (as-file (str (absolute-path (artifact-dir repo artifact)) "/" (artifact-name artifact))))
   )
-
-(defmethod create-repository :file [opts]
-  (let [[_ usage path] opts] (FileArtifactRepositoryImpl. usage (param path))))
-

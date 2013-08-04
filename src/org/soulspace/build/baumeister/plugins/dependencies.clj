@@ -3,7 +3,7 @@
         [org.soulspace.clj file file-search function]
         [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry plugin-registry]
-        [org.soulspace.build.baumeister.repository repository-protocol repositories]
+        [org.soulspace.build.baumeister.repository protocol repositories]
         [org.soulspace.build.baumeister.dependency dependency dependency-node dependency-initialization dependency-dot]
         [org.soulspace.build.baumeister.utils ant-utils checks log message]))
 
