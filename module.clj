@@ -4,7 +4,7 @@
  :project-lead "Ludger Solbach"
  :description "Baumeister Build System"
  :type :consolefrontend
- :version "0.4.5"
+ :version "0.5.0"
  :author "Ludger Solbach"
  :provider "soulspace.org"
  :inception-year 2012

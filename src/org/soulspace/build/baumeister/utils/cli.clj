@@ -47,7 +47,7 @@
 (defn doc-for-spec [{:keys [long short doc default]}]
   [(str/join ", " [short long])
    (or doc "")
-   (or (str "Default: " default) "")])
+   (or (str default) "")])
 
 (defn doc-for-specs [specs]
   (str/join "\n" (map #(str/join "\t" (doc-for-spec %)) specs)))

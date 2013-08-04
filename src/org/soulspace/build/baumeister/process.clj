@@ -13,8 +13,8 @@
 
 (def option-defs
   "Baumeister option definitions."
-  [["--define" "-D" "Define a parameter (format -Dname=value)" :multi true]
-   ["--file" "-f" "Use the specified module file (format -Dfilename)" :default "module.clj"]
+  [["--define" "-D" "Define a parameter (eg. -Dname=value)" :multi true]
+   ["--file" "-f" "Use the specified module file (eg. -Dfilename)" :default "module.clj"]
    ["--help" "-h" "Display help (format -h)"]
    ["--version" "-v" "Display version"]])
 
