@@ -1,7 +1,6 @@
 (ns org.soulspace.build.baumeister.utils.classpath
   (:require [dynapath.util :as dp])
-  (:use [clojure.java.io :only [as-url]]
-        [org.soulspace.build.baumeister.utils log]) ; TODO use tools.logging when extracting to lib
+  (:use [clojure.java.io :only [as-url]])
   (:import [java.net URL URLClassLoader]
            [clojure.lang DynamicClassLoader]))
 
@@ -61,9 +60,6 @@ if it is not dynamic already."
   []
   (let [cl (context-classloader)]
     (if (or (= (type cl) URLClassLoader) (= (type cl) DynamicClassLoader))
-      (log :debug "CL dynamic" cl)
       (let [dyn-cl (create-dynamic-classloader cl)]
-        (log :debug  "CL not dynamic" cl)
-        (.setContextClassLoader (java.lang.Thread/currentThread) dyn-cl)
-        (log :debug  "CL installed" (context-classloader))))))
+        (.setContextClassLoader (java.lang.Thread/currentThread) dyn-cl)))))
 

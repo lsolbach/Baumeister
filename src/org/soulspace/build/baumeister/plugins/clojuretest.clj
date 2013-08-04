@@ -34,8 +34,7 @@
     (register-classpath-entries [class-dir])
     (let [namespaces (flatten (map find-namespaces source-dirs))]
       (doseq [nspace namespaces]
-        (perform-test report-dir nspace)
-        ))))
+        (perform-test report-dir nspace)))))
 
 (defn clojuretest-clean
   "clojuretest clean"
@@ -49,7 +48,6 @@
   "clojuretest init"
   []
   (message :fine "initializing test report dirs...")
-  (println "CL URLS" (get-classpath-urls))
   (create-dir (as-file (param :report-unittest-dir)))
   (create-dir (as-file (param :report-integrationtest-dir)))
   (create-dir (as-file (param :report-acceptancetest-dir)))

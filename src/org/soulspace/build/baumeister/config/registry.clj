@@ -2,7 +2,8 @@
   (:require [clojure.string :as str :only [join replace]])
   (:use [org.soulspace.clj file function]
         [clojure.java.io :only [as-file as-url]]
-        [org.soulspace.build.baumeister.config parameter-registry function-registry plugin-registry]))
+        [org.soulspace.build.baumeister.config parameter-registry function-registry plugin-registry]
+        [org.soulspace.build.baumeister.utils.classpath]))
 
 ; TODO returns a parameter as-is without property replacement. still needed? if so, choose new fn name
 (defn get-var 

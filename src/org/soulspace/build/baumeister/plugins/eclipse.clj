@@ -24,43 +24,14 @@
    ])
 
 (def eclipse-containers
-  [["org.eclipse.jdt.launching.JRE_CONTAINER"]
-   ["org.eclipse.ajdt.core.ASPECTJRT_CONTAINER"]
-   ["org.eclipse.jdt.junit.JUNIT_CONTAINER/4"]
-   ["org.eclipse.jst.j2ee.internal.web.container"]
-   ["org.eclipse.jst.j2ee.internal.module.container"]
-   ["org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0"
-    [{:name "owner.project.facets" :value "jst.web"}]]
-   ])
-
-(def cpxml
-  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<classpath>
-	<classpathentry kind=\"src\" path=\"src\"/>
-	<classpathentry kind=\"src\" path=\"unittest\"/>
-	<classpathentry kind=\"con\" path=\"org.eclipse.jdt.launching.JRE_CONTAINER\"/>
-	<classpathentry kind=\"lib\" path=\"build/lib/runtime/ant-jdepend.jar\"/>
-	<classpathentry kind=\"lib\" path=\"build/lib/runtime/ant-junit.jar\"/>
-	<classpathentry kind=\"lib\" path=\"build/lib/runtime/ant-launcher.jar\"/>
-	<classpathentry kind=\"output\" path=\"bin\"/>
-</classpath>
-")
-
-(def cpzip (zip/xml-zip (xml/parse-str cpxml)))
-
-(println "ROOT" (zx/xml-> cpzip))
-(println "CP" (zx/xml-> cpzip :classpath))
+  [["org.eclipse.jdt.launching.JRE_CONTAINER"]])
 
 (defn build-container-entries []
   ; TODO zip from .classpath and include again?
-  (let [zipper (zip/xml-zip (xml/parse-str cpxml))
+  (let [zipper (xml-zipper (param "${module-dir}/.classpath"))
         ;zipper (xml-zipper (param "${module-dir}/data/.classpath"))
-        conts (zx/xml-> zipper :classpath :classpathentry [(zx/attr= :kind "con")])]
-    (println "ROOT" (zx/xml-> zipper))
-    (println "CP" (zx/xml-> zipper :classpath))
-    (println "CONTS" conts)
-    )
-  )
+        nodes (map zip/node (zx/xml-> zipper :classpathentry [(zx/attr= :kind "con")]))]
+    nodes))
 
 (defn build-source-entries []
     (doall
@@ -98,6 +69,7 @@
   (cp/classpath
     {}
     (build-source-entries)
+    (build-container-entries)
     (build-lib-entries)
     (cp/classpathentry {:kind "output" :path "bin"})
     ))

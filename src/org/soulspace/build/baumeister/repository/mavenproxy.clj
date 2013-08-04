@@ -11,11 +11,6 @@
 ;
 ; repository metadata handling
 ;
-(defn metadata
-  [zipper]
-  
-  )
-
 ;
 ; Maven Proxy Artifact Repository
 ;

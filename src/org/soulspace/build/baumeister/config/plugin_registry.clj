@@ -21,9 +21,7 @@
   []
   (urls))
 
-(defn reset-plugin-registry [] 
-  (def plugin-classloader nil)
-  (def plugin-registry #{})) ; initialize plugin registry as empty set
+(defn reset-plugin-registry [] (def plugin-registry #{})) ; initialize plugin registry as empty set
 (defn register-plugin [plugin] (def plugin-registry (conj plugin-registry plugin)))
 (defn has-plugin? [plugin] ((set plugin-registry) plugin))
 
