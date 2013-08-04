@@ -44,16 +44,16 @@
           (recur (rest defs) (conj specs spec)))
         specs))))
   
-(defn doc-for-spec [{:keys [option short doc default]}]
-  [(str/join ", " [option short])
+(defn doc-for-spec [{:keys [long short doc default]}]
+  [(str/join ", " [short long])
    (or doc "")
-   (or (str default) "")])
+   (or (str "Default: " default) "")])
 
 (defn doc-for-specs [specs]
-  (map doc-for-spec specs))
+  (str/join "\n" (map #(str/join "\t" (doc-for-spec %)) specs)))
 
-(defn doc-option-definitions [option-defs]
-  (map doc-for-spec (build-specs option-defs)))
+(defn doc-options [option-defs]
+  (doc-for-specs (build-specs option-defs)))
 
 (defn default-option-map [specs]
   "Returns an option map initalized with the default values."
