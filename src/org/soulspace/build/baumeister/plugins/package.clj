@@ -32,10 +32,6 @@
     (ant-jar {:destFile (str (param "${dist-dir}/${module}") jar-type "." archive-type) :manifest (str dir "/MANIFEST.MF")}
              (ant-fileset {:dir dir}))))
 
-(defn package-sourcedoc []
-  (ant-jar {:destFile (str (param "${dist-dir}/${module}") "Javadoc.jar")}
-            (ant-fileset {:dir (param :build-sourcedoc-dir)})))
-
 (defn package-war [dir environment additional-manifest-entries]
   (log :debug  "packaging war" dir " " environment)
   ; TODO generate environment specific configuration
@@ -54,6 +50,16 @@
 
 (defn package-ear [dir environment additional-manifest-entries]
   (log :debug "packaging ear" dir " " environment))
+
+(defn package-sourcedoc []
+  (ant-jar {:destFile (str (param "${dist-dir}/${module}") "Javadoc.jar")}
+            (ant-fileset {:dir (param :build-sourcedoc-dir)})))
+
+(defn package-sources []
+  (ant-jar {:destFile (str (param "${dist-dir}/${module}") "Source.jar")}
+            (ant-fileset {:dir (param :source-dir)})
+            ;(ant-fileset {:dir (param :generated-source-dir)}) ; etc
+            ))
 
 (defn package-data []
   (log :debug  "packaging data" (param :dist-dir))

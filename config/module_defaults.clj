@@ -12,14 +12,6 @@
  ; default project directory layout
  ;
  :module-dir "."
- :build-dir "${module-dir}/build"
- :build-classes-dir "${build-dir}/classes"
- :build-report-dir "${build-dir}/report"
- :build-doc-dir "${build-dir}/doc"
- :build-sourcedoc-dir "${build-doc-dir}/sourcedoc"
- :dist-dir "${build-dir}/dist"
- :lib-dir "${build-dir}/lib"
- :generation-dir "${build-dir}/generated"
  :source-dir "${module-dir}/src"
  :source-unittest-dir "${module-dir}/unittest"
  :source-integrationtest-dir "${module-dir}/integrationtest"
@@ -27,6 +19,16 @@
  :source-config-dir "${module-dir}/config"
  :source-script-dir "${module-dir}/scripts"
  :source-webcontent-dir "${module-dir}/WebContent"
+ :build-dir "${module-dir}/build"
+ :build-classes-dir "${build-dir}/classes"
+ :build-report-dir "${build-dir}/report"
+ :build-doc-dir "${build-dir}/doc"
+ :build-sourcedoc-dir "${build-doc-dir}/sourcedoc"
+ :dist-dir "${build-dir}/dist"
+ :lib-dir "${build-dir}/lib"
+ :doc-dir "${module-dir}/doc"
+ :generation-dir "${build-dir}/generated"
+ :generation-source-dir "${generation-dir}/src"
  ;
  ; sets of architectural module type classifications
  ;

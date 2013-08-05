@@ -9,6 +9,7 @@
 ;
 (ns org.soulspace.build.baumeister.plugins.release
   (:use [clojure.java.io :exclude [delete-file]]
+        [org.soulspace.clj file]
         [org.soulspace.build.baumeister.utils ant-utils checks log message]
         [org.soulspace.build.baumeister.config registry plugin-registry]))
 
@@ -20,21 +21,31 @@
     (partial ant-zip {:destFile (str (param :dist-dir) "/" (param :release-file))})
     (filter (complement nil?)
             [(ant-zipfileset {:dir (param :dist-dir) :includes "*.jar" :prefix (param "${release-name}/lib")})
-             (ant-zipfileset {:dir (param :lib-runtime-dir) :includes "*.jar" :prefix (param "${release-name}/lib")})
-             (when (plugin? "aspectj") (ant-zipfileset {:dir (param :lib-aspect-dir) :includes "*.jar" :prefix (param "${release-name}/lib")}))
-             (ant-zipfileset {:dir (param :source-config-dir) :prefix (param "${release-name}/config")})
-             (when (console-module?) (ant-zipfileset {:dir (param :source-script-dir) :prefix (param "${release-name}")}))
-             (ant-zipfileset {:dir (param :module-dir) :includes "module.clj" :prefix (param "${release-name}")})
+             (ant-zipfileset {:dir (param :lib-runtime-dir) :includes "*.jar" :excludes "*Javadoc.jar" :prefix (param "${release-name}/lib")})
+             (when (plugin? "aspectj")
+               (ant-zipfileset {:dir (param :lib-aspect-dir) :includes "*.jar" :prefix (param "${release-name}/lib")}))
+             (when (console-module?)
+               (ant-zipfileset {:dir (param :source-script-dir) :prefix (param "${release-name}")}))
+             (when (exists? (param :doc-dir))
+               (ant-zipfileset {:dir (param :doc-dir) :prefix (param "${release-name}/doc")}))
+             (when (exists? (param :build-sourcedoc-dir))
+               (ant-zipfileset {:dir (param :build-sourcedoc-dir) :prefix (param "${release-name}/doc/api")}))
+             (when (exists? (param :source-config-dir))
+               (ant-zipfileset {:dir (param :source-config-dir) :prefix (param "${release-name}/config")}))
+             (ant-zipfileset {:dir (param :module-dir) :includes "license.txt" :prefix (param "${release-name}")})
+             ;(ant-zipfileset {:dir (param :module-dir) :includes "module.clj" :prefix (param "${release-name}")})
              (ant-zipfileset {:dir (param :module-dir) :includes "README.md" :prefix (param "${release-name}")})])))
 
 (defn release-distribute []
   (message :fine "distributing release package")
   (let [filename (param :release-file)]
     ; FIXME copy binary release package to some useful repository
-    (copy (as-file (str (param :dist-dir) "/" filename)) (as-file (str "../" filename)))))
+    (create-dir (as-file (param "${release-dir}/${module}/")))
+    (copy (as-file (str (param :dist-dir) "/" filename)) (as-file (str (param "${release-dir}/${module}/") filename)))))
 
 (def config
   {:params [[:release-name "${module}-${version}"]
-            [:release-file "${release-name}.zip"]]
+            [:release-file "${release-name}.zip"
+             :release-dir "${user-home-dir}"]]
    :functions [[:package-release release-package]
                [:distribute-release release-distribute]]})
