@@ -41,13 +41,39 @@
   (doseq [dependency dependencies]
     (init-dependency dependency)))
 
-(defn dependency-urls
-  [dependencies]
-  (let [urls
-        (->>
-          (map :artifact dependencies)
-          (map (partial query-artifact (param :deps-repositories)))
-          (map canonical-file)
-          (map as-url))]
-    urls))
-  
+(defn dependencies-by-targets
+  "Filters the dependencies by the given targets"
+  [targets dependencies]
+  (let [target-set (into #{} targets)]
+    (filter #(contains? target-set (:target %)) dependencies)))
+
+(defn artifact-file
+  ([dependency]
+    (query-artifact (param :deps-repositories) (:artifact dependency))))
+
+(defn url-for-file
+  [file]
+  (as-url (canonical-file file)))
+
+(defn artifact-urls
+  ([dependencies]
+    (map url-for-file (map artifact-file dependencies))))
+
+(defn runtime-dependencies [dependencies]
+  (dependencies-by-targets [:runtime :aspect] dependencies))
+
+(defn compile-dependencies [dependencies]
+  (dependencies-by-targets [:runtime :dev :aspect :aspectin] dependencies))
+
+(defn aspect-dependencies [dependencies]
+  (dependencies-by-targets [:aspect] dependencies))
+
+(defn aspectin-dependencies [dependencies]
+  (dependencies-by-targets [:aspectin] dependencies))
+
+(defn model-dependencies [dependencies]
+  (dependencies-by-targets [:model] dependencies))
+
+(defn generator-dependencies [dependencies]
+  (dependencies-by-targets [:generator] dependencies))
+

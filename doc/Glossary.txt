@@ -73,7 +73,7 @@ Dependency Management
 
 Developer Tests
 ---------------
-
+A test that is written and executed by developers during the development of a module.
 
 Generator
 ---------
@@ -113,10 +113,24 @@ is required for the usage of the dependent artifact.
 
 Unit Tests
 ----------
-Unit Tests test a piece of software (e.g. a class or a function) in
-isolation.
+Unit Tests test a piece of software (e.g. a class or a function) in isolation.
 
 Workflow
 --------
 
+
+
+Source (Artifact)
+------
+Source artifacts are intrinsic input for a transformation of the build process.
+They are contained in the module that is build.
+
+Library/Dependency (Artifact)
+-----------------------------
+External input for a transformation of the build process.
+They are not part of the module to be build but referenced from external sources (repositories) during the build process.
+
+Target (Artifact)
+-----------------
+Output of a transfomation of the build process.
 

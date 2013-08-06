@@ -29,7 +29,7 @@
   (let [writer (java.io.StringWriter.)]
     (if-not (nil? (param :dependencies-tree))
       (dependencies-dot writer (param :dependencies-tree))
-      (dependencies-dot writer (build-dependency-tree)))
+      (dependencies-dot writer (build-dependency-tree))) ; e.g. when :dependeny-transitive is false 
     (spit (param "${deps-report-dir}/dependencies.dot") (str writer))
     ;(execute "dot" (str "-Tpng -o" (param "${deps-report-dir}/dependencies.png") " " (param "${deps-report-dir}/dependencies.dot")))
     ))

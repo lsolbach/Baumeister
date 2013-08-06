@@ -43,6 +43,7 @@
     (create-dir (as-file (param "${release-dir}/${module}/")))
     (copy (as-file (str (param :dist-dir) "/" filename)) (as-file (str (param "${release-dir}/${module}/") filename)))))
 
+; TODO use release spec for package content a la ant zip? e.g. [:dir :includes :excludes :prefix]
 (def config
   {:params [[:release-name "${module}-${version}"]
             [:release-file "${release-name}.zip"

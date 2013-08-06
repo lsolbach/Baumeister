@@ -89,7 +89,6 @@
       (def built-nodes (conj built-nodes node))
       node)))
 
-; TODO add cycle detection
 (defn build-dependency-node 
   "Recursively build dependency nodes depth first, use built-nodes set as cache."  
   ([target path excluded dependency]
