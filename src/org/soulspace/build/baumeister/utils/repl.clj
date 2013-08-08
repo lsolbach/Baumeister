@@ -2,12 +2,12 @@
   (:require [clojure.tools.nrepl :as repl])
   (:use [clojure.tools.nrepl.server :only [start-server stop-server]]))
   
-  
+(def port 59258)
 (def ^{:dynamic true :private true} repl-server)
 
 (defn start-repl 
   []
-  (def repl-server (start-server :port 7888)))
+  (def repl-server (start-server :port port)))
 
 (defn stop-repl 
   []
@@ -16,7 +16,7 @@
 
 (defn repl-eval
   [& forms]
-  (with-open [conn (repl/connect :port 59258)]
+  (with-open [conn (repl/connect :port port)]
      (-> (repl/client conn 1000)    ; message receive timeout required
        (repl/message {:op "eval" :code (str forms)})
        repl/response-values))

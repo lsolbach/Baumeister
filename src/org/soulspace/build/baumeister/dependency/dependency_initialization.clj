@@ -47,7 +47,7 @@
   (let [target-set (into #{} targets)]
     (filter #(contains? target-set (:target %)) dependencies)))
 
-(defn artifact-file
+(defn file-for-artifact
   ([dependency]
     (query-artifact (param :deps-repositories) (:artifact dependency))))
 
@@ -57,7 +57,7 @@
 
 (defn artifact-urls
   ([dependencies]
-    (map url-for-file (map artifact-file dependencies))))
+    (map url-for-file (map file-for-artifact dependencies))))
 
 (defn runtime-dependencies [dependencies]
   (dependencies-by-targets [:runtime :aspect] dependencies))
@@ -77,3 +77,12 @@
 (defn generator-dependencies [dependencies]
   (dependencies-by-targets [:generator] dependencies))
 
+; TODO merge dependency-initialization with repositories query-* to dependency-resolving? 
+
+(defn resolve-dependency 
+  "Returns a resolved dependency structure (map/vec?), that contains the dependency data and the resolved artifact file."
+  [dependency]
+  ; what do we need? Dependency data (target), Artifact data (all?), file in local repository
+  ; TODO implement with query artifact
+
+  )

@@ -77,7 +77,7 @@
   ; initialize dependencies
   (let [dependencies (get-dependencies)]
     (register-val :dependencies-processed dependencies)
-    (doseq [url (dependency-urls dependencies)] ; Add to classpath some time
+    (doseq [url (artifact-urls dependencies)] ; Add to classpath some time
       (println url)) 
     (doseq [dependency dependencies]
       (init-dependency dependency))))

@@ -10,13 +10,13 @@
 (ns org.soulspace.build.baumeister.plugins.clojure
   (:use [clojure.java.io :exclude [delete-file]]
         [clojure.string :only [join]]
-        [org.soulspace.clj file file-search function string ]
+        [org.soulspace.clj file file-search namespace string ]
         [org.soulspace.build.baumeister.utils ant-utils files checks log]
         [org.soulspace.build.baumeister.config registry plugin-registry]))
 
 (defn remove-clj-ext [clj-path]
   (if (ends-with ".clj" clj-path)
-    (substring 0 (- (str-length clj-path) 4) clj-path)
+    (substring 0 (- (count clj-path) 4) clj-path)
     clj-path))
 
 (defn collect-namespaces [src-path]

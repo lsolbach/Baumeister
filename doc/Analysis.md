@@ -3,10 +3,10 @@ Baumeister Build System Analysis
 
 Value proposition
 -----------------
- * automatization
+ * build (transformation) automatization
    * repeatable, fast, error free, efficient
  * enablement
-  * continuous integration, documentation, statistics and quality metrics
+   * continuous integration, documentation, statistics and quality metrics
  * standardization
  * structural clearness, explicit specification/documentation of dependencies and workflows
 
@@ -19,14 +19,16 @@ Build tasks to automate
  * documentation generation
  * project distribution
  * deployments
+(is the sole focus on software builds or can other types of structured transformation workflows be handled too?
+ (e.g. document generation processes from input content source to pdf or static site generation from input content source))
 
 Dimensions
 ----------
  * workflows, phases, steps
  * plugins
  * source types (code, models, data)
- * implementation languages (java, aspectj, clojure, ...)
  * source (code/test) types (unit, integration, acceptance, performance, load, stress, ...)
+ * implementation languages (java, aspectj, clojure, ...)
  * architectural module types (library, framework, component (integration layer, domain layer, application layer, presentation layer), web service, frontend (web, console, app))
  * dependencies (inclusion/exclusion)
  * usage types (model, runtime, dev, aspect, aspectin)

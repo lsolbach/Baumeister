@@ -16,6 +16,14 @@
         [org.soulspace.build.baumeister.repository repositories]
         [org.soulspace.build.baumeister.dependency dependency]))
 
+(defn maven-scope-to-target [maven-scope]
+  "Maps a maven scope to a target"
+  ((param :maven-scope-to-target) maven-scope))
+
+(defn maven-type-to-type [maven-type]
+  "Maps the maven type to a type."
+  ((param :maven-type-to-type) maven-type))
+
 ;
 ; Transitive dependency functions 
 ;
@@ -96,6 +104,7 @@
   ([target path excluded dependency follow-optional]
     ; get transitive dependency data for the current dependency from its module descriptor and convert it to transitive dependencies
     (let [transitive-dep-data (get-transitive-dependency-data dependency)
+          ; TODO handle POMDependencies differently
           transitive-deps (map #(apply new-dependency %) transitive-dep-data)
           included
           (loop [deps transitive-deps inclusions []]

@@ -9,10 +9,10 @@
 ;
 (ns org.soulspace.build.baumeister.config.registry
   (:require [clojure.string :as str :only [join replace]])
-  (:use [org.soulspace.clj file function]
-        [clojure.java.io :only [as-file as-url]]
-        [org.soulspace.build.baumeister.config parameter-registry function-registry plugin-registry]
-        [org.soulspace.build.baumeister.utils.classpath]))
+  (:use [clojure.java.io :only [as-file as-url]]
+        [org.soulspace.clj file]
+        [org.soulspace.clj.application classpath env-vars]
+        [org.soulspace.build.baumeister.config parameter-registry function-registry plugin-registry]))
 
 ; TODO returns a parameter as-is without property replacement. still needed? if so, choose new fn name
 (defn get-var 

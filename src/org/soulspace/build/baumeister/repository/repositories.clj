@@ -9,7 +9,7 @@
 ;
 (ns org.soulspace.build.baumeister.repository.repositories
   (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj file file-search function net]
+        [org.soulspace.clj file file-search net]
         [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister.repository protocol file httpproxy mavenproxy]
@@ -19,6 +19,10 @@
            [org.soulspace.build.baumeister.repository.mavenproxy MavenProxyArtifactRepositoryImpl])
   )
 
+;
+; repository functions
+;
+; TODO move to repository registry?
 (defmulti create-repository first)
 (defmethod create-repository :file [opts]
   (let [[_ usage path] opts]
@@ -30,9 +34,6 @@
   (let [[_ usage url path] opts] 
     (MavenProxyArtifactRepositoryImpl. usage url (param path))))
 
-;
-; repository functions
-;
 (defn create-repositories [v]
   (map create-repository v))
 
@@ -48,6 +49,7 @@
 ;
 ; query functions
 ;
+; TODO merge dependency-initialization with repositories query-* to dependency-resolving? 
 (defn query-artifact 
   "Query the configured repositories for an artifact."
   ([artifact]

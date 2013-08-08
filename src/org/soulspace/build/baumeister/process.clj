@@ -8,12 +8,11 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns org.soulspace.build.baumeister.process
-  (:use [clojure.tools.cli :only [cli]]
-        [clojure.repl]
-        [org.soulspace.clj string file]
+  (:use [org.soulspace.clj string file]
+        [org.soulspace.clj.application cli classpath] 
         [org.soulspace.build.baumeister.config registry]
         [org.soulspace.build.baumeister workflow-engine]
-        [org.soulspace.build.baumeister.utils classpath cli log message classpath])
+        [org.soulspace.build.baumeister.utils log message])
   (:import [java.util Date])
   (:gen-class))
 

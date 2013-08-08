@@ -12,8 +12,9 @@
         [clojure.test.junit]
         [clojure.string :only [split]]
         [clojure.java.io :only [as-file as-url writer]]
-        [org.soulspace.clj file file-search function]
-        [org.soulspace.build.baumeister.utils classpath files log message]
+        [org.soulspace.clj file file-search namespace]
+        [org.soulspace.clj.application classpath]
+        [org.soulspace.build.baumeister.utils files log message]
         [org.soulspace.build.baumeister.config registry]))
 
 (defn find-namespaces

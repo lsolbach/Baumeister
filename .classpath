@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="unittest"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="build/lib/runtime/ant-jdepend.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/ant-junit.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/ant-launcher.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/ant.jar" sourcepath="/home/soulman/devel/tmp/apache-ant-1.8.2/src/main"/>
@@ -17,24 +16,19 @@
 	<classpathentry kind="lib" path="build/lib/runtime/CljModelGenerator.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/CljXmlLibrary.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/clojure.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/cobertura.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/data.xml.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/data.zip.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/dom4j.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/findbugs-ant.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/findbugs.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/jaxen.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/jdepend.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/jsr305.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/ModelRepository2.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/oro.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/pmd.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/TemplateEngine.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/UML14ModelBuilder.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/UML14Repository.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/tools.cli.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/annotations.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/ant-testutil.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/antlr.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/asm-commons.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/commons-beanutils-core.jar"/>
@@ -43,13 +37,9 @@
 	<classpathentry kind="lib" path="build/lib/runtime/commons-logging.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/dynapath.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/google-collections.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/javacc.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/jdom.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/jFormatString.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/junit.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/log4j.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/rhino.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/saxon.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/xalan.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/xml-apis.jar"/>

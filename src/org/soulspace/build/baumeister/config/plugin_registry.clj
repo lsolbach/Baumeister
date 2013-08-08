@@ -8,8 +8,8 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns org.soulspace.build.baumeister.config.plugin-registry
-  (:use [org.soulspace.clj function]
-        [org.soulspace.build.baumeister.utils.classpath]
+  (:use [org.soulspace.clj namespace]
+        [org.soulspace.clj.application classpath]
         [org.soulspace.build.baumeister.config parameter-registry function-registry]))
 
 (def plugin-ns-prefix "org.soulspace.build.baumeister.plugins")

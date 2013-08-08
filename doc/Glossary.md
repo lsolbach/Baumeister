@@ -117,8 +117,7 @@ Unit Tests test a piece of software (e.g. a class or a function) in isolation.
 
 Workflow
 --------
-
-
+A sequence of steps that are executed in a defined order to produce a result.
 
 Source (Artifact)
 ------

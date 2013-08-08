@@ -9,7 +9,7 @@
 ;
 (ns org.soulspace.build.baumeister.repository.file
   (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj file file-search function]
+        [org.soulspace.clj file file-search namespace]
         [org.soulspace.clj.version version]
         [org.soulspace.clj.artifact artifact]
         [org.soulspace.build.baumeister.config registry]

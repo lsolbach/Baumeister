@@ -53,7 +53,7 @@
                (= (compatible-targets (:target this)) (:target other)))))))
 
 ; TODO add required signatures
-(defn new-dependency
+(defn create-dependency
   ([artifact]
     (DependencyImpl. (new-artifact artifact) :runtime false nil []))
   ([artifact target]
@@ -65,6 +65,10 @@
   ([artifact target optional scope exclusions]
     (DependencyImpl. (new-artifact artifact) target optional scope (map new-artifact-pattern exclusions))))
 
+; map POM scopes and types here
+; TODO multimethod on type (POMDependency/BMDependency) 
+(defn new-dependency [& args]
+  (apply new-dependency args))
 ;
 ; Dependency pattern
 ; TODO needed?
