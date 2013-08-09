@@ -1,11 +1,13 @@
 [
  :module "BaumeisterJDependPlugin"
- :project "org.soulspace.build"
+ :project "org.soulspace.baumeister"
  :type :library
  :version "0.5.1"
  :description ""
  :plugins ["global" "dependencies" "clojure" "clojuretest" "package"]
  :dependencies [["org.clojure/clojure, 1.5.1"]
-                ["org.clojure/data.xml, 0.0.7"]
-                ["org.soulspace.clj/CljXmlLibrary, 0.3.0"]]
+                ["org.soulspace.baumeister" "Baumeister" "0.6.0"]
+                ["org.soulspace.clj/CljXmlLibrary, 0.3.0"]
+                ["org.apache.ant/ant-jdepend, 1.8.3"] ; jdepend plugin
+                ["jdepend/jdepend, 2.9.1"]] ; jdepend plugin
  ]
