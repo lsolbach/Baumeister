@@ -76,7 +76,8 @@
  ;
  :dependency-transitive true ; TODO "true"/"false" strings should work, too
  ; :dependency-targets defines the valid dependency targets
- :dependency-targets #{:root ; root project dependency, not a target!
+ :dependency-targets #{:plugin-root ; root plugin dependency
+                       :root ; root project dependency
                        :runtime ; runtime dependency, used on compile and runtime classpaths
                        :dev ; dev dependency, used on compile and test classpaths
                        :aspect ; aspect dependency, used on aspect compile and runtime classpaths
@@ -88,7 +89,9 @@
                        }
  ; :dependency-target-mapping defines the target of a transitive dependency according to the target of the parent dependency
  ; if there is no mapping here, the transitive dependency will not be included in the build
- :dependency-target-mapping {:root {:runtime :runtime
+ :dependency-target-mapping {:plugin-root {:runtime :runtime
+                                           :aspect :runtime}
+                             :root {:runtime :runtime
                                     :dev :dev
                                     :aspect :aspect
                                     :aspectin :aspectin
@@ -141,7 +144,7 @@
   :coverage-workflow [:package-workflow :coverage] ; run tests with code coverage
   :analyse-workflow [:package-workflow :analyse] ; perform static code analysis
   :build-workflow [:clean :package-workflow :unittest :coverage :analyse :distribute]
-  :release-workflow [:build-workflow :generate-release :package-release :distribute-release] ; build distribution packages
+  :distribute-workflow [:build-workflow :generate-distribution :package-distribution :distribute-distribution] ; build distribution packages
   :architecture-workflow [:clean :init :dependencies :generate-architecture] ; generate modules from an architecture model
   :module-workflow [:create-module]
   }
