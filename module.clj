@@ -21,17 +21,14 @@
                 ["org.soulspace.clj/CljArtifactLibrary, 0.4.3"]
                 ["org.soulspace.clj/CljMavenLibrary, 0.5.1"]
                 ["org.soulspace.clj/CljJavaLibrary, 0.3.0"]
-                ["org.tcrawley/dynapath, 0.2.3"] ; dynamic classpath support
                 ["org.soulspace.clj/CljXmlLibrary, 0.3.0"] ; xml generation, maven, eclipse
                 ["org.clojure/data.zip, 0.1.1"] ; maven support
-                ;["org.clojure/tools.cli, 0.2.2"] ; command line arguments
                 ["org.clojure/tools.nrepl, 0.2.3"] ; repl support
                 ["org.apache.ant/ant, 1.8.3"]
                 ["org.apache.ant/ant-launcher, 1.8.3"]
                 ["org.apache.ant/ant-junit, 1.8.3"]
-                ["org.aspectj/aspectjrt, 1.6.11"] ; aspectj plugin
-                ["org.soulspace.clj/CljModelGenerator, 0.4.0"] ; mdsd/architecture plugins
-                ]
+                ["org.soulspace.clj/CljModelGenerator, 0.4.0"]] ; mdsd/architecture plugins
+                
  :dependency-excludes [["ch.qos.logback"]
                        ["avalon-framework"]
                        ["com.ibm.icu"]]

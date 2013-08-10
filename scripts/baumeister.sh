@@ -30,7 +30,7 @@ echo `pwd`
 
 # Start Baumeister
 if [ $# -eq 0 ]; then 
-  java -server -Xmx512m -cp ${BAUMEISTER_CLASSPATH} org.soulspace.build.baumeister.process
+  java -server -Xmx512m -cp ${BAUMEISTER_CLASSPATH} baumeister.process
 else
-  java -server -Xmx512m -cp ${BAUMEISTER_CLASSPATH} org.soulspace.build.baumeister.process $@	# $1 -- "$@"
+  java -server -Xmx512m -cp ${BAUMEISTER_CLASSPATH} baumeister.process $@	# $1 -- "$@"
 fi

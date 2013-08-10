@@ -201,5 +201,3 @@ The default behaviour is to add an element as a fileset."
 
 (defmethod add-nested [::junit java.util.Map]
   [_ task props] (doto (.createBatchTest task) (.setTodir (as-file (:todir props))) (.addFileSet (:fileset props))))
-
-

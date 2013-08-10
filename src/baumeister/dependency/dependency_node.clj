@@ -154,6 +154,13 @@
     ;(println (str (clojure.string/join ",\n" (map print-dependency (process-tree [tree] [])))))
     tree))
 
+(defn build-plugin-dependency-tree []
+  (log :debug "doing build-plugin-dependency-tree")
+  (def loaded #{}) ; reset loaded set
+  (def built-nodes []) ; reset loaded set
+  (let [tree (build-dependency-node :plugin-root [] (into #{} (map new-artifact-pattern (param :dependency-excludes))) (root-dependency))]
+    tree))
+
 (defn get-dependencies []
   (if (or (param :dependeny-transitive) (= true (param :dependeny-transitive)))
     (let [root (build-dependency-tree)]

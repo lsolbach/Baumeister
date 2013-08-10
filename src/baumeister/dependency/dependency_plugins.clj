@@ -1,15 +1,9 @@
 (ns baumeister.dependency.dependency-plugins
   (:use [org.soulspace.clj.application classpath]
         [baumeister.config registry]
+        [baumeister.utils log]
         [baumeister.dependency dependency dependency-node dependency-initialization dependency-dot]))
 
-
-(defn build-plugin-dependency-tree []
-  (log :debug "doing build-plugin-dependency-tree")
-  (def loaded #{}) ; reset loaded set
-  (def built-nodes []) ; reset loaded set
-  (let [tree (build-dependency-node :plugin-root [] (into #{} (map new-artifact-pattern (param :dependency-excludes))) (root-dependency))]
-    tree))
 
 
 (defn plugin-dependency-classpath []

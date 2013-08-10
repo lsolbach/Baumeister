@@ -18,7 +18,7 @@ shift
 goto setupArgs
 :doneStart
 if "%BAUMEISTER_ARGS%"=="" (
-  java -server -cp %BAUMEISTER_CLASSPATH% org.soulspace.build.baumeister.process
+  java -server -cp %BAUMEISTER_CLASSPATH% baumeister.process
 ) else (
-  java -server -cp %BAUMEISTER_CLASSPATH% org.soulspace.build.baumeister.process %BAUMEISTER_ARGS%
+  java -server -cp %BAUMEISTER_CLASSPATH% process %BAUMEISTER_ARGS%
 )
