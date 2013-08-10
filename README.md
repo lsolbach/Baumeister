@@ -1,6 +1,6 @@
 BaumeisterAspectJPlugin
 =======================
-
+AspectJ compiler plugin.
 
 Author/Project Lead
 -------------------

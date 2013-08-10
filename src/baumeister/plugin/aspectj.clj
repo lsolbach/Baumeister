@@ -79,7 +79,7 @@
                 (jar-path (param :aspectj-acceptancetest-lib-path))
                 (jar-path (param :aspectj-acceptancetest-aspectin-path))
                 (str (param :build-classes-dir) ":" (jar-path (param :aspectj-acceptancetest-aspect-path))))))
-  
+
 (def config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
             [:lib-dev-dir "${lib-dir}/dev"]
