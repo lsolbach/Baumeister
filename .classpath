@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="build/lib/runtime/ant-junit.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/ant-launcher.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/ant.jar"/>
-	<classpathentry kind="lib" path="build/lib/runtime/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/CljApplicationLibrary.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/CljArtifactLibrary.jar"/>
 	<classpathentry kind="lib" path="build/lib/runtime/CljJavaLibrary.jar"/>
