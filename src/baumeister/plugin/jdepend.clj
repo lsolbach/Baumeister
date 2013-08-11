@@ -7,26 +7,26 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 ;
-(ns org.soulspace.build.baumeister.plugins.jdepend
+(ns baumeister.plugin.jdepend
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
-        [org.soulspace.build.baumeister.utils checks ant-utils log]
-        [org.soulspace.build.baumeister.config registry plugin-registry])
+        [baumeister.utils checks ant-utils log]
+        [baumeister.config registry plugin-registry])
   (:import [java.util Set]))
 
-;(define-ant-task ant-jdepend jdepend)
+(define-ant-task ant-jdepend jdepend)
 
 (defmethod coerce [org.apache.tools.ant.taskdefs.optional.jdepend.JDependTask$FormatAttribute String] [_ str]
   (org.apache.tools.ant.taskdefs.optional.jdepend.JDependTask$FormatAttribute/getInstance
     org.apache.tools.ant.taskdefs.optional.jdepend.JDependTask$FormatAttribute str))
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/jdepend Set]
+(defmethod add-nested [:baumeister.utils.ant-utils/jdepend Set]
   [_ task exclude-set]
   (doseq [entry exclude-set]
     (doto (.createExclude task) (.setName entry))))
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/jdepend org.apache.tools.ant.types.Path]
+(defmethod add-nested [:baumeister.utils.ant-utils/jdepend org.apache.tools.ant.types.Path]
   [_ task path]
   (doto  (.createClassespath task) (.add path)))
 
