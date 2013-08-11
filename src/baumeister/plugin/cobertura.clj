@@ -11,8 +11,8 @@
   (:use [clojure.java.io :exclude [delete-file]]
         [clojure.string :only [join split]]
         [org.soulspace.clj file]
-        [org.soulspace.build.baumeister.utils ant-utils files log]
-        [org.soulspace.build.baumeister.config registry plugin-registry]))
+        [baumeister.utils ant-utils files log]
+        [baumeister.config registry]))
 
 (def cobertura-classpath (lib-path ["cobertura" "asm" "asm-tree" "jakarta-oro"])) ; log4j?
 (ant-taskdef {:classpath cobertura-classpath :resource "tasks.properties"})
@@ -20,7 +20,7 @@
 (define-ant-task ant-cobertura-report cobertura-report)
 (define-ant-type ant-ignore net.sourceforge.cobertura.ant.Ignore)
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/cobertura-instrument
+(defmethod add-nested [:baumeister.utils.ant-utils/cobertura-instrument
                        net.sourceforge.cobertura.ant.Ignore]
   [_ task regex] (doto (.createIgnore task) (.setRegex regex)))
 
@@ -84,8 +84,4 @@
                [:init cobertura-init]
                [:pre-coverage cobertura-pre-coverage]
                [:coverage cobertura-coverage]
-               [:post-coverage cobertura-post-coverage]]
-   :dependencies [[["net.sourceforge.cobertura" "cobertura" "1.9.4.1"]]
-                  [["asm" "asm" "3.3.1"]]
-                  [["asm" "asm-tree" "3.3.1"]]
-                  [["oro" "oro" "2.0.8"]]]})
+               [:post-coverage cobertura-post-coverage]]})
