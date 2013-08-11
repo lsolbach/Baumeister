@@ -20,7 +20,7 @@
 (define-ant-task ant-findbugs findbugs)
 (define-ant-type ant-class edu.umd.cs.findbugs.anttask.FindBugsTask$ClassLocation)
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/findbugs
+(defmethod add-nested [:baumeister.utils.ant-utils/findbugs
                        edu.umd.cs.findbugs.anttask.FindBugsTask$ClassLocation]
   [_ task classloc]
     (doto (.createClass task) (.setLocation (.getLocation classloc))))
