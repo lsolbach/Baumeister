@@ -12,8 +12,8 @@
         [clojure.java.io :exclude [delete-file]] 
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
-        [org.soulspace.build.baumeister.utils ant-utils files checks log]
-        [org.soulspace.build.baumeister.config registry plugin-registry]))
+        [baumeister.utils ant-utils files checks log]
+        [baumeister.config registry]))
 
 (def pmd-jar (str (get-lib-dir) "/pmd.jar"))
 
@@ -29,15 +29,15 @@
   (net.sourceforge.pmd.cpd.CPDTask$FormatAttribute/getInstance
     net.sourceforge.pmd.cpd.CPDTask$FormatAttribute str))
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/pmd net.sourceforge.pmd.ant.Formatter]
+(defmethod add-nested [:baumeister.utils.ant-utils/pmd net.sourceforge.pmd.ant.Formatter]
   [_ task formatter] (.addFormatter task formatter))
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/pmd java.util.List]
+(defmethod add-nested [:baumeister.utils.ant-utils/pmd java.util.List]
   [_ task rulesets]
   (doseq [ruleset rulesets]
     (.addRuleset task (doto (net.sourceforge.pmd.ant.RuleSetWrapper.) (.addText ruleset)))))
 
-(defmethod add-nested [:org.soulspace.build.baumeister.utils.ant-utils/pmd net.sourceforge.pmd.ant.RuleSetWrapper]
+(defmethod add-nested [:baumeister.utils.ant-utils/pmd net.sourceforge.pmd.ant.RuleSetWrapper]
   [_ task ruleset] (.addRuleset task ruleset))
 
 
