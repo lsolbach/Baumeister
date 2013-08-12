@@ -2,9 +2,20 @@
   (:use [org.soulspace.clj.xhtml.xhtml-dsl]))
 
 
+(defn generate-overview
+  []
+  )
 
+(defn generate-documentation
+  []
+  )
 
-(defn site-generate []
+(defn generate-reports
+  []
+  )
+
+(defn site-generate
+  []
   (println "Site")
   )
 
