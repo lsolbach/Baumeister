@@ -14,31 +14,14 @@
         [baumeister.config registry]
         [baumeister.repository protocol file httpproxy mavenproxy]
         [baumeister.utils log])
-  (:import [baumeister.repository.file FileArtifactRepositoryImpl]
-           [baumeister.repository.httpproxy HttpProxyArtifactRepositoryImpl]
-           [baumeister.repository.mavenproxy MavenProxyArtifactRepositoryImpl])
   )
 
-;
-; repository functions
-;
-; TODO move to repository registry?
-(defmulti create-repository first)
-(defmethod create-repository :file [opts]
-  (let [[_ usage path] opts]
-    (FileArtifactRepositoryImpl. usage (param path))))
-(defmethod create-repository :http-proxy [opts]
-  (let [[_ usage url path] opts] 
-    (HttpProxyArtifactRepositoryImpl. usage url (param path))))
-(defmethod create-repository :maven-proxy [opts]
-  (let [[_ usage url path] opts] 
-    (MavenProxyArtifactRepositoryImpl. usage url (param path))))
-
-(defn create-repositories [v]
-  (map create-repository v))
 
 (defn get-dev-repository [repositories]
   (first (filter #(= (:usage %) :development) repositories)))
+
+(defn get-staging-repository [repositories]
+  (first (filter #(= (:usage %) :staging) repositories)))
 
 (defn get-release-repository [repositories]
   (first (filter #(= (:usage %) :release) repositories)))
@@ -47,7 +30,7 @@
   (filter #(= (:usage %) (keyword usage)) repositories))
 
 ;
-; query functions
+; repository query functions
 ;
 ; TODO merge dependency-initialization with repositories query-* to dependency-resolving? 
 (defn query-artifact 
@@ -64,7 +47,8 @@
         (if (exists? artifact-file)
           artifact-file ; return artifact file
           (recur (rest repositories) artifact))) ; try next repository
-      (do (log :warn "Could not find artifact" (artifact-name-version artifact) "in the configured repositories!")
+      (do 
+        (log :warn "Could not find artifact" (artifact-name-version artifact) "in the configured repositories!")
         nil))))
 
 (defn query-dependencies

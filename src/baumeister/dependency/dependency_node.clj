@@ -59,9 +59,9 @@
 
 (defn get-transitive-dependency-data [dependency]
   "get the transitive dependencies configuration for the specified dependency"
-  (cond  
+  (cond
     (= (:target dependency) :root) (param :dependencies) ; current module, use config
-    (= (:target dependency) :plugin-root) (filter coll? (param :plugins-test))
+    (= (:target dependency) :plugin-root) (filter coll? (param :plugins)) ; current module plugins 
     :default (query-dependencies dependency)))
 
 ;
@@ -90,11 +90,8 @@
 (defn find-or-build-node [dependency target included]
   (if-let [node (find-node dependency target)]
     (do
-      ;(println "FOUND" (print-node node))
       node)
     (let [node (new-dependency-node dependency target included)]
-      ;(println "BUILT" (print-node node))
-      ;(println "NOT FOUND IN " (str (clojure.string/join ",\n" (map print-node built-nodes))))
       (def built-nodes (conj built-nodes node))
       node)))
 
@@ -158,7 +155,7 @@
   (log :debug "doing build-plugin-dependency-tree")
   (def loaded #{}) ; reset loaded set
   (def built-nodes []) ; reset loaded set
-  (let [tree (build-dependency-node :plugin-root [] (into #{} (map new-artifact-pattern (param :dependency-excludes))) (root-dependency))]
+  (let [tree (build-dependency-node :plugin-root [] (into #{} (map new-artifact-pattern (param :dependency-excludes))) (root-dependency :plugin-root))]
     tree))
 
 (defn get-dependencies []

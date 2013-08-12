@@ -8,7 +8,8 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.config.parameter-registry
-  (:use [org.soulspace.clj.application string-property]))
+  (:use [clojure.pprint]
+        [org.soulspace.clj.application string-property]))
 
 ;
 ; parameter registry
@@ -23,6 +24,9 @@
   "Resets the parameter registry."
   (def param-registry {}))
 
+(defn print-parameters []
+  (pprint (get-param-registry)))
+
 ; replace "${build-dir}/report" with (str (get-var (keyword build-dir) "${build-dir}") "/dir")
 (defn replace-vars
   [value]
@@ -33,9 +37,6 @@
   (def param-registry (assoc param-registry key value)))
 
 ; TODO refactor to multimethod
-; TODO merge seqs/vectors if a seq/vector var is already registered?!?
-; TODO  to e.g. handle default repositories in module_defaults.clj and additional module specific repositories
-; TODO check if this is a desired behaviour for all seq/vector vars (always add, never override?)
 (defn register-param [key value]
   "Register the key/value pair with preprocessing (e.g. variable replacement)"
   (def param-registry
@@ -59,5 +60,3 @@
   "Register parameters in the parameter registry."
   (doseq [[key value] vars]
     (register-param key value)))
-
-

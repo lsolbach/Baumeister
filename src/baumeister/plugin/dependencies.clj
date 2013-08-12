@@ -61,9 +61,7 @@
 
 (defn dependencies-init []
   (message :fine "initializing dependencies...")
-  (create-dir (as-file (param :deps-report-dir)))
-  ; TODO move repository initalization into Baumeister repository registry or so
-  (register-val :deps-repositories (create-repositories (param :repositories))))
+  (create-dir (as-file (param :deps-report-dir))))
 
 (defn dependencies-dependencies []
   (message :fine "resolving dependencies...")

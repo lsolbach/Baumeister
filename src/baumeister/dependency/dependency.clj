@@ -68,7 +68,6 @@
 ; map POM scopes and types here
 ; TODO multimethod on type (POMDependency/BMDependency) 
 (defn new-dependency [& args]
-  (println "New Dependency" args)
   (apply create-dependency args))
 ;
 ; Dependency pattern

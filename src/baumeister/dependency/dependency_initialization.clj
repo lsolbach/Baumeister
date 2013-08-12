@@ -11,10 +11,10 @@
   (:use [clojure.java.io :only [as-file as-url copy]]
         [org.soulspace.clj file]
         [org.soulspace.clj.artifact artifact]
-        [baumeister.config registry]
+        [baumeister.config registry parameter-registry] ; TODO remove parammeter-registry 
         [baumeister.repository repositories]
         [baumeister.dependency dependency dependency-initialization]
-        [baumeister.utils ant-utils checks log]))
+        [baumeister.utils ant-utils log]))
 
 (defn init-dependency [dependency]
   "Initialize the dependency for the build by copying or unzipping the referenced artifact."

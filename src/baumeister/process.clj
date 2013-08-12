@@ -10,6 +10,7 @@
 (ns baumeister.process
   (:use [org.soulspace.clj string file]
         [org.soulspace.clj.application cli classpath] 
+        [baumeister.config config]
         [baumeister.config registry]
         [baumeister workflow-engine]
         [baumeister.utils log message])
