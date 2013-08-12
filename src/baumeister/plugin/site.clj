@@ -1,5 +1,5 @@
 (ns baumeister.plugin.site
-  (:use [org.soulspace.clj.xhtml]))
+  (:use [org.soulspace.clj.xhtml.xhtml-dsl]))
 
 
 
@@ -9,7 +9,7 @@
   )
 
 
-
 (def config 
-  {:params []
+  {:params [:site-css ""
+            ]
    :functions []})
