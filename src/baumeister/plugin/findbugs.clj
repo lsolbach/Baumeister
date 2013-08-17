@@ -15,6 +15,7 @@
         [baumeister.utils ant-utils files checks log]
         [baumeister.config registry plugin-registry]))
 
+; TODO remove classpath, use plugin classpath
 (def findbugs-classpath (lib-path ["findbugs" "findbugs-ant" "asm" "asm-tree" "bcel" "dom4j" "jaxen"])) ;  ...
 (ant-taskdef {:name "findbugs" :classname "edu.umd.cs.findbugs.anttask.FindBugsTask" :classpath findbugs-classpath})
 (define-ant-task ant-findbugs findbugs)
