@@ -7,12 +7,12 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 ;
-(ns org.soulspace.build.baumeister.plugins.junit
+(ns baumeister.plugin.junit
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
-        [org.soulspace.build.baumeister.utils ant-utils files checks log message]
-        [org.soulspace.build.baumeister.config registry plugin-registry]))
+        [baumeister.utils ant-utils files checks log message]
+        [baumeister.config registry plugin-registry]))
 
 (defn junit [class-path test-dir report-dir]
   (log :debug "calling junit with parameters" class-path test-dir report-dir)
