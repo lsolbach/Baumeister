@@ -8,13 +8,13 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.maven
-  (:require [org.soulspace.build.baumeister.maven.pom-dsl :as pom])
+  (:require [org.soulspace.clj.maven.pom-dsl :as pom])
   (:use [clojure.data.xml]
         [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file]
-        [org.soulspace.build.baumeister.config registry]
-        [org.soulspace.build.baumeister.utils log message property xml]
-        [org.soulspace.build.baumeister.dependency dependency]))
+        [baumeister.config registry]
+        [baumeister.utils log message xml]
+        [baumeister.dependency dependency]))
 
 ; maven support plugin
 
@@ -31,7 +31,7 @@
 ;
 ; pom creation
 ;
-; TODO don't create th xml directly, create a Pom model and ask for the xml
+; TODO don't create the xml directly, create a Pom model and ask for the xml
 ;
 (defn build-pom-dependency [dependency]
   (let [artifact (:artifact dependency)]
