@@ -44,3 +44,17 @@ For post-steps the registered functions get executed in reverse order of the plu
 Plugins
 -------
 A plugin registers parameters and functions for steps of workflow phases.
+
+
+Artifacts
+---------
+Artifact
+project module version name type
+
+
+Dependency Management
+---------------------
+
+Dependency
+artifact target optional exclusions
+

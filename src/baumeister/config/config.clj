@@ -7,16 +7,6 @@
         [baumeister.dependency.dependency-plugins]
         [baumeister.config registry parameter-registry repository-registry function-registry plugin-registry]))
 
-; TODO used in plugins for the plugin class path, refactor when plugins are dependencies 
-; Baumeister lib dir
-(defn get-lib-dir [] (str (param :baumeister-home-dir) "/lib"))
-
-; Baumeister lib path
-(defn lib-path [coll]
-  (str/join ":" (map #(str (get-lib-dir) "/" % ".jar") coll)))
-
-; TODO remove register methods, use data from plugins and register the data from plugin-registry
-
 (defn- reset-registries []
   "Reset the registries."
   (reset-plugin-registry)

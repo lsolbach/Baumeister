@@ -8,14 +8,14 @@ extensibility provided by Clojure.
 Features
 --------
 * multi language builds (Java, AspectJ, Clojure, ...)
-* model driven
+* model driven development
 * architecture awareness
-* support for the Model Generator
 * dependency management (compatibility with existing repositories)
 * extensible plugin architecture
 * configurable modules
 * flexible artifact generation (multiple artifacts per module)
 * customizable per module
+* plugins for the Model Generator
 
 Author/Project Lead
 -------------------
@@ -35,6 +35,18 @@ Code Repository
 
 History
 -------
+
+Version 0.5.1 (--.--.201-)
+--------------------------
+
+Version 0.5.0 (--.--.201-)
+--------------------------
+
+Version 0.4.0 (--.--.201-)
+--------------------------
+
+Version 0.3.0 (--.--.201-)
+--------------------------
 
 Version 0.2.0 (--.--.201-)
 --------------------------

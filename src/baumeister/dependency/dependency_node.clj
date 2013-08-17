@@ -89,8 +89,7 @@
 
 (defn find-or-build-node [dependency target included]
   (if-let [node (find-node dependency target)]
-    (do
-      node)
+    node
     (let [node (new-dependency-node dependency target included)]
       (def built-nodes (conj built-nodes node))
       node)))
@@ -114,8 +113,7 @@
                 (if (or (is-excluded? excluded dep) ; dependency is excluded
                         (and (:optional dep) (not follow-optional)) ; don't include transitive optional dependencies
                         (nil? node-target) ; dependency has not to be included (e.g. transitive :aspectin)
-                        (seq (filter #(= dep %) path)) ; dependency was seen on the way down, cycle!
-                        )
+                        (seq (filter #(= dep %) path))) ; dependency was seen on the way down, cycle!
                   (recur (rest deps) inclusions)
                   (recur (rest deps) (conj inclusions (build-dependency-node node-target (conj path dependency) (union excluded (:exclusions dep)) dep)))))
               inclusions))]

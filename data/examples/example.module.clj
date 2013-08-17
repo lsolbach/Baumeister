@@ -1,24 +1,24 @@
 [
- :project "project"
- :module "v"
+ :project "org.project"
+ :module "ModuleA"
  :version "1.0.0"
 
- :parent ["project" "u" "1.0.0"] ; parent artifact coordinates
- :modules ["x" "y" "z"]
+ :parent ["org.project" "parent" "1.0.0"] ; parent artifact coordinates
+ :modules ["ModuleX" "ModuleY" "ModuleZ"]
  
  :description ""
  :homepage []
  
- :licenses []
+ :licenses [["" ""]]
  :provider []
  :author []
- :project-lead []
- :developers []
- :contributors []
+ :project-lead ["Mister X"]
+ :developers ["Joe Doe"]
+ :contributors ["Tommy Gun"]
 
- :plugins ["a" ["project.b" "b" "1.2.0"] "c" ["project.d" "d"]]
+ :plugins ["a" ["org.soulspace.baumeister" "BaumeisterClojurePlugin" "1.2.0"] "c" ["org.soulspace.baumeister" "BaumeisterClojureTestPlugin"]]
 
- :dependencies []
+ :dependencies [["org.apache.log4j/log4j, 1.2.15"]]
  
  :distribution-packages [{:name "${module}-{version}" :type "zip" :sources []}]
  :distribution-targets []

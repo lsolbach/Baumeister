@@ -8,6 +8,7 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.config.registry
+  (:require [clojure.string :as str :only [join]])
   (:use [clojure.java.io :only [as-url]]
         [org.soulspace.clj.application classpath]
         [org.soulspace.clj file]
@@ -60,4 +61,12 @@
 (defn register-vars [vars]
   "Register variables."
   (register-params vars))
+
+; TODO used in plugins for the plugin class path, refactor when plugins are dependencies 
+; Baumeister lib dir
+(defn get-lib-dir [] (str (param :baumeister-home-dir) "/lib"))
+
+; Baumeister lib path
+(defn lib-path [coll]
+  (str/join ":" (map #(str (get-lib-dir) "/" % ".jar") coll)))
 

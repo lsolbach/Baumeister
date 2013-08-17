@@ -8,13 +8,10 @@ Guidelines
 * Make common tasks easy
 * Make uncommon tasks possible
 
-
-* Implement transitive dependency management (partially implemented)
-* Implement repositories (initially implemented, use an HTTP client library for proxy support in HTTP requests)
 * Multi project builds
 
 MDSD
-====
+----
 * use src/model for input models?
 * use xmi directly by default, add config parameters for extraction from zargo
 * extract model xmi to build/model instead of model?
@@ -49,7 +46,7 @@ Plugins
 Plugin storage, user plugins, plugin dependencies, multi plugin dependencies, version conflicts for plugin and plugin dependencies
 Plugin orthogonalization!
 
-Orthogonality
+#### Orthogonality
 How to cut through the different dimensions?
 [workflows, phases, steps, plugins, module types]
 e.g.
@@ -57,9 +54,8 @@ mdsd initializing, cleaning, dependencies
 aspectj initializing, cleaning, dependencies
 
 
-Build listeners/notifiers?
+#### Build listeners/notifiers?
 Listener/Notifier plugin to register functions on build phases?
 
 Global initialization (apart from plugins)?
 build-dir
-

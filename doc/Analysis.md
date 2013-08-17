@@ -44,11 +44,11 @@ Possible build environments
    * IDE (eclipse, netbeans, idea, ...)
  * build server (continuous integration server) (jenkins, cruise control)
  * test/production servers?
- 
+
 Demarcation of Build Tools and Build Servers
 --------------------------------------------
  * Build Tools can run locally and on a Build Server,
- * Build Servers run on a "centralized" server
+ * Build Servers normally run on a "centralized" server
  * Build Servers can distribute builds to Build machines
  * Who checks out the code from the scm? 
  * Publishing of artifacts (Build Tool or Build Server?)
