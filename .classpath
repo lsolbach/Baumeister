@@ -2,5 +2,18 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="build/lib/runtime/Baumeister.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/CljJavaLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/CljLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/CljMavenLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/CljXmlLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/clojure.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/data.xml.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/data.zip.jar"/>
+	<classpathentry exported="true" kind="lib" path="classes">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

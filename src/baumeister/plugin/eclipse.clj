@@ -12,14 +12,13 @@
             [clojure.data.xml :as xml]
             [clojure.data.zip :as zf]
             [clojure.data.zip.xml :as zx]
-            [baumeister.eclipse.classpath-dsl :as cp])
+            [baumeister.plugin.eclipse.classpath-dsl :as cp])
   (:use [clojure.java.io :only [as-file]]
         [org.soulspace.clj file]
         [org.soulspace.clj.artifact artifact]
         [org.soulspace.clj.xml dsl-builder xml-util]
         [baumeister.config registry plugin-registry]
-        [baumeister.utils checks log message xml]
-        ))
+        [baumeister.utils checks log message xml]))
 
 (def eclipse-source-dirs
   [(param "${source-dir}")
@@ -29,8 +28,7 @@
    (param "${mdsd-generation-dir}/${source-dir}")
    (param "${mdsd-generation-dir}/${source-unittest-dir}")
    (param "${mdsd-generation-dir}/${source-integrationtest-dir}")
-   (param "${mdsd-generation-dir}/${source-acceptancetest-dir}")                        
-   ])
+   (param "${mdsd-generation-dir}/${source-acceptancetest-dir}")])
 
 (def eclipse-containers
   [["org.eclipse.jdt.launching.JRE_CONTAINER"]])
@@ -80,16 +78,16 @@
     (build-source-entries)
     (build-container-entries)
     (build-lib-entries)
-    (cp/classpathentry {:kind "output" :path "bin"})
-    ))
+    (cp/classpathentry {:kind "output" :path "bin"})))
 
+;
+; workflow functions
+;
 (defn eclipse-init []
   (create-dir (as-file (param "${build-eclipse-dir}"))))
 
-(defn eclipse-post-dependencies
-  []
+(defn eclipse-post-dependencies []
   (build-container-entries)
-  ;(println (emit-str (build-classpath)))
   (spit (param "${build-eclipse-dir}/classpath.xml") (xml/emit-str (build-classpath))))
 
 (def config 
