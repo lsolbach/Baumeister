@@ -13,7 +13,7 @@
         [org.soulspace.clj.artifact artifact]
         [baumeister.config registry plugin-registry]
         [baumeister.repository protocol repositories]
-        [baumeister.dependency dependency dependency-node dependency-initialization dependency-dot]
+        [baumeister.dependency dependency dependency-transitivity dependency-initialization dependency-dot]
         [baumeister.utils ant-utils checks log message]))
 
 (defn generate-dot

@@ -51,7 +51,6 @@ Artifacts
 Artifact
 project module version name type
 
-
 Dependency Management
 ---------------------
 

@@ -9,7 +9,7 @@
 ;
 (ns baumeister.dependency.dependency-dot
   (:use [org.soulspace.clj.artifact artifact]
-        [baumeister.dependency dependency dependency-node]))
+        [baumeister.dependency dependency dependency-transitivity]))
 
 (def ^:dynamic processed-edges #{})
 

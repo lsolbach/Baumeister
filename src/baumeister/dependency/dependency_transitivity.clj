@@ -7,7 +7,7 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 ;
-(ns baumeister.dependency.dependency-node
+(ns baumeister.dependency.dependency-transitivity
   (:require [clojure.zip :as zip])
   (:use [clojure.set :only [union]]
         [org.soulspace.clj.artifact artifact]
@@ -27,7 +27,6 @@
 ;
 ; Transitive dependency functions 
 ;
-(def ^:dynamic loaded #{})
 (def ^:dynamic built-nodes [])
 
 (defn print-node [node]
@@ -48,10 +47,9 @@
     (log :trace "is-excluded?" (:artifact dependency) "<<<" excluded ">>>" (seq excluding-patterns))
     (not (nil? (seq excluding-patterns)))))
 
-(defn is-loaded? [dependency]
-  (let [loaded-patterns (filter #(matches-artifact? % (:artifact dependency)) loaded)]
-    (log :trace "is-loaded?" (:artifact dependency) "<<<" loaded ">>>" (seq loaded-patterns))
-    (not (nil? (seq loaded-patterns)))))
+(defn cycle?
+  [path dependency]
+  (seq (filter #(= dependency %) path)))
 
 (defn map-target [parent-target dependency-target]
   "Maps the target of a dependency according to the parents target."
@@ -94,7 +92,8 @@
       (def built-nodes (conj built-nodes node))
       node)))
 
-(defn build-dependency-node 
+
+(defn build-dependency-node
   "Recursively build dependency nodes depth first, use built-nodes set as cache."  
   ([target path excluded dependency]
     (build-dependency-node target path excluded dependency false))
@@ -113,7 +112,7 @@
                 (if (or (is-excluded? excluded dep) ; dependency is excluded
                         (and (:optional dep) (not follow-optional)) ; don't include transitive optional dependencies
                         (nil? node-target) ; dependency has not to be included (e.g. transitive :aspectin)
-                        (seq (filter #(= dep %) path))) ; dependency was seen on the way down, cycle!
+                        (cycle? path dep)) ; dependency was seen on the way down, cycle!
                   (recur (rest deps) inclusions)
                   (recur (rest deps) (conj inclusions (build-dependency-node node-target (conj path dependency) (union excluded (:exclusions dep)) dep)))))
               inclusions))]
@@ -142,8 +141,7 @@
 
 (defn build-dependency-tree []
   (log :debug "doing build-dependency-tree")
-  (def loaded #{}) ; reset loaded set
-  (def built-nodes []) ; reset loaded set
+  (def built-nodes []) ; reset built nodes set
   (let [tree (build-dependency-node :root [] (into #{} (map new-artifact-pattern (param :dependency-excludes))) (root-dependency))]
     ;(println "DEPENDENCIES")
     ;(println (str (clojure.string/join ",\n" (map print-dependency (process-tree [tree] [])))))
@@ -151,8 +149,7 @@
 
 (defn build-plugin-dependency-tree []
   (log :debug "doing build-plugin-dependency-tree")
-  (def loaded #{}) ; reset loaded set
-  (def built-nodes []) ; reset loaded set
+  (def built-nodes []) ; reset built nodes set
   (let [tree (build-dependency-node :plugin-root [] (into #{} (map new-artifact-pattern (param :dependency-excludes))) (root-dependency :plugin-root))]
     tree))
 

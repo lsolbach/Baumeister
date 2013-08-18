@@ -2,7 +2,7 @@
   (:use [org.soulspace.clj.application classpath]
         [baumeister.config registry]
         [baumeister.utils log]
-        [baumeister.dependency dependency dependency-node dependency-initialization dependency-dot]))
+        [baumeister.dependency dependency dependency-transitivity dependency-initialization dependency-dot]))
 
 (defn plugin-dependency-classpath []
   ""
