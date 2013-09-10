@@ -33,7 +33,8 @@
  ; sets of architectural module type classifications
  ;
  :module-types #{:library :framework :component :application :domain :integration :presentation
-                  :webservice :webfrontend :consolefrontend :appfrontend :data}
+                  :webservice :webfrontend :consolefrontend :appfrontend
+                  :architecture :analysis :data}
  :code-module-types #{:library :framework :component :application :domain :integration :presentation
                       :webservice :webfrontend :consolefrontend :appfrontend}
  :library-module-types #{:library}
@@ -44,7 +45,7 @@
  :web-frontend-types #{:webfrontend :webservice}
  :console-frontend-types #{:consolefrontend}
  :app-frontend-types #{:appfrontend}
- :data-module-types #{:data}
+ :data-module-types #{:architecture :analysis :data}
  ;
  ; Set of test classifications
  ;
