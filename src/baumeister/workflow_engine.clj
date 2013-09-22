@@ -27,7 +27,9 @@
     (doseq [function functions]
       (function))))
 
-(defn do-phase [phase]
+(defn do-phase
+  "process the registered functions for the phase"
+  [phase]
   (message :important  (str "doing phase " (name phase) "... "))
   (do-functions (pre-key phase) (get-registered-functions (pre-key phase)))
   (do-functions phase (get-registered-functions phase))
