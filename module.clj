@@ -1,5 +1,5 @@
 [
- :module "BaumeisterMDDGeneratorPlugin"
+ :module "BaumeisterMDDPlugin"
  :project "org.soulspace.baumeister"
  :type :library
  :version "0.5.1"
