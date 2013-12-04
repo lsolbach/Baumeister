@@ -7,7 +7,7 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 ;
-(ns baumeister.plugin.mdsd
+(ns baumeister.plugin.mdd
   (:use [clojure.string :only [split]]
         [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search function]
