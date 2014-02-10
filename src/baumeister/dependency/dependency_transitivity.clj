@@ -139,19 +139,25 @@
   ([target]
     (new-dependency [(param :project) (param :module) (param :version)] target)))
 
-(defn build-dependency-tree []
+(defn build-dependency-tree
+  "build the module dependency tree"
+  []
   (log :debug "doing build-dependency-tree")
   (def built-nodes []) ; reset built nodes set
-  (let [tree (build-dependency-node :root [] (into #{} (map new-artifact-pattern (param :dependency-excludes))) (root-dependency))]
-    ;(println "DEPENDENCIES")
-    ;(println (str (clojure.string/join ",\n" (map print-dependency (process-tree [tree] [])))))
-    tree))
+  (build-dependency-node :root
+                         []
+                         (into #{} (map new-artifact-pattern (param :dependency-excludes)))
+                         (root-dependency)))
 
-(defn build-plugin-dependency-tree []
+(defn build-plugin-dependency-tree
+  "build the plugin dependency tree"
+  []
   (log :debug "doing build-plugin-dependency-tree")
   (def built-nodes []) ; reset built nodes set
-  (let [tree (build-dependency-node :plugin-root [] (into #{} (map new-artifact-pattern (param :dependency-excludes))) (root-dependency :plugin-root))]
-    tree))
+  (build-dependency-node :plugin-root
+                         [] 
+                         (into #{} (map new-artifact-pattern (param :dependency-excludes)))
+                         (root-dependency :plugin-root)))
 
 (defn get-dependencies []
   (if (or (param :dependeny-transitive) (= true (param :dependeny-transitive)))

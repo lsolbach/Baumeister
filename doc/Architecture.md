@@ -1,5 +1,5 @@
-Architecture
-============
+Baumeister Architecture
+=======================
 
 Baumeister Core
 ---------------
@@ -15,6 +15,9 @@ Registries
 Workflow Engine (part of core?)
 
 module abstractions?
+
+Baumeister Plugins
+------------------
 
 
 Baumeister Application

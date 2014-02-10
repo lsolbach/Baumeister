@@ -28,5 +28,4 @@
   (with-open [conn (repl/connect :port port)]
      (-> (repl/client conn 1000)    ; message receive timeout required
        (repl/message {:op "eval" :code (str forms)})
-       repl/response-values))
-  )
+       repl/response-values)))

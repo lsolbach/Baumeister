@@ -12,17 +12,38 @@
 ;
 ; function registry
 ;
-(def ^{:dynamic true :private true} fn-registry) ; registry for plugin functions
+(def ^{:dynamic true :private true} fn-registry) ; registry for plugin step functions
+(def ^{:dynamic true :private true} step-fn-registry) ; registry for plugin functions
 
+(defn reset-step-fn-registry [] (def step-fn-registry {}))
 (defn reset-fn-registry [] (def fn-registry {}))
+
+(defn register-step [build-step function]
+  (let [step (keyword build-step)]
+    (def step-fn-registry
+      (assoc step-fn-registry step (conj (get step-fn-registry step []) function)))))
+
+(defn register-steps [functions]
+  (doseq [[build-step function] functions]
+    (register-step build-step function)))
+
+(defn get-registered-step-functions [step]
+  (step-fn-registry step))
+
 (defn register-function [build-step function]
   (let [step (keyword build-step)]
     (def fn-registry
       (assoc fn-registry step (conj (get fn-registry step []) function)))))
 
 (defn register-functions [functions]
-  (doseq [[build-step function] functions]
-    (register-function build-step function)))
+  (doseq [[name function] functions]
+    (register-function name function)))
 
 (defn get-registered-functions [step]
   (fn-registry step))
+
+(defn reset-fn-registries
+  []
+  (reset-fn-registry)
+  (reset-step-fn-registry))
+

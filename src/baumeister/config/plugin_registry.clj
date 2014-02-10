@@ -31,11 +31,12 @@
 
 (defn plugin-name
   [c]
-  (lower-case (second (first (re-seq #"Baumeister(.*)Plugin" (:module (new-artifact (first c))))))))
+  (lower-case (second (first (re-seq #"(.*)Plugin" (:module (new-artifact (first c))))))))
 
 ; TODO load plugin as dependency? yes, when the build framework is stable
 ; load-file or require? (use compiled classes in Baumeister.jar and load-file user plugins from file system?)
-(defn init-plugin [name]
+(defn init-plugin
+  [name]
   (let [plugin (symbol  name)]
     (when-not (has-plugin? plugin)
       (println "loading plugin" name)
@@ -43,20 +44,19 @@
       (register-plugin name) ; register plugin in plugin registry
       (let [config-var (ns-resolve plugin (symbol "config"))]
         (register-params (:params @config-var))
+        (register-steps (:steps @config-var))
         (register-functions (:functions @config-var))))))
 
 ;
-(defn init-plugins [plugins]
+(defn init-plugins
   "initialize the given seq of plugins"
+  [plugins]
   ; get plugin dependencies for all plugins and set the classpath accordingly
   ; get plugin name and plugin artifact
   (doseq [plugin plugins]
     ; check if plugin is a plugin dependency
     (cond
       ; if not just load the plugin as clj file
-      (string? plugin)
-      (init-plugin (plugin-ns-string plugin))
+      (string? plugin) (init-plugin (plugin-ns-string plugin))
       ; if so, resolve transitive dependencies
-      (coll? plugin)
-      (init-plugin (plugin-ns-string (plugin-name plugin))))))
-
+      (coll? plugin) (init-plugin (plugin-ns-string (plugin-name plugin))))))

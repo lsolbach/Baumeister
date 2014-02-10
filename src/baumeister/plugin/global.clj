@@ -13,12 +13,11 @@
         [baumeister.utils ant-utils log]
         [baumeister.config registry plugin-registry]))
 
+; TODO handle lib-target-dirs gracefully
 (defn global-clean
   "Global clean"
   []
   (log :info "cleaning globally...")
-  (delete-dir (as-file (param :lib-dir)))
-  (delete-dir (as-file (param :dist-dir)))
   (delete-dir (as-file (param :build-dir))))
 
 (defn global-init
@@ -36,8 +35,6 @@
   (create-dir (as-file (param :lib-dev-dir)))
   (create-dir (as-file (param :dist-dir))))
 
-; TODO handle lib-target-dirs gracefully
-
 (def config
   {:params [[:module-dir "."]
             [:build-dir "${module-dir}/build"]
@@ -50,5 +47,6 @@
             [:build-integrationtest-classes-dir "${build-dir}/integrationtest/classes"]
             [:build-acceptancetest-classes-dir "${build-dir}/acceptancetest/classes"]
             [:build-report-dir "${build-dir}/report"]]
-   :functions [[:clean global-clean]
-               [:init global-init]]})
+   :steps [[:clean global-clean]
+           [:init global-init]]
+   :functions []})

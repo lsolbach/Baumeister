@@ -34,12 +34,15 @@ Each workflow consists of phases (which can be other workflows)
 
 Phases
 ------
-Each phase consists of 3 steps, pre-<phase>, <phase> and post-<phase>
+Each phase consists of 3 steps
+ * pre-<phase-name>
+ * <phase-name>
+ * post-<phase-name>
 
 Steps
 -----
-The registered functions get executed in order of the plugin declaration for pre-step and step.
-For post-steps the registered functions get executed in reverse order of the plugin declaration.
+The registered functions get executed in order of the plugin declaration for pre-phase step and phase step.
+For post-phase steps the registered functions get executed in reverse order of the plugin declaration.
 
 Plugins
 -------
@@ -56,4 +59,3 @@ Dependency Management
 
 Dependency
 artifact target optional exclusions
-

@@ -18,4 +18,5 @@
 
 (def config
   {:params []
-   :functions [[:init bmdebug-init]]})
+   :steps [[:init bmdebug-init]]
+   :functions []})

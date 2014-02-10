@@ -15,13 +15,10 @@
 (defn workflow? [id] (ends-with "-workflow" (name id)))
 (defn phase? [id] (not (ends-with "-workflow" (name id))))
 
-(defn pre-key [phase]
-  (keyword (str "pre-" (name phase))))
+(defn pre-key [phase] (keyword (str "pre-" (name phase))))
+(defn post-key [phase] (keyword (str "post-" (name phase))))
 
-(defn post-key [phase]
-  (keyword (str "post-" (name phase))))
-
-(defn do-functions [step functions]
+(defn do-step [step functions]
   (when (seq functions)
     (message :important (str "doing step " (str (name step) "... " functions)))
     (doseq [function functions]
@@ -31,9 +28,9 @@
   "process the registered functions for the phase"
   [phase]
   (message :important  (str "doing phase " (name phase) "... "))
-  (do-functions (pre-key phase) (get-registered-functions (pre-key phase)))
-  (do-functions phase (get-registered-functions phase))
-  (do-functions (post-key phase) (reverse (get-registered-functions (post-key phase)))))
+  (do-step (pre-key phase) (get-registered-step-functions (pre-key phase)))
+  (do-step phase (get-registered-step-functions phase))
+  (do-step (post-key phase) (reverse (get-registered-step-functions (post-key phase)))))
 
 (defn do-workflow
   "process the given workflow (or phase)"

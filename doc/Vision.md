@@ -17,7 +17,7 @@ Some implement a build workflow while with others the build workflow
 has to be implemented by the user.
 
 Some favour convention over configuration while others don't have any
-build in conventions at all.
+conventions built in at all.
 
 With the convention based approach you have to model your projects
 after the conventions of the build system.
@@ -30,7 +30,7 @@ others target single module projects only.
 
 Some build systems provide dependency management, others do not.
 
-Simple Dependency management is a crucial feature for even smaller
+Simple Dependency management is a crucial feature even for smaller
 projects. Bigger projects or multi module projects need Transitive
 Dependency Management.
 
@@ -48,7 +48,7 @@ o implemented in C
 - no architecture awareness
 - no tool support for jvm projects
 
-### Apache Ant ###
+### Ant ###
 + flexible workflows
 + many existing tasks
 o implemented in Java
@@ -71,11 +71,11 @@ o extensible build process via plugins
 - inflexible artifact concept, only one artifact per project/module
 - no architecture awareness
 
-
 ### Gradle ###
 + flexible
 + reuse of existing ant tasks and targets 
 o implemented in Groovy
+o some integration of maven
 - no architecture awareness
 ???
 
@@ -86,115 +86,122 @@ o implemented in Clojure
 - mainly clojure focused
 - no architecture awareness
 
+### Others ###
+Most other build systems (like rake for ruby) primarily target specific languages.
+
 
 Opportunity
 -----------
 A build system combining the simplicity of the convention based approach with the power of a
-configuration based approach and the extensibility provided by clojure. 
+configuration based approach and the extensibility provided by Clojure. 
 
-* simplicity of the convention based approach
-* power of the configuration based approach
-* support for an architecture and model centric development process
-* flexible module structure
-* flexible control structures
-* extensible plugin system
-* extensible build workflows
-* high level programming
-* transitive dependency management
-* maven style repository support
-* flexible repositories, multiple artifacts per module
-* multi language builds
-* reuse of existing ant tasks
+ * simplicity of the convention based approach
+ * power of the configuration based approach
+ * support for an architecture and model centric development process
+ * flexible module structure
+ * extensible plugin system
+ * extensible build workflows
+ * flexible control structures
+ * high level programming of build functionality
+ * transitive dependency management
+ * maven style repository support
+ * flexible repositories, multiple artifacts per module
+ * multi language builds
+ * reuse of existing ant tasks
 
 
 Stakeholders
 ------------
-+ Software Architects
-+ Developers
-+ Configuration Managers
-+ Project Managers
+ * Software Developers
+ * Software Architects
+ * Configuration Managers
+ * Project Managers
 
 
 Users
 -----
-+ Software Architects
-+ Developers
+ * Configuration Managers
+ * Software Developers
+ * Software Architects
 
 
-Features
---------
-* multi language builds (Java, AspectJ, Clojure, ...)
-* architecture awareness
-* suport for model driven software development
-* dependency management (compatibility with existing repositories)
-* extensible plugin architecture
-* configurable modules
-* flexible artifact generation (multiple artifacts per module)
-* customizable per module
+Proposed Features
+-----------------
+ * multi language builds (Java, AspectJ, Clojure, ...)
+ * architecture awareness
+ * suport for model driven software development
+ * dependency management (compatibility with existing repositories)
+ * extensible plugin architecture
+ * configurable modules
+ * flexible artifact generation (multiple artifacts per module)
+ * customizable per module
 
 
 Plugin architecture
 -------------------
-* shipped plugins for core features
-* extensible via clojure plugins
-* usage of ant tasks in plugins where feasible
+ * plugins for the orthogonalization of build functionality
+ * shipped plugins for core build features
+ * extensible via clojure plugins
+ * usage of ant tasks in plugins where feasible
 
 
 Language support via plugins
 ----------------------------
-Shipped plugins (at least)
-* Java
-* AspectJ
-* Clojure
-* additional languages via plugins
-* support for languages for which an ant task is available should be straight forward
+ * Shipped compiler plugins 
+   * Java
+   * AspectJ
+   * Clojure
+ * additional languages via plugins
+ * support for languages for which an ant task is available should be straight forward
 
 
 Module configuration
 --------------------
-* name
-* type
-* version
-* license
-* vendor
-* plugins
-* dependencies
-* configuration vars
+Minimal configuration in a concise way
+ * project name
+ * module name
+ * module type
+ * version
+ * license
+ * vendor
+ * plugins
+ * dependencies
+ * configuration vars
 
 
 Module types
 ------------
-* architecture
-* library
-* framework
-* integration
-* domain
-* application
-* presentation
-* console frontend?
-* app frontend?
-* web frontend
-* web service
-* data
-* extensible with new module types
+ * architecture
+ * library
+ * framework
+ * integration
+ * domain
+ * application
+ * presentation
+ * console frontend?
+ * app frontend?
+ * web frontend
+ * web service
+ * data
+ * extensible with new module types
 
 
 Build workflows
 ---------------
 Predefined workflows with phases, steps and hooks for extension and module specific customization
-* workflows
-* phases
-* steps
-* tasks
+ * workflows
+ * phases
+ * steps
+ * tasks
 
-* extensible workflows via configuration
-* embedding of workflows as subworkflows in other workflows
+ * extensible workflows via configuration
+ * embedding of workflows as subworkflows in other workflows
 
 ### Build Steps ###
 
 
 ### Build Tasks ###
-* depending on the module type
+ * depending on the module type
 
 ### Workflow Examples ###
 

@@ -10,12 +10,13 @@
 (ns baumeister.repository.mavenproxy
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file file-search namespace net]
+        [org.soulspace.clj.xml zip]
         [org.soulspace.clj.version version]
         [org.soulspace.clj.artifact artifact]
         [org.soulspace.clj.maven pom-model metadata-model]
         [baumeister.config registry]
         [baumeister.repository protocol]
-        [baumeister.utils log xml]))
+        [baumeister.utils log]))
 
 ;
 ; repository metadata handling

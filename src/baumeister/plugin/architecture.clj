@@ -77,7 +77,7 @@
     (ant-zip {:destFile (str (param :dist-dir) "/" module ".zip")
               :basedir (str (param :architecture-generated-modules-dir) "/" module)})))
 
-; TODO when handling plugins as dependencies, move to plugin module.clj
+; TODO when handling plugins as dependencies, move to plugin module.clj?
 (def config
   {:params [[:lib-generator-dir "${lib-dir}/generator"]
             [:lib-model-dir "${lib-dir}/model"]
@@ -92,9 +92,10 @@
             [:architecture-profiles ["argouml/default-uml14.xmi" "MDSDProfile.xmi"]]
             [:architecture-generated-models-dir "${architecture-generation-dir}/models"]
             [:architecture-generated-modules-dir "${architecture-generation-dir}/modules"]]
-   :functions [[:clean architecture-clean]
-               [:pre-init architecture-pre-init]
-               [:init architecture-init]
-               [:pre-generate-architecture architecture-pre-generate]
-               [:generate-architecture architecture-generate]
-               [:post-generate-architecture architecture-post-generate]]})
+   :steps [[:clean architecture-clean]
+           [:pre-init architecture-pre-init]
+           [:init architecture-init]
+           [:pre-generate-architecture architecture-pre-generate]
+           [:generate-architecture architecture-generate]
+           [:post-generate-architecture architecture-post-generate]]
+   :functions []})

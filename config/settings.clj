@@ -22,4 +22,11 @@
  
  ; uncomment and set to the Graphviz installation dir, if the 'dot' command is not on the PATH
  ;:graphviz_home ""
+ 
+ ; uncomment and configure to use a proxy for HTTP/HTTPS requests
+ ;http-proxy-bybasshosts "www.example.org"
+ ;http-proxy-host "proxy"
+ ;http-proxy-port 3128
+ ;https-proxy-host "proxy"
+ ;https-proxy-port 3128
  ]

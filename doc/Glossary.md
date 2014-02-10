@@ -14,20 +14,31 @@ conformity of the software to the specified requirements.
 Architecture
 ------------
 
+
 Artifact
 --------
-An artifact is a resource generated or used by the build process.
-Common properties of an Artifact in the context of the Baumeister build
-system are
-* project
-* module
-* version
-* name
-* type
+Depending on the context the term Artifact is used with different meanings.
+ * Artifact (General)
+   * Source or input Artifacts are intrinsic input for a transformation of
+     the build process. They are contained in the module that is build.
+   * Build or target Artifacts are the result of a transfomation
+     (e.g. generation, compilation) of the build process.
+ * Artifact (Dependency Management)
+   * An Artifact in the context of Depenency Management is a resource generated
+     or used by the build process and is stored or retrieved from an Artifact
+     Repository.
+   * The common qualifying properties (coordinates) of an Artifact in the
+     context of the Baumeister Dependency Management are
+     * project
+     * module
+     * version
+     * name
+     * type
 
 Artifact Repository
 -------------------
-
+An Artifact Repository is a service which stores artifacts.
+Artifacts can be stored in the repository and retrieved from it.
 
 Build
 -----
@@ -58,14 +69,13 @@ Dependency
 ----------
 A Dependency is a reference to an existing Artifact (from outside the
 current Module) that is needed for the build of the current Module. A
-Dependency can be scoped for the usage in the current Module. Common
-properties of a Dependency in the context of the Baumeister build
-system are
+Dependency can be scoped for the usage in the current Module.
 
-* target
-* transitivity
-* scope
-* exclusions
+The common properties of a Dependency in the context of the Baumeister build
+system are
+ * target
+ * scope
+ * transitivity/exclusions
 
 Dependency Management
 ---------------------
@@ -73,11 +83,13 @@ Dependency Management
 
 Developer Tests
 ---------------
-A test that is written and executed by developers during the development of a module.
+A test that is written and executed by developers during the development of
+a module.
 
 Generator
 ---------
-A Generator transforms some input artifacts to output artifacts.
+A Generator generates output artifact transforms some source/input artifacts
+to output artifacts.
 
 Generator Framework
 -------------------
@@ -106,6 +118,10 @@ Plugin
 A Plugin is a component of the build system that encapsulates some
 specific functionality for the build.
 
+Transformation
+--------------
+generation, compilation
+
 Transitive Dependency
 ---------------------
 A transitive dependency is a dependency of a dependent artifact, which
@@ -113,23 +129,10 @@ is required for the usage of the dependent artifact.
 
 Unit Tests
 ----------
-Unit Tests test a piece of software (e.g. a class or a function) in isolation.
+Unit Tests test a single aspect of a unit of software (e.g. a class or a
+function) in isolation.
 
 Workflow
 --------
-A sequence of steps that are executed in a defined order to produce a result.
-
-Source (Artifact)
-------
-Source artifacts are intrinsic input for a transformation of the build process.
-They are contained in the module that is build.
-
-Library/Dependency (Artifact)
------------------------------
-External input for a transformation of the build process.
-They are not part of the module to be build but referenced from external sources (repositories) during the build process.
-
-Target (Artifact)
------------------
-Output of a transfomation of the build process.
-
+A sequence of steps that are executed in a defined order to produce a
+result.

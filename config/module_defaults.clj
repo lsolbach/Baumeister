@@ -7,7 +7,7 @@
 ; If you want to override configuration parameters, use $(HOME)/.Baumeister/settings.clj or module.clj
 ;
 [
- :system-version "0.5.1"
+ :system-version "0.6.0"
  ;
  ; default project directory layout
  ;
@@ -30,8 +30,12 @@
  :generation-dir "${build-dir}/generated"
  :generation-source-dir "${generation-dir}/src"
  ;
+ ;
  ; sets of architectural module type classifications
  ;
+ ; TODO integrate :enterprise-application :web-application :console-application :enterprise-module
+ ; TODO rething layered components (e.g. :domain-component, :integration-component, :presentation-component)
+ ; TODO think about hexagonal architecture
  :module-types #{:library :framework :component :application :domain :integration :presentation
                   :webservice :webfrontend :consolefrontend :appfrontend
                   :architecture :analysis :data}
@@ -51,14 +55,15 @@
  ;
  :test-types #{:unittest :integrationtest :acceptancetest}
  ;
+ ;
  ; default compiler config
  ;
  :compiler-fork "true" ; TODO string because it is fed into ant, but true/false should work too
  :compiler-maxmem "256m"
  :compile-debug "true"
  :source-encoding "UTF-8"
- :source-version "1.6"
- :target-version "1.6"
+ :source-version "1.6" ; used for Java and AspectJ
+ :target-version "1.6" ; used for Java and AspectJ
  ;
  ; default repository config
  ;
@@ -68,6 +73,7 @@
  :repositories [[:file :release "${repository-root-dir}/release"]
                 [:file :development "${repository-root-dir}/development"]
                 [:file :thirdparty "${repository-root-dir}/thirdparty"]
+                [:http-proxy :thirdparty "http://repo.soulspace.org/baumeister" "${repository-root-dir}/soulspace.org"]
                 [:maven-proxy :thirdparty "http://repo1.maven.org/maven2" "${repository-root-dir}/repo1.maven.org"]
                 [:maven-proxy :thirdparty "http://clojars.org/repo" "${repository-root-dir}/clojars.org"]
                 [:maven-proxy :thirdparty "https://maven.java.net/content/repositories/releases/" "${repository-root-dir}/java.net"]
@@ -109,15 +115,16 @@
                              :model {:model :model}
                              :generator {:generator :generator}
                              } ; TODO dependency/meta/exclude?
+ ;
  ; :dependency-actions defines the actions for the initialization of the dependencies in the build process
  :dependency-actions {:copy #{:runtime :dev :aspect :aspectin :model} ; copy the artifact to the specified lib target dir
                       :unzip #{:generator} ; unzip the artifact to ${lib-dir}
-                      :follow #{:root} ; just follow
+                      :follow #{:root} ; don't use the dependency, just follow for transitive dependencies
                       }
  ;
  ; maven dependency management compatibility
  ;
- ; maven-scopes-to-targets contains the mapping of maven scopes to Baumeister targets
+ ; maven-scope-to-target contains the mapping of maven scopes to Baumeister targets
  :maven-scope-to-target {"runtime" :runtime
                          "compile" :runtime
                          "test" :dev

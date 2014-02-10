@@ -16,9 +16,14 @@
         [baumeister.dependency dependency dependency-transitivity dependency-initialization dependency-dot]
         [baumeister.utils ant-utils checks log message]))
 
+(defn resolve-build-dependency-tree []
+  (if-not (nil? (param :dependencies-tree))
+    (param :dependencies-tree)
+    (build-dependency-tree)))
+
 (defn generate-dot
   "Generate dot graphs for the configured dependency tree."
-  [dependency-tree]
+  []
   (let [writer (java.io.StringWriter.)]
     (if-not (nil? (param :dependencies-tree))
       (dependencies-dot writer (param :dependencies-tree))
@@ -27,6 +32,7 @@
     ;(execute "dot" (str "-Tpng -o" (param "${deps-report-dir}/dependencies.png") " " (param "${deps-report-dir}/dependencies.dot")))
     ))
 
+; TODO move to distribution plugin
 ;
 ; distribution of the built artifacts
 ;
@@ -77,10 +83,10 @@
   "Post dependencies step."
   []
   (when (param :deps-report)
-    (if-not (nil? (param :dependencies-tree))
-      (generate-dot (param :dependencies-tree))
-      (generate-dot (build-dependency-tree)))))
+    (generate-dot)))
 
+
+; TODO move to distribution plugin
 (defn dependencies-distribute
   "Distribute generated artifacts to the dev repository."
   []
@@ -100,8 +106,9 @@
   {:params [[:deps-report true]
             [:deps-transitive false]
             [:deps-report-dir "${build-report-dir}/dependencies"]]
-   :functions [[:clean dependencies-clean]
-               [:init dependencies-init]
-               [:dependencies dependencies-dependencies]
-               [:post-dependencies dependencies-post-dependencies]
-               [:distribute dependencies-distribute]]})
+   :steps [[:clean dependencies-clean]
+           [:init dependencies-init]
+           [:dependencies dependencies-dependencies]
+           [:post-dependencies dependencies-post-dependencies]
+           [:distribute dependencies-distribute]]
+   :functions []})
