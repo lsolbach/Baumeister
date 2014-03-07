@@ -13,12 +13,9 @@
         [baumeister.config config]
         [baumeister.config registry]
         [baumeister workflow-engine]
-        [baumeister.utils log message])
+        [baumeister.utils log])
   (:import [java.util Date])
   (:gen-class))
-
-; TODO check to (set! *read-eval* false) to prevent security issues reading files
-(set! *read-eval* false)
 
 (def option-defs
   "Baumeister option definitions."
@@ -34,13 +31,15 @@
         [arguments options] (parse-args args option-defs)]
     (if (and (nil? (:help options)) (nil? (:version options)))
       (do ; Workflow
+        (message :info "Started at" (Date. start))
         (init-config options)
-        (message :normal "Started at" (Date. start))
         (apply start-workflow arguments)
-        (let [end (System/currentTimeMillis)] (message :important (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds."))))
+        (let [end (System/currentTimeMillis)]
+          (message :info (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds."))))
       (do ; Version/Help options
+        (init-defaults) ; initialize defaults only
         (if-not (nil? (:version options))
-          (println (param :system-version)))
+          (println "Baumeister version: " (param :system-version)))
         (when-not (nil? (:help options))
           (println "Baumeister usage:")
           (println (doc-options option-defs))))))

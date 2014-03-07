@@ -31,16 +31,12 @@
   (create-dir (as-file (param :build-acceptancetest-classes-dir)))
   (create-dir (as-file (param :build-report-dir)))
   (create-dir (as-file (param :lib-dir)))
-  (create-dir (as-file (param :lib-runtime-dir)))
-  (create-dir (as-file (param :lib-dev-dir)))
   (create-dir (as-file (param :dist-dir))))
 
 (def config
   {:params [[:module-dir "."]
             [:build-dir "${module-dir}/build"]
             [:lib-dir "${build-dir}/lib"]
-            [:lib-runtime-dir "${lib-dir}/runtime"]
-            [:lib-dev-dir "${lib-dir}/dev"]
             [:dist-dir "${build-dir}/dist"]
             [:build-classes-dir "${build-dir}/classes"]
             [:build-unittest-classes-dir "${build-dir}/unittest/classes"]

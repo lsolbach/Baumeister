@@ -24,7 +24,7 @@
     (doseq [url cl-urls]
       (if-not (contains? urls url)
         (add-url url)))))
-  
+
 (defn register-classpath-entries
   [cl-entries]
   (let [urls (into #{} (get-classpath-urls))]
@@ -34,7 +34,7 @@
           (add-url url))))))
   
 ; TODO returns a parameter as-is without property replacement. still needed? if so, choose new fn name
-(defn get-var 
+(defn get-var
   "Get parameter without replacements."
   ([name] (get (get-param-registry) name ""))
   ([name default] (get (get-param-registry) name default)))

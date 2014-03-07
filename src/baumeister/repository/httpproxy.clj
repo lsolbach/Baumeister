@@ -28,7 +28,7 @@
       (artifact-file repo artifact)
       nil))
   (get-dependencies-for-artifact [repo artifact]
-    (let [module-file (get-artifact repo (module-artifact repo artifact))]
+    (let [module-file (find-artifact repo (module-artifact repo artifact))]
       (if (exists? module-file)
         (:dependencies (apply hash-map (load-string (slurp module-file))))
         nil)))

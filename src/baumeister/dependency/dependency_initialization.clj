@@ -16,6 +16,7 @@
         [baumeister.dependency dependency dependency-initialization]
         [baumeister.utils ant-utils log]))
 
+; TODO instead of copying to target lib dirs, build target specific classpaths with references into the repositories?!?
 (defn init-dependency [dependency]
   "Initialize the dependency for the build by copying or unzipping the referenced artifact."
   (let [artifact (:artifact dependency)
@@ -23,18 +24,12 @@
         tgt (param (keyword (str "lib-" (name (:target dependency)) "-dir")))]
     (log :debug "Copying" src " -> " tgt)
     (if (nil? src)
-      (do
-        (log :error (artifact-name artifact) "not found in repositories!"))
-      ; (throw (RuntimeException. (str "Error: " (artifact-name artifact) " not found!")))
+      (log :error (artifact-name artifact) "not found in repositories!")
       (cond
-        (copy? dependency)
-        (copy src (as-file (str tgt "/" (artifact-name artifact))))
-        (unzip? dependency)
-        (ant-unzip {:src src :dest tgt :overwrite "true"})
-        (follow? dependency)
-        nil ; do nothing in initalization 
-        :default
-        (log :error "Could not handle dependency " dependency)))))
+        (copy? dependency) (copy src (as-file (str tgt "/" (artifact-name artifact))))
+        (unzip? dependency) (ant-unzip {:src src :dest tgt :overwrite "true"})
+        (follow? dependency) nil ; do nothing in initalization 
+        :default (log :error "Could not handle dependency " dependency)))))
 
 (defn init-dependencies [dependencies]
   "Initialize the sequence of dependencies."
@@ -48,16 +43,19 @@
     (filter #(contains? target-set (:target %)) dependencies)))
 
 (defn file-for-artifact
-  ([dependency]
-    (query-artifact (param :deps-repositories) (:artifact dependency))))
+  ([artifact]
+    (log :trace "file for artifact" (print-artifact artifact))
+    (query-artifact artifact)))
 
 (defn url-for-file
   [file]
+  (log  :trace "url for file" (str file))
   (as-url (canonical-file file)))
 
 (defn artifact-urls
   ([dependencies]
-    (map url-for-file (map file-for-artifact dependencies))))
+    (log :trace dependencies)
+    (map url-for-file (filter (complement nil?) (map file-for-artifact (map :artifact dependencies))))))
 
 (defn runtime-dependencies [dependencies]
   (dependencies-by-targets [:runtime :aspect] dependencies))
@@ -84,5 +82,4 @@
   [dependency]
   ; what do we need? Dependency data (target), Artifact data (all?), file in local repository
   ; TODO implement with query artifact
-
   )

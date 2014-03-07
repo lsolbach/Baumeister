@@ -61,12 +61,11 @@
 
 (defmulti add-nested
   "Adds a nested element to ant task.
-Elements are added in a different way for each type.
-Task name keywords are connected into a hierarchy which can
-be used to extensively add other types to this method.
-The default behaviour is to add an element as a fileset."
+   Elements are added in a different way for each type.
+   Task name keywords are connected into a hierarchy which can
+   be used to extensively add other types to this method.
+   The default behaviour is to add an element as a fileset."
   (fn [name task nested]
-    (println "dispatch" (keyword "baumeister.utils.ant-utils" name) (class nested))
     [(keyword "baumeister.utils.ant-utils" name) (class nested)])
   :hierarchy ant-task-hierarchy)
 
@@ -104,9 +103,8 @@ The default behaviour is to add an element as a fileset."
   (.addFileset task fileset))
 
 (defmethod add-nested :default [_ task nested] 
-  (println "ADD-NESTED default" task nested)
-  (.addFileset task nested)
-  )
+  (log :debug "Ant add-nested: using default" task nested)
+  (.addFileset task nested))
 
 (defn instantiate-task [project name props & nested]
   (let [task (.createTask project name)]

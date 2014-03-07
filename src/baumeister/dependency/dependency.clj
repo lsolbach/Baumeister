@@ -25,16 +25,25 @@
   {:aspectj :runtime
    :aspectin :dev})
 
+(defn set-dependency-target [dependency target]
+  "Sets the target of the dependency."
+  (assoc dependency :target target))
+
+(defn print-artifact
+  ([artifact]
+    (str "[" 
+         (clojure.string/join ", " [(:project artifact) (:module artifact) (artifact-version artifact) (:name artifact) (:type artifact)])
+         "]")))
+
 (defn print-dependency
   ([dependency]
     (print-dependency dependency (:target dependency)))
   ([dependency target]
     (let [artifact (:artifact dependency)]
       (str "[" 
-           (clojure.string/join  ", " 
-                                 [(:project artifact) (:module artifact) (artifact-version artifact) (:name artifact) (:type artifact) target])
+           (clojure.string/join ", " [(print-artifact artifact) target (:optional dependency)])
            "]"))))
-  
+
 ;
 ; Dependency Protocol 
 ;
@@ -52,8 +61,10 @@
            (or (= (:target this) (:target other))
                (= (compatible-targets (:target this)) (:target other)))))))
 
-; TODO add required signatures
+; TODO map POM scopes and types here?! (are currently mapped while building the dependency tree)
+; add signatures as required
 (defn create-dependency
+  "Creates a new dependency to the given artifact."
   ([artifact]
     (DependencyImpl. (new-artifact artifact) :runtime false nil []))
   ([artifact target]
@@ -65,13 +76,5 @@
   ([artifact target optional scope exclusions]
     (DependencyImpl. (new-artifact artifact) target optional scope (map new-artifact-pattern exclusions))))
 
-; map POM scopes and types here
-; TODO multimethod on type (POMDependency/BMDependency) 
 (defn new-dependency [& args]
   (apply create-dependency args))
-;
-; Dependency pattern
-; TODO needed?
-;
-(defprotocol DependencyPattern
-  (matches-dependency? [pattern dependency]))

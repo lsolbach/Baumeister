@@ -82,9 +82,9 @@
   (metadata-folder [repo artifact]
     (str (ns-to-path (:project artifact) "/" (:module artifact))))
   (get-metadata [repo artifact]
+    (log :trace "getting repository metadata for " (:project artifact) "/" (:module artifact))
     (let [md-artifact (new-artifact [(:project artifact) (:module artifact) "" "maven-metadata" "xml"])
           md-file (get-artifact repo md-artifact)]
-      (println "MD-File" md-file)
       (if (exists? md-file)
         (parse-metadata (xml-zipper md-file)))))
 
@@ -96,7 +96,6 @@
   (artifact-dir [repo artifact]
     (as-file (str  path "/" (artifact-folder repo artifact))))
   (artifact-file [repo artifact]
-    ;(log :trace (str (absolute-path (artifact-dir repo artifact)) "/" (artifact-mvn-name repo artifact)))
     (as-file (str (absolute-path (artifact-dir repo artifact)) "/" (maven-name repo artifact))))
   
   HttpArtifactRepository

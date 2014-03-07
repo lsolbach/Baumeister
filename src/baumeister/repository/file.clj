@@ -27,13 +27,14 @@
   (get-artifact [repo artifact]
     (artifact-file repo artifact))
   (get-dependencies-for-artifact [repo artifact]
-    (let [module-file (get-artifact repo (module-artifact repo artifact))]
+    (let [module-file (find-artifact repo (module-artifact repo artifact))]
       (if (exists? module-file)
         (:dependencies (apply hash-map (load-string (slurp module-file))))
         nil)))
   (put-artifact [repo artifact artifact-src]
+    (log :trace "putting" artifact-src "to" (artifact-file repo artifact))
     (create-dir (artifact-dir repo artifact))
-    (copy artifact-src (artifact-file repo artifact))) ; TODO copy artifact
+    (copy artifact-src (artifact-file repo artifact)))
 
   VersionedArtifactRepository
   (versions [repo artifact]

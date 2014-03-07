@@ -12,10 +12,9 @@
         [org.soulspace.clj string namespace]
         [org.soulspace.clj.application classpath]
         [org.soulspace.clj.artifact artifact]
-        [baumeister.config parameter-registry function-registry]))
-
-(def plugin-ns-prefix "baumeister.plugin")
-(def plugin-path "baumeister/plugin")
+        [baumeister.utils log]
+        [baumeister.config parameter-registry function-registry]
+        [baumeister.dependency dependency dependency-transitivity dependency-initialization]))
 
 ;
 ; plugin registry
@@ -26,15 +25,32 @@
 (defn register-plugin [plugin] (def plugin-registry (conj plugin-registry plugin)))
 (defn has-plugin? [plugin] ((set plugin-registry) plugin))
 
-(defn plugin-ns-string [name]
+; TODO the plugin namespace is too static, use project and module params from plugin dependencies
+(def plugin-ns-prefix "baumeister.plugin")
+(def plugin-path "baumeister/plugin")
+
+(defn plugin-ns-string
+  "Returns the qualified namespace for the plugin."
+  [name]
   (str plugin-ns-prefix "." name))
 
 (defn plugin-name
+  "Extracts the plugin namespace name from the plugin artifact"
   [c]
   (lower-case (second (first (re-seq #"(.*)Plugin" (:module (new-artifact (first c))))))))
 
+(defn set-plugin-dependency-classpath
+  "Adds the plugin dependencies to the baumeister classpath."
+  []
+  ; get the urls for the plugin dependencies, but drop plugin root, because it's the current module
+  (let [plugin-deps (plugin-dependencies)
+        plugin-dependency-urls (artifact-urls (filter #(not= (:target %) :plugin-root) plugin-deps))]
+    (log :trace "plugin dependencies" plugin-deps)
+    (generate-plugin-dot)
+    (add-urls plugin-dependency-urls)))
+
 ; TODO load plugin as dependency? yes, when the build framework is stable
-; load-file or require? (use compiled classes in Baumeister.jar and load-file user plugins from file system?)
+; load-file or require? (use compiled classes in Baumeister.jar or Baumeister plugins and load-file user plugins from file system?)
 (defn init-plugin
   [name]
   (let [plugin (symbol  name)]
@@ -51,12 +67,13 @@
 (defn init-plugins
   "initialize the given seq of plugins"
   [plugins]
+
   ; get plugin dependencies for all plugins and set the classpath accordingly
-  ; get plugin name and plugin artifact
+  (set-plugin-dependency-classpath)
+  ; initialize all plugins
   (doseq [plugin plugins]
-    ; check if plugin is a plugin dependency
     (cond
-      ; if not just load the plugin as clj file
+      ; if it's an internal plugin just use the string as name
       (string? plugin) (init-plugin (plugin-ns-string plugin))
-      ; if so, resolve transitive dependencies
+      ; if it's a plugin dependency build the name from the dependency data
       (coll? plugin) (init-plugin (plugin-ns-string (plugin-name plugin))))))

@@ -94,3 +94,13 @@ e.g.
 Build listeners/notifiers
 -------------------------
 Listener/Notifier plugin to register functions on build phases?
+
+
+Command line parameters
+-----------------------
+How to start workflows, workflow phases and plugin functions?
+
+* <workflow-name>-workflow
+* <phase-name>
+* <plugin-name>:<function-name>
+

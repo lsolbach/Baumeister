@@ -9,7 +9,7 @@
 ;
 (ns baumeister.workflow-engine
   (:use [org.soulspace.clj string]
-        [baumeister.utils checks log message]
+        [baumeister.utils checks log]
         [baumeister.config registry function-registry]))
 
 (defn workflow? [id] (ends-with "-workflow" (name id)))
@@ -20,14 +20,15 @@
 
 (defn do-step [step functions]
   (when (seq functions)
-    (message :important (str "doing step " (str (name step) "... " functions)))
+    (message :trace (str "doing step " (str (name step) "... ")))
+    (log :trace (str "step " (str (name step) functions)))
     (doseq [function functions]
       (function))))
 
 (defn do-phase
   "process the registered functions for the phase"
   [phase]
-  (message :important  (str "doing phase " (name phase) "... "))
+  (message :info  (str "doing phase " (name phase) "... "))
   (do-step (pre-key phase) (get-registered-step-functions (pre-key phase)))
   (do-step phase (get-registered-step-functions phase))
   (do-step (post-key phase) (reverse (get-registered-step-functions (post-key phase)))))
@@ -36,7 +37,9 @@
   "process the given workflow (or phase)"
   [workflow]
   (if (workflow? workflow)
-    (do (message :important  "doing workflow" workflow)
+    (do
+      (message :important  "doing workflow" workflow)
+      (log :debug "workflow phases" ((param :workflow-definitions) workflow))
       (doseq [phase ((param :workflow-definitions) workflow)]
         (if (workflow? phase)
           (do-workflow phase)

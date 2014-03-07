@@ -44,10 +44,6 @@ Steps
 The registered functions get executed in order of the plugin declaration for pre-phase step and phase step.
 For post-phase steps the registered functions get executed in reverse order of the plugin declaration.
 
-Plugins
--------
-A plugin registers parameters and functions for steps of workflow phases.
-
 
 Artifacts
 ---------
@@ -59,3 +55,54 @@ Dependency Management
 
 Dependency
 artifact target optional exclusions
+
+Plugins
+-------
+A plugin registers parameters and functions for steps of workflow phases.
+
+Existing Plugins
+
+Dependency Resolution
+* org.soulspace.baumeister/DependencyPlugin
+
+Compiler
+ * org.soulspace.baumeister/AspectJPlugin
+ * org.soulspace.baumeister/ClojurePlugin
+ * org.soulspace.baumeister/GroovyPlugin
+ * org.soulspace.baumeister/JavaPlugin
+ * org.soulspace.baumeister/ScalaPlugin
+
+API Documentation
+ * org.soulspace.baumeister/AspectJDocPlugin
+ * org.soulspace.baumeister/JavaDocPlugin
+
+Packaging
+ * org.soulspace.baumeister/PackagePlugin
+
+Testing
+ * org.soulspace.baumeister/ClojureTestPlugin
+ * org.soulspace.baumeister/JUnitPlugin
+
+Code Coverage
+ * org.soulspace.baumeister/CoberturaPlugin
+
+Static Code Analysis
+ * org.soulspace.baumeister/CheckstylePlugin
+ * org.soulspace.baumeister/FindbugsPlugin
+ * org.soulspace.baumeister/JDependPlugin
+ * org.soulspace.baumeister/PMDPlugin
+
+Generators
+ * org.soulspace.baumeister/MDDGeneratorPlugin
+ * org.soulspace.baumeister/PlantUMLPlugin
+
+Integration
+ * org.soulspace.baumeister/EclipsePlugin
+ * org.soulspace.baumeister/MavenPlugin
+ * org.soulspace.baumeister/MarkdownPlugin
+
+Work in progress, not yet functional
+ * org.soulspace.baumeister/ClojureDocPlugin
+ * org.soulspace.baumeister/DistributionPlugin
+ * org.soulspace.baumeister/JythonPlugin
+ * org.soulspace.baumeister/SitePlugin

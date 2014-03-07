@@ -11,24 +11,17 @@
     (:use [clojure.java.io :only [as-file copy]]
         [org.soulspace.clj file file-search function]
         [org.soulspace.clj.artifact artifact]
-        [baumeister.config registry plugin-registry]
+        [baumeister.config registry]
         [baumeister.repository protocol repositories]
         [baumeister.dependency dependency dependency-transitivity dependency-initialization dependency-dot]
-        [baumeister.utils ant-utils checks log message]))
+        [baumeister.utils ant-utils checks log]))
 
-(defn resolve-build-dependency-tree []
-  (if-not (nil? (param :dependencies-tree))
-    (param :dependencies-tree)
-    (build-dependency-tree)))
-
-(defn generate-dot
+(defn dependency-generate-dot
   "Generate dot graphs for the configured dependency tree."
   []
-  (let [writer (java.io.StringWriter.)]
-    (if-not (nil? (param :dependencies-tree))
-      (dependencies-dot writer (param :dependencies-tree))
-      (dependencies-dot writer (build-dependency-tree))) ; e.g. when :dependeny-transitive is false 
-    (spit (param "${deps-report-dir}/dependencies.dot") (str writer))
+  (with-open [wrt (java.io.StringWriter.)]
+    (dependencies-dot wrt (resolve-module-dependency-tree))
+    (spit (param "${deps-report-dir}/dependencies.dot") (str wrt))
     ;(execute "dot" (str "-Tpng -o" (param "${deps-report-dir}/dependencies.png") " " (param "${deps-report-dir}/dependencies.dot")))
     ))
 
@@ -72,10 +65,8 @@
 (defn dependencies-dependencies []
   (message :fine "resolving dependencies...")
   ; initialize dependencies
-  (let [dependencies (get-dependencies)]
+  (let [dependencies (module-dependencies)]
     (register-val :dependencies-processed dependencies)
-    (doseq [url (artifact-urls dependencies)] ; Add to classpath some time
-      (println url)) 
     (doseq [dependency dependencies]
       (init-dependency dependency))))
 
@@ -83,7 +74,7 @@
   "Post dependencies step."
   []
   (when (param :deps-report)
-    (generate-dot)))
+    (dependency-generate-dot)))
 
 
 ; TODO move to distribution plugin

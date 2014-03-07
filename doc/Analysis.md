@@ -7,11 +7,15 @@ Value proposition
    * repeatable, fast, error free, efficient
    * enablement
      * continuous integration, documentation, statistics and quality metrics
-   * standardization
    * structural clearness
      * explicit specification/documentation of dependencies and workflows
+   * standardization
  * automation of non software build transformation processes (e.g. PDF generation from xml source)!?
 
+(is the sole focus on software builds or can other types of structured transformation workflows be handled too?
+ (e.g. document generation processes from input content source to pdf or static site generation from input content source))
+
+ 
 Software build tasks to automate
 --------------------------------
  * development builds
@@ -21,25 +25,34 @@ Software build tasks to automate
  * documentation generation
  * project distribution
  * deployments
-(is the sole focus on software builds or can other types of structured transformation workflows be handled too?
- (e.g. document generation processes from input content source to pdf or static site generation from input content source))
+
 
 Dimensions
 ----------
+ Build System Dimensions
  * process
-   * workflows, phases, steps
- * functional orthogonality
-   * plugins
+   * workflows, phases, steps, standalone functions
+ * functionality (functional orthogonality)
+   * plugins (compile, test, doc, analyse, ...)
+ 
+ Module
  * source types (code, models, data)
  * source (code/test) types (unit, integration, acceptance, performance, load, stress, ...)
- * implementation languages (java, aspectj, clojure, ...)
- * architectural module types (library, framework, component (integration layer, domain layer, application layer, presentation layer), web service, frontend (web, console, app))
- * dependencies (inclusion/exclusion)
- * usage types (model, runtime, dev, aspect, aspectin)
- * artifacts, versions
+ * implementation languages
+ 	(java, aspectj, clojure, ...)
+ * architectural module types
+ 	(library, framework, component (integration layer, domain layer, application layer, presentation layer), web service, frontend (web, console, app))
+ * packaging (jar, war, ear, ...)
+
  * environments (servers, ...)?
  * (development, test, staging, production, ...)
  * build classification (development snapshots, releases)
+
+Dependency Dimensions
+ * dependencies (inclusion/exclusion)
+ * usage types (model, runtime, dev, aspect, aspectin)
+ * artifacts, versions
+ 
 
 Possible build environments
 ---------------------------
@@ -48,6 +61,7 @@ Possible build environments
    * IDE (eclipse, netbeans, idea, ...)
  * build server (continuous integration server) (jenkins, cruise control)
  * test/production servers?
+
 
 Demarcation of Build Tools and Build Servers
 --------------------------------------------

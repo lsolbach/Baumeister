@@ -10,7 +10,7 @@
 (ns baumeister.utils.files
   (:use [clojure.java.io :exclude [delete-file]]
         [clojure.string :only [split join]]
-        [org.soulspace.clj file file-search function]
+        [org.soulspace.clj file file-search]
         [baumeister.utils checks]
         [baumeister.config registry]))
 
