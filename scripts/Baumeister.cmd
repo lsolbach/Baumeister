@@ -20,5 +20,5 @@ goto setupArgs
 if "%BAUMEISTER_ARGS%"=="" (
   java -server -cp %BAUMEISTER_CLASSPATH% baumeister.process
 ) else (
-  java -server -cp %BAUMEISTER_CLASSPATH% process %BAUMEISTER_ARGS%
+  java -server -cp %BAUMEISTER_CLASSPATH% baumeister.process %BAUMEISTER_ARGS%
 )

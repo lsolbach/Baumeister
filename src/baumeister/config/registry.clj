@@ -69,4 +69,3 @@
 ; Baumeister lib path
 (defn lib-path [coll]
   (str/join ":" (map #(str (get-lib-dir) "/" % ".jar") coll)))
-

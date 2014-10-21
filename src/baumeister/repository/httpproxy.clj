@@ -38,6 +38,8 @@
 
   VersionedArtifactRepository
   (versions [repo artifact]
+    ; TODO use versions from the remote repository instead of the local repository
+    ; TDOO extract metadata from the HTML of the version dir (see maven repo get-metadata)
     (map new-version (map file-name (files (module-dir repo artifact)))))
   (latest? [repo artifact]
     (same-version? (:version artifact) (latest-version repo artifact)))
@@ -83,5 +85,4 @@
     (exists? (artifact-file repo artifact)))
   (remote-hit? [repo artifact]
     (log :trace "checking remote hit for" (artifact-file-url repo artifact))
-    (test-url (artifact-file-url repo artifact)))
-  )
+    (test-url (artifact-file-url repo artifact))))
