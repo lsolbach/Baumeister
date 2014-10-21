@@ -22,7 +22,8 @@
   [["--define" "-D" "Define a parameter (eg. -Dname=value)" :multi true]
    ["--file" "-f" "Use the specified module file (eg. -Dfilename)" :default "module.clj"]
    ["--help" "-h" "Display help (format -h)"]
-   ["--version" "-v" "Display version"]])
+   ["--version" "-v" "Display version"]
+   ])
 
 (defn -main
   "Baumeister main method."

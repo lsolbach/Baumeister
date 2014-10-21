@@ -7,7 +7,7 @@
 ; If you want to override configuration parameters, use $(HOME)/.Baumeister/settings.clj or module.clj
 ;
 [
- :system-version "0.6.0"
+ :system-version "0.6.2"
  ;
  ; default log and message levels
  ;
@@ -82,6 +82,13 @@
  ;
  :test-types #{:unittest :integrationtest :acceptancetest}
  ;
+ ; Set of language classifications
+ ; TODO use language classifications?! Could be used for default plugins, packaging, etc
+ :language-types #{:none :java :aspectj :clojure :clojurescript :groovy :jython :jruby :scala}
+ ;
+ ; Set of packaging types
+ ; TODO use packaging-type in PackagePlugin, implement mappings of language-types/module-types to packaging-types
+ :packaging-types #{:jar :war :ear :zip}
  ;
  ; default compiler config
  ;
