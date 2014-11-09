@@ -1,6 +1,7 @@
-BaumeisterAspectJPlugin
-=======================
-AspectJ compiler plugin.
+Baumeister AspectJPlugin
+========================
+
+AspectJ compiler plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,12 +17,12 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterAspectJPlugin] (https://github.com/lsolbach/BaumeisterAspectJPlugin)
+[https://github.com/lsolbach/AspectJPlugin] (https://github.com/lsolbach/AspectJPlugin)
 
 History
 -------
 
 Version 0.5.1 (--.--.2013)
 --------------------------
-* Extracted from Baumeister
+* Extracted from Baumeister code
 

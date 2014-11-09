@@ -9,17 +9,17 @@
 ;
 (ns baumeister.plugin.aspectj
   (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj file function]
-        [baumeister.config registry plugin-registry]
+        [org.soulspace.clj file]
+        [baumeister.config registry]
         [baumeister.utils ant-utils files checks log]))
 
 ; TODO fix classpath, add aspectjtools.jar to plugin dependencies
-(ant-taskdef {:classpath (param "${aspectj-home}/lib/aspectjtools.jar")
-              :resource "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"})
+(ant-taskdef {:name "iajc"
+              :classname "org.aspectj.tools.ant.taskdefs.AjcTask"})
 (define-ant-task ant-iajc iajc)
 
 (defn aspectj-task [dest-dir src-path class-path in-path aspect-path]
-  (log :debug "iajc" dest-dir src-path class-path in-path aspect-path)
+  (log :debug "aspectj-task" dest-dir src-path class-path in-path aspect-path)
   (ant-iajc {:fork (param :aspectj-compiler-fork)
              :sourceRoots src-path
              :destdir dest-dir
@@ -31,22 +31,25 @@
              :sourceRootCopyFilter "**/CVS/*,**/*.java,**/*.aj,**/.clj"
              :inpathDirCopyFilter "**/CVS/*,**/*.java,**/*.aj,**/.clj,**/*.class,**/*.jar,**/*.txt"}))
 
-(defn aspectj-clean []
-  "aspectj clean"
+(defn aspectj-clean
+  "AspectJ clean"
+  []
   (delete-dir (as-file (param :lib-runtime-dir)))
   (delete-dir (as-file (param :lib-aspectin-dir)))
   (delete-dir (as-file (param :lib-aspect-dir)))
   (delete-dir (as-file (param :lib-dev-dir))))
 
-(defn aspectj-init []
-  "aspectj init"
+(defn aspectj-init
+  "AspectJ init"
+  []
   (create-dir (as-file (param :lib-runtime-dir)))
   (create-dir (as-file (param :lib-aspectin-dir)))
   (create-dir (as-file (param :lib-aspect-dir)))
   (create-dir (as-file (param :lib-dev-dir))))
 
-(defn aspectj-pre-compile []
-  "aspectj pre-compile"
+(defn aspectj-pre-compile
+  "AspectJ pre-compile"
+  []
   ; handle a missing generation dirs (TODO check if necessary?!)
   (when (plugin? "mdsd")
     (create-dir (as-file (str (param :mdsd-generation-dir) "/unittest")))
@@ -54,10 +57,9 @@
     (create-dir (as-file (str (param :mdsd-generation-dir) "/acceptancetest")))))
 
 (defn aspectj-compile []
-  "aspectj compile"
+  "AspectJ compile"
   ; compute classpaths before compilation after dependencies have been initialized
   (when-let [source-dirs (seq (source-dirs :aspectj-source-dir))]
-    (println source-dirs)
     (aspectj-task (param :build-classes-dir) (dir-path source-dirs)
                   (jar-path (param :aspectj-lib-path))
                   (jar-path (param :aspectj-aspectin-path)) (jar-path (param :aspectj-aspect-path))))
@@ -106,7 +108,8 @@
             [:aspectj-unittest-aspectin-path "${lib-aspectin-dir}"]
             [:aspectj-integrationtest-aspectin-path "${lib-aspectin-dir}"]
             [:aspectj-acceptancetest-aspectin-path "${lib-aspectin-dir}"]]
-   :functions [[:clean aspectj-clean]
-               [:init aspectj-init]
-               [:pre-compile aspectj-pre-compile]
-               [:compile aspectj-compile]]})
+   :steps [[:clean aspectj-clean]
+           [:init aspectj-init]
+           [:pre-compile aspectj-pre-compile]
+           [:compile aspectj-compile]]
+   :functions []})
