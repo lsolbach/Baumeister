@@ -1,6 +1,7 @@
 BaumeisterClojurePlugin
 =======================
 
+Clojure compiler plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterClojurePlugin] (https://github.com/lsolbach/BaumeisterClojurePlugin)
+[https://github.com/lsolbach/ClojurePlugin] (https://github.com/lsolbach/ClojurePlugin)
 
 History
 -------

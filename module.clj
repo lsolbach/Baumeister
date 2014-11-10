@@ -1,11 +1,12 @@
 [
- :module "BaumeisterClojurePlugin"
+ :module "ClojurePlugin"
  :project "org.soulspace.baumeister"
- :type :library
- :version "0.5.1"
+ :type :baumeister-plugin
+ :version "0.6.0"
  :description "Compiler plugin for Clojure"
- :plugins ["global" "dependencies" "clojure" "clojuretest" "package"]
- :dependencies [["org.clojure/clojure, 1.5.1"]
-                ["org.soulspace.baumeister/Baumeister, 0.6.0"]
-                ]
+ :plugins ["global"
+           ["org.soulspace.baumeister/DependencyPlugin"]
+           ["org.soulspace.baumeister/ClojurePlugin"]
+           ["org.soulspace.baumeister/PackagePlugin"]]
+ :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.1" :dev]]
  ]

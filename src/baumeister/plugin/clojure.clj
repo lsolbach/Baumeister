@@ -12,7 +12,7 @@
         [clojure.string :only [join]]
         [org.soulspace.clj file file-search namespace string ]
         [baumeister.utils ant-utils files checks log]
-        [baumeister.config registry plugin-registry]))
+        [baumeister.config registry]))
 
 (defn remove-clj-ext [clj-path]
   (if (ends-with ".clj" clj-path)
@@ -79,6 +79,7 @@
             [:clojure-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:clojure-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:clojure-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]]
-   :functions [[:clean clojure-clean]
-               [:init clojure-init]
-               [:compile clojure-compile]]})
+   :steps [[:clean clojure-clean]
+           [:init clojure-init]
+           [:compile clojure-compile]]
+   :functions []})
