@@ -14,7 +14,7 @@
         [clojure.java.io :only [as-file as-url writer]]
         [org.soulspace.clj file file-search namespace]
         [org.soulspace.clj.application classpath]
-        [baumeister.utils files log message]
+        [baumeister.utils files log]
         [baumeister.config registry]))
 
 (defn find-namespaces
@@ -24,25 +24,26 @@
     (if (is-dir? dir)
       (->>
         (all-files-by-extension "clj" dir)
-        (map #(second (re-matches (re-pattern (str (absolute-path dir) "/(.*)\\.clj")) (absolute-path %))))
+        (map #(second (re-matches (re-pattern (str (absolute-path dir) "/(.*)\\.clj")) (absolute-path %)))) ; collect namespace paths
         (map file-to-ns)
         (map symbol)))))
 
 (defn perform-test
   "Perform tests for the namespace and write the result to the report directory."
   [report-dir nspace]
-  (message :normal "Testing namspace" nspace)
+  (message :info "Testing namspace" nspace)
   (require nspace)
   (with-open [writer (writer (str report-dir "/TEST-" (name nspace) ".xml"))]
     (binding [*test-out* writer]
       (with-junit-output
-          (message :normal (run-tests nspace))))))
+          (message :info (run-tests nspace))))))
 
 (defn perform-tests
   "Perform tests."
   [source-key class-dir report-dir]
   (when-let [source-dirs (source-dirs source-key)]
-    (register-classpath-entries [class-dir])
+    (log :trace "registering classpath entries for testing from" (param :build-classes-dir) "and" class-dir)
+    (register-classpath-entries [(param :build-classes-dir) class-dir])
     (let [namespaces (flatten (map find-namespaces source-dirs))]
       (doseq [nspace namespaces]
         (perform-test report-dir nspace)))))
@@ -80,9 +81,9 @@
   {:params [[:report-unittest-dir "${build-report-dir}/unittest"]
             [:report-integrationtest-dir "${build-report-dir}/integrationtest"]
             [:report-acceptancetest-dir "${build-report-dir}/acceptancetest"]]
-   :functions [[:clean clojuretest-clean]
-               [:init clojuretest-init]
-               [:unittest clojuretest-unittest]
-               [:integrationtest clojuretest-integrationtest]
-               [:acceptancetest clojuretest-acceptancetest]
-               ]})
+   :steps [[:clean clojuretest-clean]
+           [:init clojuretest-init]
+           [:unittest clojuretest-unittest]
+           [:integrationtest clojuretest-integrationtest]
+           [:acceptancetest clojuretest-acceptancetest]]
+   :functions []})

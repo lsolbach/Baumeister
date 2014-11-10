@@ -1,6 +1,7 @@
-BaumeisterClojureTestPlugin
-===========================
+Baumeister ClojureTestPlugin
+============================
 
+ClojureTest plugin for unit testing clojure code with the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterClojureTestPlugin] (https://github.com/lsolbach/BaumeisterClojureTestPlugin)
+[https://github.com/lsolbach/ClojureTestPlugin] (https://github.com/lsolbach/ClojureTestPlugin)
 
 History
 -------
