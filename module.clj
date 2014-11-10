@@ -1,12 +1,13 @@
 [
- :module "BaumeisterCoberturaPlugin"
+ :module "CoberturaPlugin"
  :project "org.soulspace.baumeister"
- :type :library
- :version "0.5.1"
- :description ""
- :plugins ["global" "dependencies" "clojure" "clojuretest" "package"]
- :dependencies [["org.clojure/clojure, 1.5.1"]
-                ["org.soulspace.clj/CljXmlLibrary, 0.3.0"]
-                ["org.soulspace.baumeister/Baumeister, 0.6.0"]
-                ["net.sourceforge.cobertura/cobertura, 1.9.4.1"]] ; cobertura plugin
+ :type :baumeister-plugin
+ :version "0.6.1"
+ :description "Cobertura plugin for the measure code coverage with the Baumeister build system."
+ :plugins ["global"
+           ["org.soulspace.baumeister/DependencyPlugin"]
+           ["org.soulspace.baumeister/ClojurePlugin"]
+           ["org.soulspace.baumeister/PackagePlugin"]]
+ :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.1" :dev]
+                ["net.sourceforge.cobertura/cobertura, 1.9.4.1" :runtime ["org.apache.ant"]]]
  ]

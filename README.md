@@ -1,6 +1,7 @@
-BaumeisterCoberturaPlugin
-=========================
+Baumeister CoberturaPlugin
+==========================
 
+Cobertura plugin for the measure code coverage with the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterCoberturaPlugin] (https://github.com/lsolbach/BaumeisterCoberturaPlugin)
+[https://github.com/lsolbach/CoberturaPlugin] (https://github.com/lsolbach/CoberturaPlugin)
 
 History
 -------

@@ -15,8 +15,13 @@
         [baumeister.config registry]))
 
 ; TODO remove lib path
-(def cobertura-classpath (lib-path ["cobertura" "asm" "asm-tree" "jakarta-oro"])) ; log4j?
-(ant-taskdef {:classpath cobertura-classpath :resource "tasks.properties"})
+;(def cobertura-classpath (lib-path ["cobertura" "asm" "asm-tree" "jakarta-oro"])) ; log4j?
+(ant-taskdef {:resource "net.sourceforge.cobertura.ant.antlib.xml"})
+;(ant-taskdef {:name cobertura-instrument :classname "net.sourceforge.cobertura.ant.InstrumentTask"})
+;(ant-taskdef {:name cobertura-report :classname "net.sourceforge.cobertura.ant.ReportTask"})
+;(ant-taskdef {:name cobertura-merge :classname "net.sourceforge.cobertura.ant.MergeTask"})
+;(ant-taskdef {:name cobertura-check :classname "net.sourceforge.cobertura.ant.CheckTask"})
+
 (define-ant-task ant-cobertura-instrument cobertura-instrument)
 (define-ant-task ant-cobertura-report cobertura-report)
 (define-ant-type ant-ignore net.sourceforge.cobertura.ant.Ignore)
@@ -26,7 +31,7 @@
   [_ task regex] (doto (.createIgnore task) (.setRegex regex)))
 
 (defn instrument-task []
-  (ant-cobertura-instrument {:todir (param :build.instrumented.dir)
+  (ant-cobertura-instrument {:toDir (param :build.instrumented.dir)
                              :datafile (param :cobertura-data-file)}
                             (ant-ignore {:regex "org.apache.log4j.*"})
                             (ant-ignore {:regex "antlr.*"})
@@ -37,9 +42,6 @@
   (ant-cobertura-report {:destdir (param :cobertura-report-dir) :format "xml"
                          :datafile (param :cobertura-data-file)}
                         (ant-fileset {:dir (param :module-dir) :includes (join " " (split (source-path) #":"))})))
-
-(def cobertura-run-classpath
-  (class-path [(param :build-cobertura-dir) cobertura-classpath])) ; add unittest classpath
 
 (defn cobertura-junit [class-path test-dir report-dir]
   (log :debug class-path test-dir)
@@ -54,6 +56,9 @@
              (ant-formatter {:type "brief" :useFile "false"})
              {:todir report-dir
               :fileset (ant-fileset {:dir test-dir :includes "**/*Test.class" :excludes "junit/**/*Test.class,**/Abstract*.class"})}))
+
+(def cobertura-run-classpath
+  (class-path [(param :build-cobertura-dir)]))
 
 (defn cobertura-clean []
   (log :info "cleaning cobertura...")
@@ -71,7 +76,7 @@
 
 (defn cobertura-coverage []
   (log :info "coverage cobertura...")
-  (cobertura-junit cobertura-run-classpath (param :build-unittest-classes-dir) (param :unittest-unittest-report-dir)))
+  (cobertura-junit cobertura-run-classpath (param :build-unittest-classes-dir) (param :unittest-unittest-report-dir)))  ; add unittest classpath
 
 (defn cobertura-post-coverage []
   (log :info "post-coverage cobertura...")
@@ -81,8 +86,9 @@
   {:params [[:build-cobertura-dir "${build-dir}/cobertura"]
             [:cobertura-data-file "${build-cobertura-dir}/cobertura.ser"]
             [:cobertura-report-dir "${build-report-dir}/cobertura"]]
-   :functions [[:clean cobertura-clean]
-               [:init cobertura-init]
-               [:pre-coverage cobertura-pre-coverage]
-               [:coverage cobertura-coverage]
-               [:post-coverage cobertura-post-coverage]]})
+   :steps [[:clean cobertura-clean]
+           [:init cobertura-init]
+           [:pre-coverage cobertura-pre-coverage]
+           [:coverage cobertura-coverage]
+           [:post-coverage cobertura-post-coverage]]
+   :functions []})
