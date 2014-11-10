@@ -24,7 +24,7 @@
   XMLMarshalling
   (to-xml [this]
     )
-  (from-xml [this]
+  (from-xml [this xml]
     ))
 
 (defrecord AttributeImpl
@@ -32,5 +32,5 @@
   XMLMarshalling
   (to-xml [this]
     )
-  (from-xml [this]
+  (from-xml [this xml]
     ))

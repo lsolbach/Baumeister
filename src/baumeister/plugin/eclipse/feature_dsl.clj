@@ -8,7 +8,8 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.eclipse.feature-dsl
-  (:use [org.soulspace.clj.xml dsl-builder]))
+  (:use [org.soulspace.clj.xml dsl-builder])
+  (:refer-clojure :exclude [import]))
 
 (deftags ["copyright" "data" "description" "discovery" "feature" "import"
           "includes" "install-handler" "license" "plugin" "requires" "update" "url"])

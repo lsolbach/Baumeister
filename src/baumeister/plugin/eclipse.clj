@@ -16,9 +16,9 @@
   (:use [clojure.java.io :only [as-file]]
         [org.soulspace.clj file]
         [org.soulspace.clj.artifact artifact]
-        [org.soulspace.clj.xml dsl-builder xml-util]
-        [baumeister.config registry plugin-registry]
-        [baumeister.utils checks log message xml]))
+        [org.soulspace.clj.xml dsl-builder util zip]
+        [baumeister.config registry]
+        [baumeister.utils checks log]))
 
 (def eclipse-source-dirs
   [(param "${source-dir}")
@@ -64,7 +64,14 @@
       (cp/attribute {:name "org.eclipse.jst.component.dependency" :value "WEB-INF/lib"}))))
 
 (defn lib-entry [dep]
-  (cp/classpathentry {:kind "lib" :path (lib-target-path dep)}))
+  (cond 
+    (= (:target dep) :aspect) (cp/classpathentry
+                                {:kind "lib" :path (lib-target-path dep)}
+                                (cp/attributes
+                                  {}
+                                  (cp/attribute {:name "org.eclipse.ajdt.aspectpath"
+                                                 :value "org.eclipse.ajdt.aspectpath"})))
+    :default (cp/classpathentry {:kind "lib" :path (lib-target-path dep)})))
 
 (defn build-lib-entries []
   (let [deps (filter code-dependency? (param :dependencies-processed))]
@@ -92,5 +99,6 @@
 
 (def config 
   {:params [[:build-eclipse-dir "${build-dir}/eclipse"]]
-   :functions [[:init eclipse-init]
-               [:post-dependencies eclipse-post-dependencies]]})
+   :steps [[:init eclipse-init]
+           [:post-dependencies eclipse-post-dependencies]]
+   :functions []})

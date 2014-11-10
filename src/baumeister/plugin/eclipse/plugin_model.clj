@@ -15,7 +15,7 @@
   XMLMarshalling
   (to-xml [this]
     )
-  (from-xml [this]
+  (from-xml [this xml]
     ))
 
 (defrecord Fragment 
@@ -23,7 +23,7 @@
   XMLMarshalling
   (to-xml [this]
     )
-  (from-xml [this]
+  (from-xml [this xml]
     ))
 
 (defrecord ExtensionPoint
@@ -31,7 +31,7 @@
   XMLMarshalling
     (to-xml [this]
     )
-  (from-xml [this]
+  (from-xml [this xml]
     ))
 
 (defrecord Extension
@@ -39,5 +39,5 @@
   XMLMarshalling
     (to-xml [this]
     )
-  (from-xml [this]
+  (from-xml [this xml]
     ))

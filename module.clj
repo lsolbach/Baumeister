@@ -1,12 +1,12 @@
 [
- :module "BaumeisterEclipsePlugin"
+ :module "EclipsePlugin"
  :project "org.soulspace.baumeister"
- :type :component
- :version "0.5.1"
- :description ""
- :plugins ["global" "dependencies" "clojure" "clojuretest" "package"]
- :dependencies [["org.clojure/clojure, 1.5.1"]
-                ["org.soulspace.clj/CljXmlLibrary, 0.3.0"]
-                ["org.soulspace.baumeister/Baumeister, 0.6.0"]
-                ["net.sourceforge.pmd/pmd, 5.0.0"]]
+ :type :baumeister-plugin
+ :version "0.6.0"
+ :description "Plugin for the integration of the Baumeister builds with Eclipse."
+ :plugins ["global"
+           ["org.soulspace.baumeister/DependencyPlugin"]
+           ["org.soulspace.baumeister/ClojurePlugin"]
+           ["org.soulspace.baumeister/PackagePlugin"]]
+ :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.0" :dev]]
  ]

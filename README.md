@@ -1,6 +1,7 @@
-BaumeisterPMDPlugin
-===================
+Baumeister EclipsePlugin
+========================
 
+Plugin for the integration of the Baumeister builds with Eclipse.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterPMDPlugin] (https://github.com/lsolbach/BaumeisterPMDPlugin)
+[https://github.com/lsolbach/EclipsePlugin] (https://github.com/lsolbach/EclipsePlugin)
 
 History
 -------

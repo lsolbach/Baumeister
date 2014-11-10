@@ -8,7 +8,8 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.eclipse.project-dsl
-  (:use [org.soulspace.clj.xml dsl-builder]))
+  (:use [org.soulspace.clj.xml dsl-builder])
+  (:refer-clojure :exclude [comment key name type]))
 
 (deftags ["arguments" "buildCommand" "buildSpec" "comment" "dictionary" "key"
           "link" "linkedResources" "location" "name" "nature" "natures"
