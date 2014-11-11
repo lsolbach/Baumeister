@@ -1,6 +1,7 @@
-BaumeisterSitePlugin
-====================
-The BaumeisterSitePlugin is a plugin for the Baumeister build system that creates web sites with information about modules and projects.
+Baumeister MarkdownPlugin
+=========================
+
+Markdown plugin to generate markdown files with the Baumeister build system.
 
 Author/Project Lead
 -------------------
