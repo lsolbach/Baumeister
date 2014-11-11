@@ -12,12 +12,12 @@
   (:use [clojure.data.xml]
         [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file]
+        [org.soulspace.clj.xml zip]
         [baumeister.config registry]
-        [baumeister.utils log message xml]
+        [baumeister.utils log]
         [baumeister.dependency dependency]))
 
 ; maven support plugin
-
 (def target-to-maven-scope
   "map all targets to maven scopes"
   {:runtime "compile"
@@ -25,8 +25,7 @@
    :aspect "compile"
    :aspectin "provided"
    :model "compile"
-   :generator "compile"
-   })
+   :generator "compile"})
 
 ;
 ; pom creation
@@ -60,7 +59,7 @@
         {}
         (build-pom-dependencies dependencies)))))
 
-(defn maven-clean 
+(defn maven-clean
   []
   (delete-file (as-file (param :maven-build-dir))))
 
@@ -71,9 +70,9 @@
 (defn maven-post-dependencies []
   (spit (param "${maven-build-dir}/pom.xml") (indent-str (build-pom))))
 
-
 (def config
   {:params [[:maven-build-dir "${build-dir}/maven"]]
-   :functions [[:clean maven-clean]
-               [:init maven-init]
-               [:post-dependencies maven-post-dependencies]]})
+   :steps [[:clean maven-clean]
+           [:init maven-init]
+           [:post-dependencies maven-post-dependencies]]
+   :functions []})

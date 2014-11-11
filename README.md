@@ -1,6 +1,7 @@
-BaumeisterMavenPlugin
-=====================
+Baumeister MavenPlugin
+======================
 
+Maven plugin for the integration of the Maven build system and the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterMavenPlugin] (https://github.com/lsolbach/BaumeisterMavenPlugin)
+[https://github.com/lsolbach/MavenPlugin] (https://github.com/lsolbach/MavenPlugin)
 
 History
 -------
