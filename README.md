@@ -1,6 +1,7 @@
-BaumeisterJUnitPlugin
-=====================
+Baumeister JUnitPlugin
+======================
 
+JUnit plugin for unit testing with the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterJUnitPlugin] (https://github.com/lsolbach/BaumeisterJUnitPlugin)
+[https://github.com/lsolbach/JUnitPlugin] (https://github.com/lsolbach/JUnitPlugin)
 
 History
 -------

@@ -11,8 +11,8 @@
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
-        [baumeister.utils ant-utils files checks log message]
-        [baumeister.config registry plugin-registry]))
+        [baumeister.utils ant-utils files checks log]
+        [baumeister.config registry]))
 
 (defn junit [class-path test-dir report-dir]
   (log :debug "calling junit with parameters" class-path test-dir report-dir)
@@ -79,8 +79,9 @@
             [:junit-fork-mode "once"]
             [:junit-max-memory "512m"]
             [:junit-print-summary "false"]]
-   :functions [[:clean junit-clean]
-               [:init junit-init]
-               [:unittest junit-unittest]
-               [:integrationtest junit-integrationtest]
-               [:acceptancetest junit-acceptancetest]]})
+   :steps [[:clean junit-clean]
+           [:init junit-init]
+           [:unittest junit-unittest]
+           [:integrationtest junit-integrationtest]
+           [:acceptancetest junit-acceptancetest]]
+   :functions []})
