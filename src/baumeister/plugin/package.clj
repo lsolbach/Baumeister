@@ -11,7 +11,7 @@
   (:use [clojure.java.io :only [as-file]]
         [org.soulspace.clj file function]
         [baumeister.utils ant-utils checks log]
-        [baumeister.config registry plugin-registry]))
+        [baumeister.config registry]))
 
 ; TODO get file names from artifacts
 
@@ -19,7 +19,8 @@
 (defn get-environments []
   (files (param :package-environment-dir)))
 
-(defn manifest [dir additional-entries]
+(defn manifest
+  [dir additional-entries]
   (ant-manifest {:file (str dir "/MANIFEST.MF")}
                 (merge {"Implementation-Version" (param :version)} additional-entries)))
 
@@ -32,7 +33,8 @@
     (ant-jar {:destFile (str (param "${dist-dir}/${module}") jar-type "." archive-type) :manifest (str dir "/MANIFEST.MF")}
              (ant-fileset {:dir dir}))))
 
-(defn package-war [dir environment additional-manifest-entries]
+(defn package-war
+  [dir environment additional-manifest-entries]
   (log :debug  "packaging war" dir " " environment)
   ; TODO generate environment specific configuration
   ; generate environment specific war file
@@ -41,33 +43,40 @@
          (filter (complement nil?)
                  [(ant-zipfileset {:dir (param :dist-dir) :includes (param "${dist-dir}/${module}.jar") :prefix "WEB-INF/lib"})
                   (ant-zipfileset {:dir (param :lib-runtime-dir) :prefix "WEB-INF/lib"})
-                  (when (has-plugin? "aspectj")
+                  (when (plugin? "aspectj")
                     (ant-zipfileset {:dir (param :lib-aspect-dir) :prefix "WEB-INF/lib"}))
                   (ant-fileset {:dir "${source-webcontent-dir}"})
-                  (when (has-plugin? "mdsd")
+                  (when (plugin? "mdsd")
                     (ant-fileset {:dir (param "${mdsd-generation-dir}/WebContent")}))
                   ])))
 
-(defn package-ear [dir environment additional-manifest-entries]
+(defn package-ear
+  [dir environment additional-manifest-entries]
   (log :debug "packaging ear" dir " " environment))
 
-(defn package-sourcedoc []
+(defn package-sourcedoc
+  []
   (ant-jar {:destFile (str (param "${dist-dir}/${module}") "Javadoc.jar")}
             (ant-fileset {:dir (param :build-sourcedoc-dir)})))
 
-(defn package-sources []
+(defn package-sources
+  []
   (ant-jar {:destFile (str (param "${dist-dir}/${module}") "Source.jar")}
             (ant-fileset {:dir (param :source-dir)})
             ;(ant-fileset {:dir (param :generated-source-dir)}) ; etc
             ))
 
-(defn package-data []
+(defn package-data
+  "Package data."
+  []
   (log :debug  "packaging data" (param :dist-dir))
   (ant-zip {:destFile (param "${dist-dir}/${module}.zip")}
            (ant-fileset {:dir (param :module-dir) :excludes (param "${dist-dir} ${build-dir} ${lib-dir}")})))
 
 ; TODO handle source jars
-(defn package-jars []
+(defn package-jars
+  "Package JARs."
+  []
   (package-jar (param :build-classes-dir) "" "jar" {})
   (when (unittest?)
     (package-jar (param :build-unittest-classes-dir) "Unittest" "jar" {}))
@@ -83,7 +92,7 @@
   )
 
 (defn package-package
-  "package package"
+  "Package package."
   []
   (when (code-module?)
     (package-jars))
@@ -105,4 +114,5 @@
 (def config
   {:params [[:package-environment-dir "${module-dir}/env"]
             [:package-additional-jars []]]
-   :functions [[:package package-package]]})
+   :steps [[:package package-package]]
+   :functions []})

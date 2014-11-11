@@ -1,6 +1,7 @@
-BaumeisterPackagePlugin
-==========================
+Baumeister PackagePlugin
+========================
 
+Package plugin to package the built artifacts with the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterPackagePlugin] (https://github.com/lsolbach/BaumeisterPackagePlugin)
+[https://github.com/lsolbach/PackagePlugin] (https://github.com/lsolbach/PackagePlugin)
 
 History
 -------
@@ -24,4 +25,3 @@ History
 Version 0.5.1 (--.--.2013)
 --------------------------
 * Extracted from Baumeister
-
