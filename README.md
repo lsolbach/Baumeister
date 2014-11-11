@@ -1,6 +1,7 @@
-BaumeisterClojureTestPlugin
-===========================
+Baumeister GenesisPlugin
+========================
 
+Genesis plugin for the creation of new modules with the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterClojureTestPlugin] (https://github.com/lsolbach/BaumeisterClojureTestPlugin)
+[https://github.com/lsolbach/GenesisPlugin] (https://github.com/lsolbach/GenesisPlugin)
 
 History
 -------

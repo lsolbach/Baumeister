@@ -15,4 +15,5 @@
 
 (def config
   {:params []
-   :functions [[:init genesis-init]]})
+   :steps [[:init genesis-init]]
+   :functions []})
