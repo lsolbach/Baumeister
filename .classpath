@@ -2,5 +2,41 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="build/lib/dev/ant-junit.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/ant.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/Baumeister.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljApplicationLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljArtifactLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljJavaLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljMavenLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljVersionLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljXmlLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/clojure.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/data.xml.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/data.zip.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/dynapath.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/junit.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/tools.reader.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/annotations.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/asm-commons.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/asm-tree.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/asm.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/bcel.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/commons-lang.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/dom4j.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/findbugs-ant.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/findbugs.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/icu4j.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/jaxen.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/jdom.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/jFormatString.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/jsr305.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/xalan.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/xml-apis.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/xmlParserAPIs.jar"/>
+	<classpathentry kind="lib" path="build/lib/runtime/xom.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

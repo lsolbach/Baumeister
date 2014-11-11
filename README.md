@@ -1,6 +1,7 @@
-BaumeisterFindbugsPlugin
-========================
+Baumeister FindbugsPlugin
+=========================
 
+FindBugs statical code analysis plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterFindbugsPlugin] (https://github.com/lsolbach/BaumeisterFindbugsPlugin)
+[https://github.com/lsolbach/FindbugsPlugin] (https://github.com/lsolbach/FindbugsPlugin)
 
 History
 -------

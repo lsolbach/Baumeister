@@ -12,8 +12,8 @@
         [clojure.java.io :exclude [delete-file]] 
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
-        [baumeister.utils ant-utils files checks log]
-        [baumeister.config registry plugin-registry]))
+        [baumeister.utils ant-utils files log]
+        [baumeister.config registry]))
 
 ; TODO remove classpath, use plugin classpath
 (def findbugs-classpath (lib-path ["findbugs" "findbugs-ant" "asm" "asm-tree" "bcel" "dom4j" "jaxen"])) ;  ...
@@ -56,8 +56,9 @@
             [:findbugs-output-file "${findbugs-report-dir}/findbugs.xml"]
             [:findbugs-output "xml:withMessages"]
             [:findbugs-report-level "medium"]
-            [:findbugs-max-memory "256m"]
+            [:findbugs-max-memory "512m"]
             [:findbugs-jvm-args "-Xmx${findbugs-max-memory}"]]
-   :functions [[:clean findbugs-clean]
-               [:init findbugs-init]
-               [:analyse findbugs-analyse]]})
+   :steps [[:clean findbugs-clean]
+           [:init findbugs-init]
+           [:analyse findbugs-analyse]]
+   :functions []})
