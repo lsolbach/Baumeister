@@ -1,12 +1,13 @@
 [
- :module "BaumeisterMDDPlugin"
+ :module "MDDGeneratorPlugin"
  :project "org.soulspace.baumeister"
- :type :library
- :version "0.5.1"
- :description "MDD Generator plugin."
- :plugins ["global" "dependencies" "clojure" "clojuretest" "package"]
- :dependencies [["org.clojure/clojure, 1.5.1"]
-                ["org.soulspace.baumeister/Baumeister, 0.6.0"]
-                ["org.soulspace.clj/CljModelGenerator, 0.4.0"]
-                ]
+ :type :baumeister-plugin
+ :version "0.6.1"
+ :description "MDDGenerator plugin for generating artifacts from UML/XMI models with the Baumeister build system."
+ :plugins ["global"
+           ["org.soulspace.baumeister/DependencyPlugin"]
+           ["org.soulspace.baumeister/ClojurePlugin"]
+           ["org.soulspace.baumeister/PackagePlugin"]]
+ :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.0" :dev]
+                ["org.soulspace.clj/CljModelGenerator, 0.5.1"]]
  ]
