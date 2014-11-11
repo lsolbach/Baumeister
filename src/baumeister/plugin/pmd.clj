@@ -15,6 +15,7 @@
         [baumeister.utils ant-utils files checks log]
         [baumeister.config registry]))
 
+; TODO fix classpath (pmd is in the dynamic plugin classpath)
 (def pmd-jar (str (get-lib-dir) "/pmd.jar"))
 
 (ant-taskdef {:name "pmd" :classname "net.sourceforge.pmd.ant.PMDTask" :classpath pmd-jar})
@@ -75,6 +76,7 @@
             [:cpd-report-dir "${build-report-dir}/cpd"]
             [:cpd-source-pattern "**/*.java,**/*.aj,**/*.clj"]
             [:cpd-minimum-token-count 50]]
-   :functions [[:clean pmd-clean]
-               [:init pmd-init]
-               [:analyse pmd-analyse]]})
+   :steps [[:clean pmd-clean]
+           [:init pmd-init]
+           [:analyse pmd-analyse]]
+   :functions []})

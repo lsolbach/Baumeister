@@ -1,6 +1,7 @@
-BaumeisterPMDPlugin
-===================
+Baumeister PMDPlugin
+====================
 
+PMD statical code analysis plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterPMDPlugin] (https://github.com/lsolbach/BaumeisterPMDPlugin)
+[https://github.com/lsolbach/PMDPlugin] (https://github.com/lsolbach/PMDPlugin)
 
 History
 -------
