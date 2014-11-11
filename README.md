@@ -1,6 +1,7 @@
-BaumeisterSitePlugin
-====================
-The BaumeisterSitePlugin is a plugin for the Baumeister build system that creates web sites with information about modules and projects.
+Baumeister SitePlugin
+=====================
+
+Site generation plugin for the generation of module and project web sites with the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterSitePlugin] (https://github.com/lsolbach/BaumeisterSitePlugin)
+[https://github.com/lsolbach/SitePlugin] (https://github.com/lsolbach/SitePlugin)
 
 History
 -------

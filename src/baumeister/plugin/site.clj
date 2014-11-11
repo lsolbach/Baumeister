@@ -1,5 +1,5 @@
 (ns baumeister.plugin.site
-  (:use [org.soulspace.clj.xhtml.xhtml-dsl]))
+  )
 
 (defn site-structure
   "Returns the structure of the site to generate."
@@ -10,7 +10,14 @@
 (defn generate-page
   "Generate a page of the site."
   [structure page]
-  
+  )
+
+(defn site-clean
+  []
+  )
+
+(defn site-init
+  []
   )
 
 (defn site-generate
@@ -19,11 +26,9 @@
   ; get the site structure
   (let [site-struct (site-structure)]
     ; iterate over site structure and generate pages
-    
     ))
 
-
 (def config 
-  {:params [:site-css ""
-            ]
+  {:params [:site-css ""]
+   :steps []
    :functions []})

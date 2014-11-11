@@ -1,11 +1,15 @@
 [
- :module "BaumeisterSitePlugin"
+ :module "SitePlugin"
  :project "org.soulspace.baumeister"
- :type :library
- :version "0.5.1"
- :description "The BaumeisterSitePlugin is a plugin for the Baumeister build system that creates web sites with information about modules and projects."
- :plugins ["global" "dependencies" "clojure" "clojuretest" "package"]
- :dependencies [["org.clojure/clojure, 1.5.1"]
-                ["org.soulspace.baumeister/Baumeister, 0.6.0"]
+ :type :baumeister-plugin
+ :version "0.6.0"
+ :description "Site generation plugin for the generation of module and project web sites with the Baumeister build system."
+ :plugins ["global"
+           ["org.soulspace.baumeister/DependencyPlugin"]
+           ["org.soulspace.baumeister/ClojurePlugin"]
+           ["org.soulspace.baumeister/PackagePlugin"]]
+ :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.0" :dev]
                 ["org.soulspace.clj/CljXHtmlLibrary, 0.2.0"]]
+ :log-level :trace
+ :message-level :finer
  ]
