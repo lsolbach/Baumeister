@@ -1,6 +1,7 @@
-BaumeisterJavaPlugin
-====================
+Baumeister JavaPlugin
+=====================
 
+Java compiler plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,12 +17,4 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterJavaPlugin] (https://github.com/lsolbach/BaumeisterJavaPlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
-
+[https://github.com/lsolbach/JavaPlugin] (https://github.com/lsolbach/JavaPlugin)
