@@ -1,0 +1,79 @@
+digraph Dependencies {
+    outputmode=nodefirst;
+    node [shape=plaintext fontsize=9];
+"org.soulspace.baumeister/ClojureReplPlugin/0.6.0/ClojureReplPlugin.jar" [label="org.soulspace.baumeister\nClojureReplPlugin.jar[0.6.0]"];
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" [label="org.soulspace.baumeister\nBaumeister.jar[0.6.0]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.soulspace.clj/CljApplicationLibrary/0.5.1/CljApplicationLibrary.jar" [label="org.soulspace.clj\nCljApplicationLibrary.jar[0.5.1]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.soulspace.clj/CljLibrary/0.6.0/CljLibrary.jar" [label="org.soulspace.clj\nCljLibrary.jar[0.6.0]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.tcrawley/dynapath/0.2.3/dynapath.jar" [label="org.tcrawley\ndynapath.jar[0.2.3]"];
+"org.soulspace.clj/CljArtifactLibrary/0.4.3/CljArtifactLibrary.jar" [label="org.soulspace.clj\nCljArtifactLibrary.jar[0.4.3]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.soulspace.clj/CljVersionLibrary/0.4.3/CljVersionLibrary.jar" [label="org.soulspace.clj\nCljVersionLibrary.jar[0.4.3]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.soulspace.clj/CljLibrary/0.6.0/CljLibrary.jar" [label="org.soulspace.clj\nCljLibrary.jar[0.6.0]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.soulspace.clj/CljMavenLibrary/0.5.1/CljMavenLibrary.jar" [label="org.soulspace.clj\nCljMavenLibrary.jar[0.5.1]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.clojure/data.zip/0.1.1/data.zip.jar" [label="org.clojure\ndata.zip.jar[0.1.1]"];
+"org.soulspace.clj/CljXmlLibrary/0.4.0/CljXmlLibrary.jar" [label="org.soulspace.clj\nCljXmlLibrary.jar[0.4.0]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.clojure/data.xml/0.0.7/data.xml.jar" [label="org.clojure\ndata.xml.jar[0.0.7]"];
+"org.soulspace.clj/CljApplicationLibrary/0.5.1/CljApplicationLibrary.jar" [label="org.soulspace.clj\nCljApplicationLibrary.jar[0.5.1]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.soulspace.clj/CljLibrary/0.6.0/CljLibrary.jar" [label="org.soulspace.clj\nCljLibrary.jar[0.6.0]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.tcrawley/dynapath/0.2.3/dynapath.jar" [label="org.tcrawley\ndynapath.jar[0.2.3]"];
+"org.soulspace.clj/CljJavaLibrary/0.4.0/CljJavaLibrary.jar" [label="org.soulspace.clj\nCljJavaLibrary.jar[0.4.0]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.soulspace.clj/CljLibrary/0.6.0/CljLibrary.jar" [label="org.soulspace.clj\nCljLibrary.jar[0.6.0]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.soulspace.clj/CljXmlLibrary/0.4.0/CljXmlLibrary.jar" [label="org.soulspace.clj\nCljXmlLibrary.jar[0.4.0]"];
+"org.clojure/clojure/1.5.1/clojure.jar" [label="org.clojure\nclojure.jar[1.5.1]"];
+"org.clojure/data.xml/0.0.7/data.xml.jar" [label="org.clojure\ndata.xml.jar[0.0.7]"];
+"org.clojure/data.zip/0.1.1/data.zip.jar" [label="org.clojure\ndata.zip.jar[0.1.1]"];
+"org.clojure/tools.reader/0.8.3/tools.reader.jar" [label="org.clojure\ntools.reader.jar[0.8.3]"];
+"org.apache.ant/ant/1.8.3/ant.jar" [label="org.apache.ant\nant.jar[1.8.3]"];
+"org.apache.ant/ant-launcher/1.8.3/ant-launcher.jar" [label="org.apache.ant\nant-launcher.jar[1.8.3]"];
+"org.apache.ant/ant-junit/1.8.3/ant-junit.jar" [label="org.apache.ant\nant-junit.jar[1.8.3]"];
+"org.clojure/tools.nrepl/0.2.3/tools.nrepl.jar" [label="org.clojure\ntools.nrepl.jar[0.2.3]"];
+"org.soulspace.baumeister/ClojureReplPlugin/0.6.0/ClojureReplPlugin.jar" -> "org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" [style=dashed color=black];
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.clojure/clojure/1.5.1/clojure.jar" [color=black];
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.soulspace.clj/CljApplicationLibrary/0.5.1/CljApplicationLibrary.jar" [color=black];
+"org.soulspace.clj/CljApplicationLibrary/0.5.1/CljApplicationLibrary.jar" -> "org.clojure/clojure/1.5.1/clojure.jar" [color=black];
+"org.soulspace.clj/CljApplicationLibrary/0.5.1/CljApplicationLibrary.jar" -> "org.soulspace.clj/CljLibrary/0.6.0/CljLibrary.jar" [color=black];
+"org.soulspace.clj/CljLibrary/0.6.0/CljLibrary.jar" -> "org.clojure/clojure/1.5.1/clojure.jar" [color=black];
+"org.soulspace.clj/CljApplicationLibrary/0.5.1/CljApplicationLibrary.jar" -> "org.tcrawley/dynapath/0.2.3/dynapath.jar" [color=black];
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.soulspace.clj/CljArtifactLibrary/0.4.3/CljArtifactLibrary.jar" [color=black];
+"org.soulspace.clj/CljArtifactLibrary/0.4.3/CljArtifactLibrary.jar" -> "org.clojure/clojure/1.5.1/clojure.jar" [color=black];
+"org.soulspace.clj/CljArtifactLibrary/0.4.3/CljArtifactLibrary.jar" -> "org.soulspace.clj/CljVersionLibrary/0.4.3/CljVersionLibrary.jar" [color=black];
+"org.soulspace.clj/CljVersionLibrary/0.4.3/CljVersionLibrary.jar" -> "org.clojure/clojure/1.5.1/clojure.jar" [color=black];
+"org.soulspace.clj/CljArtifactLibrary/0.4.3/CljArtifactLibrary.jar" -> "org.soulspace.clj/CljLibrary/0.6.0/CljLibrary.jar" [color=black];
+
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.soulspace.clj/CljMavenLibrary/0.5.1/CljMavenLibrary.jar" [color=black];
+"org.soulspace.clj/CljMavenLibrary/0.5.1/CljMavenLibrary.jar" -> "org.clojure/clojure/1.5.1/clojure.jar" [color=black];
+"org.soulspace.clj/CljMavenLibrary/0.5.1/CljMavenLibrary.jar" -> "org.clojure/data.zip/0.1.1/data.zip.jar" [color=black];
+"org.soulspace.clj/CljMavenLibrary/0.5.1/CljMavenLibrary.jar" -> "org.soulspace.clj/CljXmlLibrary/0.4.0/CljXmlLibrary.jar" [color=black];
+"org.soulspace.clj/CljXmlLibrary/0.4.0/CljXmlLibrary.jar" -> "org.clojure/clojure/1.5.1/clojure.jar" [color=black];
+"org.soulspace.clj/CljXmlLibrary/0.4.0/CljXmlLibrary.jar" -> "org.clojure/data.xml/0.0.7/data.xml.jar" [color=black];
+"org.soulspace.clj/CljMavenLibrary/0.5.1/CljMavenLibrary.jar" -> "org.soulspace.clj/CljApplicationLibrary/0.5.1/CljApplicationLibrary.jar" [color=black];
+
+
+
+
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.soulspace.clj/CljJavaLibrary/0.4.0/CljJavaLibrary.jar" [color=black];
+"org.soulspace.clj/CljJavaLibrary/0.4.0/CljJavaLibrary.jar" -> "org.clojure/clojure/1.5.1/clojure.jar" [color=black];
+"org.soulspace.clj/CljJavaLibrary/0.4.0/CljJavaLibrary.jar" -> "org.soulspace.clj/CljLibrary/0.6.0/CljLibrary.jar" [color=black];
+
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.soulspace.clj/CljXmlLibrary/0.4.0/CljXmlLibrary.jar" [color=black];
+
+
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.clojure/data.zip/0.1.1/data.zip.jar" [color=black];
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.clojure/tools.reader/0.8.3/tools.reader.jar" [color=black];
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.apache.ant/ant/1.8.3/ant.jar" [color=black];
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.apache.ant/ant-launcher/1.8.3/ant-launcher.jar" [color=black];
+"org.soulspace.baumeister/Baumeister/0.6.0/Baumeister.jar" -> "org.apache.ant/ant-junit/1.8.3/ant-junit.jar" [color=black];
+"org.soulspace.baumeister/ClojureReplPlugin/0.6.0/ClojureReplPlugin.jar" -> "org.clojure/tools.nrepl/0.2.3/tools.nrepl.jar" [color=black];
+}

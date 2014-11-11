@@ -1,0 +1,2 @@
+cmdhistory=["(ant-taskdef {\:name \\"plantuml\\" \:classname \\"net.sourceforge.plantuml.ant.PlantUmlTask\\" \:classpath plantuml-classpath})" "(bean (ant-taskdef {\:name \\"plantuml\\" \:classname \\"net.sourceforge.plantuml.ant.PlantUmlTask\\" \:classpath plantuml-classpath}))"]
+eclipse.preferences.version=1

@@ -1,0 +1,2 @@
+cmdhistory=["(find-dot-files)" "(map outfile (find-dot-files))" "(map (partial outfile \\"png\\") (find-dot-files))" "(graphviz-post-generate)" "(path (dir .))" "(path \\".\\")" "(absolute-path \\".\\")" "(graphviz-post-generate)"]
+eclipse.preferences.version=1
