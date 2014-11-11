@@ -1,6 +1,7 @@
 BaumeisterJDependPlugin
 =======================
 
+JDepend statical code analysis plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterJDependPlugin] (https://github.com/lsolbach/BaumeisterJDependPlugin)
+[https://github.com/lsolbach/JDependPlugin] (https://github.com/lsolbach/JDependPlugin)
 
 History
 -------

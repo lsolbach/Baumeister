@@ -11,8 +11,8 @@
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file]
         [org.soulspace.clj.java type-conversion]
-        [baumeister.utils checks ant-utils log]
-        [baumeister.config registry plugin-registry])
+        [baumeister.utils checks ant-utils files log]
+        [baumeister.config registry])
   (:import [java.util Set]))
 
 (define-ant-task ant-jdepend jdepend)
@@ -32,9 +32,9 @@
 
 (defn get-classpath []
   (cond
-    (aspectj?) (param :aspectj-class-path)
-    (java?) (param :java-class-path)
-    (clojure?) (param :clojure-class-path)))
+    (aspectj?) (str (param :dist-dir) "/" (param :module) ".jar:" (jar-path (param :aspectj-lib-path)))
+    (java?) (str (param :dist-dir) "/" (param :module) ".jar:" (jar-path (param :java-lib-path)))
+    (clojure?) (str (param :dist-dir) "/" (param :module) ".jar:" (jar-path (param :clojure-lib-path)))))
 
 (defn jdepend-clean []
     (delete-file (as-file (param :jdepend-report-xml-dir)))
@@ -52,6 +52,7 @@
 (def config
   {:params [[:jdepend-report-dir "${build-report-dir}/jdepend"]
             [:jdepend-excludes #{"java.*" "javax.*" }]]
-   :functions [[:clean jdepend-clean]
-               [:init jdepend-init]
-               [:analyse jdepend-analyse]]})
+   :steps [[:clean jdepend-clean]
+           [:init jdepend-init]
+           [:analyse jdepend-analyse]]
+   :functions []})

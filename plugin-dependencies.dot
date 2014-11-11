@@ -1,0 +1,11 @@
+digraph Dependencies {
+    outputmode=nodefirst;
+    node [shape=plaintext fontsize=9];
+"org.soulspace.baumeister/JDependPlugin/0.6.1/JDependPlugin.jar" [shape=box label="org.soulspace.baumeister\nJDependPlugin.jar[0.6.1]"];
+"org.soulspace.baumeister/DependencyPlugin//DependencyPlugin.jar" [shape=box label="org.soulspace.baumeister\nDependencyPlugin.jar[]"];
+"org.soulspace.baumeister/ClojurePlugin//ClojurePlugin.jar" [shape=box label="org.soulspace.baumeister\nClojurePlugin.jar[]"];
+"org.soulspace.baumeister/PackagePlugin//PackagePlugin.jar" [shape=box label="org.soulspace.baumeister\nPackagePlugin.jar[]"];
+"org.soulspace.baumeister/JDependPlugin/0.6.1/JDependPlugin.jar" -> "org.soulspace.baumeister/DependencyPlugin//DependencyPlugin.jar" [color=black style=solid];
+"org.soulspace.baumeister/JDependPlugin/0.6.1/JDependPlugin.jar" -> "org.soulspace.baumeister/ClojurePlugin//ClojurePlugin.jar" [color=black style=solid];
+"org.soulspace.baumeister/JDependPlugin/0.6.1/JDependPlugin.jar" -> "org.soulspace.baumeister/PackagePlugin//PackagePlugin.jar" [color=black style=solid];
+}
