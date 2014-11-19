@@ -8,13 +8,13 @@ extensibility provided by Clojure.
 Features
 --------
 * multi language builds (Java, AspectJ, Clojure, ...)
-* model driven development
-* architecture awareness
 * dependency management (compatibility with existing repositories)
 * extensible plugin architecture
 * configurable modules
 * flexible artifact generation (multiple artifacts per module)
 * customizable per module
+* architecture awareness
+* support for model driven development
 * plugins for the Model Generator
 
 Author/Project Lead
@@ -31,7 +31,13 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/CljJavaLibrary] (https://github.com/lsolbach/CljJavaLibrary)
+[https://github.com/lsolbach/Baumeister] (https://github.com/lsolbach/Baumeister)
+
+Download
+--------
+Prebuild versions of the Baumeister Build System can be found at
+[http://downloads.soulspace.org/Baumeister/] (http://downloads.soulspace.org/Baumeister/).
+
 
 History
 -------
