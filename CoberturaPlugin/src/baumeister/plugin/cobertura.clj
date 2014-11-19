@@ -14,8 +14,6 @@
         [baumeister.utils ant-utils files log]
         [baumeister.config registry]))
 
-; TODO remove lib path
-;(def cobertura-classpath (lib-path ["cobertura" "asm" "asm-tree" "jakarta-oro"])) ; log4j?
 (ant-taskdef {:resource "net.sourceforge.cobertura.ant.antlib.xml"})
 ;(ant-taskdef {:name cobertura-instrument :classname "net.sourceforge.cobertura.ant.InstrumentTask"})
 ;(ant-taskdef {:name cobertura-report :classname "net.sourceforge.cobertura.ant.ReportTask"})
