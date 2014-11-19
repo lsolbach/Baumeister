@@ -7,7 +7,7 @@
 ; If you want to override configuration parameters, use $(HOME)/.Baumeister/settings.clj or module.clj
 ;
 [
- :system-version "0.6.2"
+ :system-version "0.6.3"
  ;
  ; default log and message levels
  ;
