@@ -7,30 +7,43 @@ Command Line Usage
 
 baumeister [options] [actions]
 
-Command Line Options
+Command Line Options:
 
 -D	--define	Define a parameter (-Dx=y)
 -f	--file		Use the given file instead of module.clj (-fmyfile.clj)
 -h	--help		Display help
 -v	--version	Display the version of this Baumeister instance
 
+Actions:
+
+As action you can specify workflows (e.g. compile-workflow) or phases (e.g. compile).
+See config/module_defaults.clj for the default workflow definitions.
+
 Module Configuration
 --------------------
 
 The configuration file per module is module.clj in the root directory of the module.
-
-Parameters are specified as key value pairs.
+It contains a vector of paeameters, which are specified as key value pairs.
 
 The required parameters are 
 
-* module	Identifier of this module.
-* project	Identifier of the project of this module
-* version	Version of this module
-* plugins 	List of plugins for this module
+ * module	Identifier of this module.
+ * project	Identifier of the project of this module
+ * version	Version of this module
+ * plugins 	List of plugins for this module
+
+You can find the default configuration in config/module_defaults.clj.
+In this file the default workflows, repositories and various other
+parameters are defined.
+
+If you want to overwrite some of the parameters on a global basis,
+please don't change the module_defaults.clj file. Instead copy the
+file config/settings.clj to $HOME/.Baumeister/settings.clj and change
+it to your needs.
 
 Workflows
 ---------
-Each workflow consists of phases (which can be other workflows)
+Each workflow consists of phases (which can be other workflows).
 
 Phases
 ------
@@ -41,29 +54,29 @@ Each phase consists of 3 steps
 
 Steps
 -----
-The registered functions get executed in order of the plugin declaration for pre-phase step and phase step.
-For post-phase steps the registered functions get executed in reverse order of the plugin declaration.
+The registered functions get executed in order of the plugin declaration for pre-phase step and phase step. For post-phase steps the registered functions get executed in reverse order of the plugin declaration.
 
-
-Artifacts
----------
-Artifact
-project module version name type
 
 Dependency Management
 ---------------------
+Baumeister provides transitive dependency management and can use Baumeister and Maven repositories for dependency resolution.
 
-Dependency
+Dependency properties:
+
 artifact target optional exclusions
+
+Artifact properties:
+
+project module version name type
 
 Plugins
 -------
 A plugin registers parameters and functions for steps of workflow phases.
 
-Existing Plugins
+Existing Plugins:
 
 Dependency Resolution
-* org.soulspace.baumeister/DependencyPlugin
+ * org.soulspace.baumeister/DependencyPlugin
 
 Compiler
  * org.soulspace.baumeister/AspectJPlugin
@@ -106,3 +119,5 @@ Work in progress, not yet functional
  * org.soulspace.baumeister/DistributionPlugin
  * org.soulspace.baumeister/JythonPlugin
  * org.soulspace.baumeister/SitePlugin
+
+

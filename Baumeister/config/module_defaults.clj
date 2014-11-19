@@ -1,5 +1,5 @@
 ;
-; Don't change this file!
+; *Please don't change this file!*
 ;
 ; This file defines the default configuration for Baumeister. 
 ; These settings are merged with the settings in other the module.clj files
@@ -33,6 +33,8 @@
   :architecture-workflow [:clean :init :dependencies :generate-architecture] ; generate modules from an architecture model
   :module-workflow [:create-module]
   }
+ ; the default action to take, if no workflow or phase is provided
+ :default-action :package-workflow
  ;
  ; default project directory layout
  ;

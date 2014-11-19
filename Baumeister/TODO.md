@@ -1,6 +1,8 @@
 TODO's
 ======
 
+Use clojure.edn for reading config files
+
 Guidelines
 ----------
  * Make common tasks easy
@@ -14,14 +16,6 @@ Build
    * call baumeister on multiple modules
      * handle multiple configurations
  * parent module configurations?
-
-MDSD Code Generation
---------------------
- * use src/model for input models?
- * use xmi directly by default,
- * argo uml plugin for handling zargo files?
-   * add config parameters for extraction from zargo
-   * extract model xmi to build/model instead of model?
 
 
 Think About
@@ -72,7 +66,7 @@ Properties: ArtifactUsage (scope, target, exclusion), ArtifactReference(Pattern)
 
 Plugins
 -------
- * plugin storage,
+ * plugin storage
  * plugin dependencies
  * user plugins
  * functional inter-plugin dependencies
@@ -89,7 +83,6 @@ How to cut through the different dimensions?
 e.g.
  * mdsd initializing, cleaning, dependencies
  * aspectj initializing, cleaning, dependencies
-
 
 Build listeners/notifiers
 -------------------------

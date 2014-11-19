@@ -19,10 +19,5 @@
 	<classpathentry kind="lib" path="build/lib/dev/dynapath.jar"/>
 	<classpathentry kind="lib" path="build/lib/dev/junit.jar"/>
 	<classpathentry kind="lib" path="build/lib/dev/tools.reader.jar"/>
-	<classpathentry exported="true" kind="lib" path="classes">
-		<attributes>
-			<attribute name="optional" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
