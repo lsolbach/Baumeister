@@ -70,7 +70,8 @@
 
 (def config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
-            [:lib-dev-dir "${lib-dir}/dev"][:clojure-compiler-fork "${compiler-fork}"]
+            [:lib-dev-dir "${lib-dir}/dev"]
+            [:clojure-compiler-fork "${compiler-fork}"]
             [:clojure-source-dir "${source-dir}"]
             [:clojure-source-unittest-dir "${source-unittest-dir}"]
             [:clojure-source-integrationtest-dir "${source-integrationtest-dir}"]

@@ -2,5 +2,5 @@
  :module ""
  :project ""
  :version ""
- :plugins ["a"]
+ :plugins ["global"]
  ]

@@ -46,9 +46,9 @@
 ; TODO use distribution spec for package content a la ant zip? e.g. [:dir :includes :excludes :prefix]
 ; :generate-distribution :package-distribution :distribute-distribution
 (def config
-  {:params [[:distribution-name "${module}-${version}"]
-            [:distribution-file "${distribution-name}.zip"
-             :distribution-dir "${user-home-dir}"]]
+  {:params [[:distribution-dir "${user-home-dir}"]
+            [:distribution-name "${module}-${version}"]
+            [:distribution-file "${distribution-name}.zip"]]
    :steps [[:package-distribution distribution-package]
            [:distribute-distribution distribution-distribute]]
    :functions []})
