@@ -2,7 +2,7 @@
  :module "DistributionPlugin"
  :project "org.soulspace.baumeister"
  :type :baumeister-plugin
- :version "0.6.0"
+ :version "0.6.2"
  :description "Distribution plugin to distribute the built artifacts with the Baumeister build system."
  :plugins ["global"
            ["org.soulspace.baumeister/DependencyPlugin"]
