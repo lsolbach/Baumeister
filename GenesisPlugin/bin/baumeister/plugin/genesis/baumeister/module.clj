@@ -7,21 +7,5 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 ;
-(ns baumeister.plugin.ftp
-  (:use [clojure.java.io]
-        [org.soulspace.clj.net.ftp ftp-client]))
+(ns baumeister.plugin.genesis.baumeister.module)
 
-(defn ftp-upload
-  "Upload files"
-  ([server local remote]
-    (with-ftp-connection server
-      (store-file remote (input-stream local))))
-  ([server file-names]
-    (with-ftp-connection server
-      (doseq [file-name file-names]
-        (store-file file-name (input-stream file-name))))))
-
-(def config
-  {:params []
-   :steps []
-   :functions []})

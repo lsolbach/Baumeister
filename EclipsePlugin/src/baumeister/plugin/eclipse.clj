@@ -65,13 +65,15 @@
 
 (defn lib-entry [dep]
   (cond 
-    (= (:target dep) :aspect) (cp/classpathentry
-                                {:kind "lib" :path (lib-target-path dep)}
-                                (cp/attributes
-                                  {}
-                                  (cp/attribute {:name "org.eclipse.ajdt.aspectpath"
-                                                 :value "org.eclipse.ajdt.aspectpath"})))
-    :default (cp/classpathentry {:kind "lib" :path (lib-target-path dep)})))
+    (= (:target dep) :aspect)
+    (cp/classpathentry
+      {:kind "lib" :path (lib-target-path dep)}
+      (cp/attributes
+        {}
+        (cp/attribute {:name "org.eclipse.ajdt.aspectpath"
+                       :value "org.eclipse.ajdt.aspectpath"})))
+    :default
+    (cp/classpathentry {:kind "lib" :path (lib-target-path dep)})))
 
 (defn build-lib-entries []
   (let [deps (filter code-dependency? (param :dependencies-processed))]

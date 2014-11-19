@@ -29,6 +29,8 @@
     ))
 
 (def config 
-  {:params [:site-css ""]
-   :steps []
+  {:params [[:build-site-dir "${build-dir}/site"]
+            [:site-css ""]]
+   :steps [[:clean site-clean]
+           [:init site-init]]
    :functions []})
