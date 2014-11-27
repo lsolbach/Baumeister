@@ -2,7 +2,7 @@
   (:require [clojure.string :as str :only [split join replace]])
   (:use [clojure.pprint]
         [clojure.java.io :only [as-file as-url]]
-        [org.soulspace.clj file]
+        [org.soulspace.clj file string]
         [org.soulspace.clj.application classpath env-vars]
         [baumeister.utils log]
         [baumeister.config registry parameter-registry repository-registry function-registry plugin-registry]))
@@ -44,30 +44,47 @@
                  :default [])]
     (partition 2 params)))
 
+(defn param-action
+  [key value]
+  (log :trace "param action for" key "->" value)
+  (cond
+    ; repositories
+    (= key :repositories) ; TODO append to existing repositories
+    (do
+      (message :info "registering repositories...")
+      ; register repositories
+      (register-val :deps-repositories (if (seq (param :deps-repositories))
+                                         (let [repos (param :deps-repositories)]
+                                           (into repos (create-repositories value)))
+                                         (create-repositories value))))
+    ; plugins
+    (= key :plugins)
+    (do
+      (message :info "loading plugins...")
+      ; plugin registration has to take place when the :plugins key is resolved in module.clj
+      ; otherwise the plugin default config will override the module config
+      ; IDEA An alternative is the specification of the module specific plugin configuration
+      ; IDEA as part of the plugin dependency (like in maven).
+      (init-plugins value))
+    (= key :log-level) (set-log-level (keyword value))
+    (= key :log-level) (set-message-level (keyword value))))
+
 (defn set-params [params]
   "Sets parameters in the parameter registry."
   (log :debug "set params" params)
   (if (seq params)
     (doseq [[key value] params]
       ; TODO implement override/append behaviour on defined keys?
-      (log :trace "setting variable" key "to" value)
-      (register-var key value)
-      (cond
-        (= key :repositories) ; TODO append to existing repositories
+      (log :trace "setting parameter" key "to" value)
+      (if (starts-with "additional-" (name key))
+        (let [param-key (substring (count "additional-") (name key))]
+          (log :trace "updating parameter" key "with" value)
+          (update-var param-key value)
+          (param-action param-key value))
         (do
-          (message :info "registering repositories...")
-          ; register repositories
-          (register-val :deps-repositories (create-repositories (param :repositories))))
-        (= key :plugins)
-        (do 
-          (message :info "loading plugins...")
-          ; plugin registration has to take place when the :plugins key is resolved in module.clj
-          ; otherwise the plugin default config will overide the module config
-          ; IDEA An alternative is the specification of the module specific plugin configuration
-          ; IDEA as part of the plugin dependency (like in maven).
-          (init-plugins (param :plugins)))
-        (= key :log-level) (set-log-level (keyword value))
-        (= key :log-level) (set-message-level (keyword value))))))
+          (log :trace "setting parameter" key "to" value)
+          (register-var key value)
+          (param-action key value))))))
 
 (defn init-defaults
   "Initializes the configuration defaults."
@@ -82,7 +99,7 @@
   (register-var :aspectj-home (get-env "ASPECTJ_HOME")) ; register ASPECTJ_HOME
 
   ; load module defaults
-  (set-params (read-module (str (param :baumeister-home-dir) "/config/module_defaults.clj"))))
+  (set-params (read-module (str (param :baumeister-home-dir) "/config/default_settings.clj"))))
 
 (defn init-config
   "Initializes the configuration."

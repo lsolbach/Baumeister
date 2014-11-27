@@ -3,6 +3,8 @@ TODO's
 
 Use clojure.edn for reading config files
 
+Separate GlobalPlugin, ...
+
 Guidelines
 ----------
  * Make common tasks easy

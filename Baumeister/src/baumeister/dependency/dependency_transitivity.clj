@@ -172,11 +172,15 @@
       module-tree
       (module-dependency-tree))))
 
-(defn resolve-plugin-dependency-tree []
-  (let [plugin-tree (param :plugin-dependency-tree)]
-    (if (seq plugin-tree)
-      plugin-tree
-      (plugin-dependency-tree))))
+;(defn resolve-plugin-dependency-tree []
+;  (let [plugin-tree (param :plugin-dependency-tree)]
+;    (if (seq plugin-tree)
+;      plugin-tree
+;      (plugin-dependency-tree))))
+(defn resolve-plugin-dependency-tree
+  "Resolve the plugin dependency tree."
+  []
+  (plugin-dependency-tree))
 
 (defn generate-plugin-dot
   "Generate dot graphs for the configured dependency tree."

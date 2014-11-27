@@ -40,9 +40,7 @@
     (print-dependency dependency (:target dependency)))
   ([dependency target]
     (let [artifact (:artifact dependency)]
-      (str "[" 
-           (clojure.string/join ", " [(print-artifact artifact) target (:optional dependency)])
-           "]"))))
+      (str "[" (clojure.string/join ", " [(print-artifact artifact) target (:optional dependency)]) "]"))))
 
 ;
 ; Dependency Protocol 

@@ -45,7 +45,7 @@
   ; get the urls for the plugin dependencies, but drop plugin root, because it's the current module
   (let [plugin-deps (plugin-dependencies)
         plugin-dependency-urls (artifact-urls (filter #(not= (:target %) :plugin-root) plugin-deps))]
-    (log :trace "plugin dependencies" plugin-deps)
+    (log :info "plugin dependencies" plugin-deps)
     (generate-plugin-dot)
     (add-urls plugin-dependency-urls)))
 
@@ -65,9 +65,8 @@
 
 ;
 (defn init-plugins
-  "initialize the given seq of plugins"
+  "Initialize the given seq of plugins"
   [plugins]
-
   ; get plugin dependencies for all plugins and set the classpath accordingly
   (set-plugin-dependency-classpath)
   ; initialize all plugins

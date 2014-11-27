@@ -2,7 +2,7 @@
 ; *Please don't change this file!*
 ;
 ; This file defines the default configuration for Baumeister. 
-; These settings are merged with the settings in other the module.clj files
+; These settings are merged with the settings in the user specific settings.clj file and the module.clj files
 ;
 ; If you want to override configuration parameters, use $(HOME)/.Baumeister/settings.clj or module.clj
 ;
@@ -48,11 +48,14 @@
  :source-webcontent-dir "${module-dir}/WebContent"
  :build-dir "${module-dir}/build"
  :build-classes-dir "${build-dir}/classes"
+ :build-unittest-classes-dir "${build-dir}/unittest/classes"
+ :build-integrationtest-classes-dir "${build-dir}/integrationtest/classes"
+ :build-acceptancetest-classes-dir "${build-dir}/acceptancetest/classes"
  :build-report-dir "${build-dir}/report"
  :build-doc-dir "${build-dir}/doc"
  :build-sourcedoc-dir "${build-doc-dir}/sourcedoc"
- :dist-dir "${build-dir}/dist"
  :lib-dir "${build-dir}/lib"
+ :dist-dir "${build-dir}/dist"
  :doc-dir "${module-dir}/doc"
  :generation-dir "${build-dir}/generated"
  :generation-source-dir "${generation-dir}/src"
@@ -169,4 +172,6 @@
                       "ejb-client" "jar"
                       "pom" "pom"
                       nil "jar"}
+ :plugins ["global"
+           ["org.soulspace.baumeister/GenesisPlugin"]]
  ]

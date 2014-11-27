@@ -21,27 +21,44 @@
   "Baumeister option definitions."
   [["--define" "-D" "Define a parameter (eg. -Dname=value)" :multi true]
    ["--file" "-f" "Use the specified module file (eg. -Dfilename)" :default "module.clj"]
-   ["--help" "-h" "Display help (format -h)"]
-   ["--version" "-v" "Display version"]
+   ["--help" "-h" "Display help"]
+   ["--version" "-v" "Display the Baumeister version information"]
+   ["--new" "-n" "New project (format -n <name> <template>)"]
+   ["--print-config" "-PC" "Print the effective configuration"]
    ])
+
+(defn print-options?
+  [options]
+  (let [options (into #{} (keys options))]
+    (or (contains? options :help)
+        (contains? options :version))))
+
+(defn print-options
+  "Print some messages and quit."
+  [options]
+  (init-defaults) ; initialize defaults only
+  (if-not (nil? (:version options))
+    (println "Baumeister version: " (param :system-version)))
+  (when-not (nil? (:help options))
+    (println "Baumeister usage:")
+    (println (doc-options option-defs))))
+
+(defn start-processing
+  "Start processing."
+  [arguments options]
+  (let [start (System/currentTimeMillis)]
+    (message :info "Started at" (Date. start))
+    (init-config options)
+    (apply start-workflow arguments)
+    (let [end (System/currentTimeMillis)]
+      (message :info (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds.")))))
 
 (defn -main
   "Baumeister main method."
   [& args]
-  (let [start (System/currentTimeMillis)
-        [arguments options] (parse-args args option-defs)]
-    (if (and (nil? (:help options)) (nil? (:version options)))
-      (do ; Workflow
-        (message :info "Started at" (Date. start))
-        (init-config options)
-        (apply start-workflow arguments)
-        (let [end (System/currentTimeMillis)]
-          (message :info (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds."))))
-      (do ; Version/Help options
-        (init-defaults) ; initialize defaults only
-        (if-not (nil? (:version options))
-          (println "Baumeister version: " (param :system-version)))
-        (when-not (nil? (:help options))
-          (println "Baumeister usage:")
-          (println (doc-options option-defs))))))
+  (let [[arguments options] (parse-args args option-defs)]
+    (println "Options:" options)
+    (if (print-options? options)
+      (print-options options)
+      (start-processing arguments options)))
   0)

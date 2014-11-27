@@ -15,10 +15,12 @@
         [baumeister.config parameter-registry]))
 
 (defn get-classpath-urls
+  "Returns the registered urls of the classpath."
   []
   (urls))
 
 (defn register-classpath-urls
+  "Register classpath urls."
   [cl-urls]
   (let [urls (into #{} (get-classpath-urls))]
     (doseq [url cl-urls]
@@ -26,6 +28,7 @@
         (add-url url)))))
 
 (defn register-classpath-entries
+  "Register classpath entries."
   [cl-entries]
   (let [urls (into #{} (get-classpath-urls))]
     (doseq [entry cl-entries]
@@ -54,18 +57,24 @@
   "Register a value."
   (register-param-as-is key value))
 
-(defn register-var [key value]
+(defn register-var
   "Register a variable."
+  [key value]
   (register-param key value))
 
-(defn register-vars [vars]
+(defn update-var
+  "Update a variable by adding the values."
+  [key value]
+  (let [var (param key)]
+    (cond
+      (vector? var)
+      (register-var key (into var value))
+      (set? var)
+      (register-var key (into var value))
+      )
+  ))
+
+(defn register-vars
   "Register variables."
+  [vars]
   (register-params vars))
-
-; TODO used in plugins for the plugin class path, refactor when plugins are dependencies 
-; Baumeister lib dir
-(defn get-lib-dir [] (str (param :baumeister-home-dir) "/lib"))
-
-; Baumeister lib path
-(defn lib-path [coll]
-  (str/join ":" (map #(str (get-lib-dir) "/" % ".jar") coll)))

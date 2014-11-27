@@ -9,9 +9,7 @@
  :provider "soulspace.org"
  :inception-year 2012
  :license ["Eclipse Public License 1.0" "http://www.eclipse.org/legal/epl-v10.html"]
- :log-level :debug
  :plugins ["global"
-           ;"dependencies" "clojure" "package" "release"
            ["org.soulspace.baumeister/DependencyPlugin"]
            ["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]

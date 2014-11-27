@@ -14,7 +14,7 @@
 
 (defn bmdebug-init []
   (spit (param "${build-dir}/debug")
-        (with-out-str (pprint (get-param-registry)))))
+        (with-out-str (print-parameters))))
 
 (def config
   {:params []
