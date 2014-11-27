@@ -97,10 +97,14 @@
 
 (defn eclipse-post-dependencies []
   (build-container-entries)
-  (spit (param "${build-eclipse-dir}/classpath.xml") (xml/emit-str (build-classpath))))
+  (let [classpath (build-classpath)]
+    (if (param :eclipse-test)
+      (spit (param "${build-eclipse-dir}/classpath.xml") (xml/emit-str classpath))
+      (spit (param "${module-dir}/.classpath") (xml/emit-str classpath)))))
 
 (def config 
-  {:params [[:build-eclipse-dir "${build-dir}/eclipse"]]
+  {:params [[:build-eclipse-dir "${build-dir}/eclipse"]
+            [:eclipse-test false]]
    :steps [[:init eclipse-init]
            [:post-dependencies eclipse-post-dependencies]]
    :functions []})
