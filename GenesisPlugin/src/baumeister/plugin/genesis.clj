@@ -10,10 +10,28 @@
 (ns baumeister.plugin.genesis)
 
 (defn genesis-init
+  ""
   []
+  )
+
+(defn process-template
+  ""
+  [template]
+  )
+
+(defn process-templates
+  ""
+  [coll]
+  )
+
+(defn genesis-new
+  "Creates a new module."
+  []
+  (mkdir (param :module))
   )
 
 (def config
   {:params []
-   :steps [[:init genesis-init]]
+   :steps [[:init genesis-init]
+           [:new genesis-new]]
    :functions []})
