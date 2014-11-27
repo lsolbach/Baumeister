@@ -8,7 +8,8 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.java
-  (:use [org.soulspace.clj file function]
+  (:use [clojure.java.io :exclude [delete-file]]
+        [org.soulspace.clj file function]
         [baumeister.utils files ant-utils checks log]
         [baumeister.config registry]))
 
@@ -27,8 +28,16 @@
                 :srcdir srcdir
                 :classpath class-path})))
 
+(defn java-init
+  "Java init"
+  []
+  (create-dir (as-file (param :build-classes-dir)))
+  (create-dir (as-file (param :build-unittest-classes-dir)))
+  (create-dir (as-file (param :build-integrationtest-classes-dir)))
+  (create-dir (as-file (param :build-acceptancetest-classes-dir))))
+
 (defn java-compile
-  "java compile"
+  "Java compile"
   []
   ; compute classpaths before compilation after dependencies have been initialized
   ; (remove #(not (exists? %)) source-dirs)
@@ -61,5 +70,6 @@
             [:java-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:java-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]]
-   :steps [[:compile java-compile]]
+   :steps [[:init java-init]
+           [:compile java-compile]]
    :functions []})

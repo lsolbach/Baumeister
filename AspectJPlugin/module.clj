@@ -2,7 +2,7 @@
  :module "AspectJPlugin"
  :project "org.soulspace.baumeister"
  :type :baumeister-plugin
- :version "0.6.1"
+ :version "0.6.3"
  :description "AspectJ compiler plugin for the Baumeister build system."
  :plugins ["global"
            ["org.soulspace.baumeister/DependencyPlugin"]

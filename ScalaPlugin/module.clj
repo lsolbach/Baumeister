@@ -2,7 +2,7 @@
  :module "ScalaPlugin"
  :project "org.soulspace.baumeister"
  :type :baumeister-plugin
- :version "0.1.0"
+ :version "0.1.1"
  :description "Scala compiler plugin for the Baumeister build system."
  :log-level :debug
  :plugins ["global"

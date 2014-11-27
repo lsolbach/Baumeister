@@ -28,17 +28,13 @@
             (ant-variable {:key "clojure.compile.path" :value dest-dir})
             {:line (join " " (collect-namespaces src-path))}))
 
-(defn clojure-clean
-  "clojure clean"
-  []
-  (delete-file (as-file (param :lib-runtime-dir)))
-  (delete-file (as-file (param :lib-dev-dir))))
-
 (defn clojure-init
   "clojure init"
   []
-  (create-dir (as-file (param :lib-runtime-dir)))
-  (create-dir (as-file (param :lib-dev-dir))))
+  (create-dir (as-file (param :build-classes-dir)))
+  (create-dir (as-file (param :build-unittest-classes-dir)))
+  (create-dir (as-file (param :build-integrationtest-classes-dir)))
+  (create-dir (as-file (param :build-acceptancetest-classes-dir))))
 
 (defn clojure-compile
   "clojure compile"
@@ -80,7 +76,6 @@
             [:clojure-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:clojure-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:clojure-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]]
-   :steps [[:clean clojure-clean]
-           [:init clojure-init]
+   :steps [[:init clojure-init]
            [:compile clojure-compile]]
    :functions []})

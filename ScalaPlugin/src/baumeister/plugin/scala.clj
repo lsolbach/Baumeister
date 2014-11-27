@@ -1,5 +1,7 @@
 (ns baumeister.plugin.scala
-  (:use [baumeister.utils files ant-utils checks log]
+  (:use [clojure.java.io :exclude [delete-file]]
+        [org.soulspace.clj file]
+        [baumeister.utils files ant-utils checks log]
         [baumeister.config registry]))
 
 (ant-taskdef {:resource "scala/tools/ant/antlib.xml"})
@@ -11,6 +13,14 @@
                :encoding (param :scala-source-encoding)
                :srcdir srcdir
                :classpath class-path}))
+
+(defn scala-init
+  "Scala init"
+  []
+  (create-dir (as-file (param :build-classes-dir)))
+  (create-dir (as-file (param :build-unittest-classes-dir)))
+  (create-dir (as-file (param :build-integrationtest-classes-dir)))
+  (create-dir (as-file (param :build-acceptancetest-classes-dir))))
 
 (defn scala-compile
 []
@@ -37,5 +47,6 @@
             [:scala-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:scala-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:scala-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]]
-   :steps [:compile scala-compile]
+   :steps [[:init scala-init]
+           [:compile scala-compile]]
    :functions []})

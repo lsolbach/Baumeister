@@ -2,7 +2,7 @@
  :module "ClojurePlugin"
  :project "org.soulspace.baumeister"
  :type :baumeister-plugin
- :version "0.6.0"
+ :version "0.6.3"
  :description "Compiler plugin for Clojure"
  :plugins ["global"
            ["org.soulspace.baumeister/DependencyPlugin"]

@@ -1,5 +1,7 @@
 (ns baumeister.plugin.groovy
-  (:use [baumeister.utils files ant-utils checks log]
+  (:use [clojure.java.io :exclude [delete-file]]
+        [org.soulspace.clj file]
+        [baumeister.utils files ant-utils checks log]
         [baumeister.config registry]))
 
 (ant-taskdef {:name "groovyc"
@@ -14,6 +16,14 @@
                 :encoding (param :groovy-source-encoding)
                 :srcdir srcdir
                 :classpath class-path}))
+
+(defn groovy-init
+  "Groovy init"
+  []
+  (create-dir (as-file (param :build-classes-dir)))
+  (create-dir (as-file (param :build-unittest-classes-dir)))
+  (create-dir (as-file (param :build-integrationtest-classes-dir)))
+  (create-dir (as-file (param :build-acceptancetest-classes-dir))))
 
 (defn groovy-compile
   []
@@ -41,5 +51,6 @@
             [:groovy-unittest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:groovy-integrationtest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]
             [:groovy-acceptancetest-lib-path "${lib-runtime-dir}:${lib-dev-dir}"]]
-   :steps [:compile groovy-compile]
+   :steps [[:init groovy-init]
+           [:compile groovy-compile]]
    :functions []})

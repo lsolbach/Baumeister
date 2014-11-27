@@ -31,21 +31,13 @@
              :sourceRootCopyFilter "**/CVS/*,**/*.java,**/*.aj,**/.clj"
              :inpathDirCopyFilter "**/CVS/*,**/*.java,**/*.aj,**/.clj,**/*.class,**/*.jar,**/*.txt"}))
 
-(defn aspectj-clean
-  "AspectJ clean"
-  []
-  (delete-dir (as-file (param :lib-runtime-dir)))
-  (delete-dir (as-file (param :lib-aspectin-dir)))
-  (delete-dir (as-file (param :lib-aspect-dir)))
-  (delete-dir (as-file (param :lib-dev-dir))))
-
 (defn aspectj-init
   "AspectJ init"
   []
-  (create-dir (as-file (param :lib-runtime-dir)))
-  (create-dir (as-file (param :lib-aspectin-dir)))
-  (create-dir (as-file (param :lib-aspect-dir)))
-  (create-dir (as-file (param :lib-dev-dir))))
+  (create-dir (as-file (param :build-classes-dir)))
+  (create-dir (as-file (param :build-unittest-classes-dir)))
+  (create-dir (as-file (param :build-integrationtest-classes-dir)))
+  (create-dir (as-file (param :build-acceptancetest-classes-dir))))
 
 (defn aspectj-pre-compile
   "AspectJ pre-compile"
@@ -108,8 +100,7 @@
             [:aspectj-unittest-aspectin-path "${lib-aspectin-dir}"]
             [:aspectj-integrationtest-aspectin-path "${lib-aspectin-dir}"]
             [:aspectj-acceptancetest-aspectin-path "${lib-aspectin-dir}"]]
-   :steps [[:clean aspectj-clean]
-           [:init aspectj-init]
+   :steps [[:init aspectj-init]
            [:pre-compile aspectj-pre-compile]
            [:compile aspectj-compile]]
    :functions []})
