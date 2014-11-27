@@ -9,6 +9,6 @@
            ["org.soulspace.baumeister/DependencyPlugin"]
            ["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
- :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.1" :dev]
+ :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.3" :dev]
                 ["org.codehaus.groovy/groovy-all, 2.2.0"]]
  ]
