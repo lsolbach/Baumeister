@@ -198,7 +198,7 @@
 (defn plugin-dependencies []
   (let [root (resolve-plugin-dependency-tree)]
     (log :trace "dependency tree" (print-node root))
-    (generate-plugin-dot)
+    ;(generate-plugin-dot)
     ; topologically sorted sequence of the dependency dag
     (topological-sort root)))
 

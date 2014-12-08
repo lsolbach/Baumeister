@@ -7,20 +7,47 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 ;
-(ns baumeister.plugin.genesis)
+(ns baumeister.plugin.genesis
+  (:use [clojure.java.io]
+        [org.soulspace.clj file]
+        [baumeister.config parameter-registry]))
 
-(defn genesis-init
-  ""
-  []
+; TODO extract templates into (data) modules and use the dependency mechanisms to resolve them
+
+(defn target-filename
+  "Returns the file name of the target file."
+  [filename]
+  (if (starts-with "dot." filename)
+    (substring 3 filename)
+    filename))
+
+(defn process-template-file
+  "Processes a template file by reading it and replacing the variables."
+  [file]
   )
 
-(defn process-template
-  ""
+(defn create-folder
+  "Creates a folder."
+  [file]
+  (mkdir (as-file (path))))
+
+(defn create-file
+  "Creates a file."
+  [file]
+  ()
+  )
+
+(defn process-project-template
+  "Process a project template."
   [template]
+  (->>
+    (str root-dir template)
+    (as-file)
+    (all-files))
   )
 
-(defn process-templates
-  ""
+(defn process-project-templates
+  "Process the collection of project templates."
   [coll]
   )
 
@@ -28,6 +55,7 @@
   "Creates a new module."
   []
   (mkdir (param :module))
+  (process-templates (param :templates))
   )
 
 (def config
