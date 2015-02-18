@@ -15,10 +15,21 @@
         [org.soulspace.clj file file-search namespace]
         [org.soulspace.clj.application classpath]
         [baumeister.utils files log]
+        [baumeister.dependency dependency-initialization]
         [baumeister.config registry]))
 
+(defn add-dependencies-to-classpath
+  "Adds the dependencies to the classpath."
+  []
+  ; get the urls for the dependencies, but drop root, because it's the current module
+  ; TODO filter for runtime dependencies
+  (let [deps (param :dependencies-processed)
+        dependency-urls (artifact-urls (filter #(not= (:target %) :root) deps))]
+    (log :info "dependencies" deps)
+    (add-urls dependency-urls)))
+
 (defn find-namespaces
-  "Find all clojure namespaces in a given directory."
+  "Finds all clojure namespaces in a given directory."
   [dir]
   (let [dir (as-file dir)]
     (if (is-dir? dir)
@@ -29,7 +40,7 @@
         (map symbol)))))
 
 (defn perform-test
-  "Perform tests for the namespace and write the result to the report directory."
+  "Performs tests for the namespace and write the result to the report directory."
   [report-dir nspace]
   (message :info "Testing namspace" nspace)
   (require nspace)
@@ -39,17 +50,21 @@
           (message :info (run-tests nspace))))))
 
 (defn perform-tests
-  "Perform tests."
+  "Performs tests for all namespaces of the source dirs."
   [source-key class-dir report-dir]
   (when-let [source-dirs (source-dirs source-key)]
-    (log :trace "registering classpath entries for testing from" (param :build-classes-dir) "and" class-dir)
+    (log :trace "already registered classpath" (urls))
+    ; add dependencies to classpath
+    (add-dependencies-to-classpath)
+        (log :trace "registering classpath entries for testing from" (param :build-classes-dir) "and" class-dir)
     (register-classpath-entries [(param :build-classes-dir) class-dir])
+    (log :trace "resulting classpath for running the tests" (urls))
     (let [namespaces (flatten (map find-namespaces source-dirs))]
       (doseq [nspace namespaces]
         (perform-test report-dir nspace)))))
 
 (defn clojuretest-clean
-  "clojuretest clean"
+  "Clojuretest clean."
   []
   (message :fine "cleaning test report dirs...")
   (delete-file (as-file (param :report-acceptancetest-dir)))
