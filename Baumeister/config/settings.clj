@@ -1,9 +1,11 @@
 ;
 ; This settings.clj file contains the user specific settings for Baumeister.
-; These settings override the defaults in $BAUMEISTER_HOME/config/module_defaults.clj
+; These settings override the defaults in $BAUMEISTER_HOME/config/default_settings.clj
 ; and are merged with the settings in the module.clj files.
 ;
 ; The format is <key> <value> where keys start with a colon and values are strings or numbers.
+; Using a key already defined will override the value. Using 'additional-<key>' items
+; can be appended to a collection value.
 ; 
 ; You can use the variables that are defined in $BAUMEISTER_HOME/config/module_defaults.clj
 ; but especially these variables should be useful:

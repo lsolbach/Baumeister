@@ -2,6 +2,7 @@ Baumeister Usage
 ================
 
 Command Line Usage
+------------------
 
 > baumeister 
 
@@ -17,7 +18,8 @@ Command Line Options:
 Actions:
 
 As action you can specify workflows (e.g. compile-workflow) or phases (e.g. compile).
-See config/module_defaults.clj for the default workflow definitions.
+See entry :default-workflows in config/default_settings.clj for the default workflow definitions.
+
 
 Module Configuration
 --------------------

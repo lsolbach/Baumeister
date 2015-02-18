@@ -125,6 +125,13 @@ Users
  * Software Architects
 
 
+Guidelines
+----------
+ * Make common tasks easy
+ * Make uncommon tasks possible
+ * Make everything as simple as possible but not simpler
+
+
 Proposed Features
 -----------------
  * multi language builds (Java, AspectJ, Clojure, ...)

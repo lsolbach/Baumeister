@@ -1,24 +1,31 @@
 TODO's
 ======
 
-Use clojure.edn for reading config files
-
-Separate GlobalPlugin, ...
-
-Guidelines
-----------
- * Make common tasks easy
- * Make uncommon tasks possible
- * Make everything as simple as possible but not simpler
+Plugins
+-------
+ * FIX PACKAGING AND JAR-COPYING
+ * Separate GlobalPlugin, ...
+ * define default plugins for languages and architectural types
+ 
+Configuration
+-------------
+ * Use clojure.edn for reading config files
 
 Build
 -----
  * Multi module builds
    * topological sorting of the modules based on the module dependencies
+     * or as a start just build in declared order?
    * call baumeister on multiple modules
      * handle multiple configurations
- * parent module configurations?
+	 * parent module configurations?
+       * read parent configuration and merge the config of the current module at registry level or at config level?
+   * use the build output of dependent modules directly, don't rely on packaged jars
+     * use the build/classes dir of dependent modules on the classpath of the current module so no packaging of jars is required 
 
+Dependency classpath
+--------------------
+ * Build classpath from the local repository cache instead of build/lib
 
 Think About
 ===========
@@ -34,7 +41,7 @@ Differences between baumeister and maven repositories
    * baumeister repositories (remote dev/release)
    * maven repositories (maven install/release)
 
-### Maven ###
+### Maven
 Maven 3 way repository structure
  * local repository cache
    * visible only for the developer
@@ -77,6 +84,7 @@ Plugins
  * internal/default plugins
    * global initialization
    * dependency management
+ * account for dynamic plugins evaluating/executing clojure code
 
 Orthogonality
 -------------
