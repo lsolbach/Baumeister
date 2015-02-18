@@ -9,7 +9,6 @@
 
 ; TODO read the whole configuration before taking actions on specific keys (repositories, plugins,...)?!
 ; TODO conj all configuration items to a list and process them after reading all?! So the order would be preserved.
-; TODO define key syntax to which data gets appended instead of overriding the data from prior config
 
 (defn- reset-registries []
   "Resets the registries."
@@ -69,6 +68,7 @@
     (= key :log-level) (set-log-level (keyword value))
     (= key :log-level) (set-message-level (keyword value))))
 
+
 (defn set-params [params]
   "Sets parameters in the parameter registry."
   (log :debug "set params" params)
@@ -77,6 +77,7 @@
       ; TODO implement override/append behaviour on defined keys?
       (log :trace "setting parameter" key "to" value)
       (if (starts-with "additional-" (name key))
+        ; if a key starts with additional, the values get appended to the collection of base values
         (let [param-key (substring (count "additional-") (name key))]
           (log :trace "updating parameter" key "with" value)
           (update-var param-key value)

@@ -43,36 +43,46 @@
     (filter #(contains? target-set (:target %)) dependencies)))
 
 (defn file-for-artifact
+  "Returns the file for the artifact."
   ([artifact]
     (log :trace "file for artifact" (print-artifact artifact))
     (query-artifact artifact)))
 
 (defn url-for-file
+  "Returns the url for the given file."
   [file]
   (log  :trace "url for file" (str file))
   (as-url (canonical-file file)))
 
 (defn artifact-urls
+  "Returns the artifact urls for the dependencies."
   ([dependencies]
     (log :trace dependencies)
     (map url-for-file (filter (complement nil?) (map file-for-artifact (map :artifact dependencies))))))
 
+; TODO make the targets configurable in the settings
 (defn runtime-dependencies [dependencies]
+  "Returns the runtime dependencies."
   (dependencies-by-targets [:runtime :aspect] dependencies))
 
 (defn compile-dependencies [dependencies]
+  "Returns the compile time dependencies."
   (dependencies-by-targets [:runtime :dev :aspect :aspectin] dependencies))
 
 (defn aspect-dependencies [dependencies]
+  "Returns the aspect dependencies."
   (dependencies-by-targets [:aspect] dependencies))
 
 (defn aspectin-dependencies [dependencies]
+  "Returns the aspectin dependencies."
   (dependencies-by-targets [:aspectin] dependencies))
 
 (defn model-dependencies [dependencies]
+  "Returns the model dependencies."
   (dependencies-by-targets [:model] dependencies))
 
 (defn generator-dependencies [dependencies]
+  "Returns the generator dependencies."
   (dependencies-by-targets [:generator] dependencies))
 
 ; TODO merge dependency-initialization with repositories query-* to dependency-resolving? 

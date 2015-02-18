@@ -46,7 +46,7 @@
   (let [plugin-deps (plugin-dependencies)
         plugin-dependency-urls (artifact-urls (filter #(not= (:target %) :plugin-root) plugin-deps))]
     (log :info "plugin dependencies" plugin-deps)
-    (generate-plugin-dot)
+    ;(generate-plugin-dot)
     (add-urls plugin-dependency-urls)))
 
 ; TODO load plugin as dependency? yes, when the build framework is stable

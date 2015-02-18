@@ -36,7 +36,7 @@
   "Register the key/value pair without any preprocessing"
   (def param-registry (assoc param-registry key value)))
 
-; TODO refactor to multimethod
+; TODO refactor to multimethod?
 (defn register-param [key value]
   "Register the key/value pair with preprocessing (e.g. variable replacement)"
   (def param-registry
