@@ -10,8 +10,9 @@
 ; TODO read the whole configuration before taking actions on specific keys (repositories, plugins,...)?!
 ; TODO conj all configuration items to a list and process them after reading all?! So the order would be preserved.
 
-(defn- reset-registries []
+(defn- reset-registries
   "Resets the registries."
+  []
   (reset-plugin-registry)
   (reset-fn-registries)
   (reset-param-registry))
@@ -30,8 +31,9 @@
   (let [[key value] (str/split define  #"=")]
     [(keyword key) (read-string value)]))
 
-(defn get-params-from-options [options]
+(defn get-params-from-options
   "Extracts the defined options from the command line args."
+  [options]
   (let [define (:define options)
         params (cond
                  (nil? define) []
@@ -44,6 +46,7 @@
     (partition 2 params)))
 
 (defn param-action
+  "Executes an action for the parameter based on the key."
   [key value]
   (log :trace "param action for" key "->" value)
   (cond
@@ -69,8 +72,9 @@
     (= key :log-level) (set-message-level (keyword value))))
 
 
-(defn set-params [params]
+(defn set-params
   "Sets parameters in the parameter registry."
+  [params]
   (log :debug "set params" params)
   (if (seq params)
     (doseq [[key value] params]
