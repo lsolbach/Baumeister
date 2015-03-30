@@ -12,13 +12,29 @@
         [baumeister.utils checks log]
         [baumeister.config registry function-registry]))
 
-(defn workflow? [id] (ends-with "-workflow" (name id)))
-(defn phase? [id] (not (ends-with "-workflow" (name id))))
+(defn workflow?
+  "Returns true if the given id identifies a workflow."
+  [id]
+  (ends-with "-workflow" (name id)))
 
-(defn pre-key [phase] (keyword (str "pre-" (name phase))))
-(defn post-key [phase] (keyword (str "post-" (name phase))))
+(defn phase?
+  "Returns true if the given id identifies a workflow phase."
+  [id]
+  (not (ends-with "-workflow" (name id))))
 
-(defn do-step [step functions]
+(defn pre-key
+  "Returns the key of the pre step of the phase."
+  [phase]
+  (keyword (str "pre-" (name phase))))
+
+(defn post-key
+  "Returns the key of the post step of the phase."
+  [phase]
+  (keyword (str "post-" (name phase))))
+
+(defn do-step
+  "Processes the functions for the step."
+  [step functions]
   (when (seq functions)
     (message :trace (str "doing step " (str (name step) "... ")))
     (log :trace (str "step " (str (name step) functions)))
@@ -26,7 +42,7 @@
       (function))))
 
 (defn do-phase
-  "process the registered functions for the phase"
+  "Processes the registered functions for the phase."
   [phase]
   (message :info  (str "doing phase " (name phase) "... "))
   (do-step (pre-key phase) (get-registered-step-functions (pre-key phase)))
@@ -34,7 +50,7 @@
   (do-step (post-key phase) (reverse (get-registered-step-functions (post-key phase)))))
 
 (defn do-workflow
-  "process the given workflow (or phase)"
+  "Processes the given workflow (or phase)"
   [workflow]
   (if (workflow? workflow)
     (do
@@ -47,7 +63,7 @@
     (do-phase workflow)))
 
 (defn start-workflow
-  "Start the Baumeister workflow."
+  "Starts the workflow."
   ([]
     (do-workflow (keyword (param :default-action)))) ; default workflow is :build-workflow
   ([& args]

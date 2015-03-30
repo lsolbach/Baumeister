@@ -22,20 +22,25 @@
 (def ^:dynamic built-nodes []) ; cache built nodes
 (def ^:dynamic dependency-data {}) ; cache dependency data
 
-(defn print-node [node]
+(defn print-node
+  [node]
   (print-dependency (:dependency node) (:target node)))
 
-(defn matches-node? [dependency target node]
+(defn matches-node?
+  [dependency target node]
   (and (= (:dependency node) dependency) (= (:target node) target)))
 
-(defn find-node [dependency target]
+(defn find-node
+  [dependency target]
   (first (filter (partial matches-node? dependency target) built-nodes)))
 
-(defn is-built? [dependency target]
+(defn is-built?
+  [dependency target]
   (let [node (find-node dependency target)]
     (not (nil? node))))
 
-(defn is-excluded? [excluded dependency]
+(defn is-excluded?
+  [excluded dependency]
   (let [excluding-patterns (filter #(matches-artifact? % (:artifact dependency)) excluded)]
     (log :trace "is excluded?" (print-dependency dependency) "<<" excluded ">>" (seq excluding-patterns))
     (not (nil? (seq excluding-patterns)))))
@@ -85,7 +90,8 @@
     (DependencyNodeImpl. dependency target included excluded)))
 
 ; TODO use memoization for caching?! (must work over plugin and module dependency resolution, which works now, because the cache is resetted)
-(defn find-or-build-node [dependency target included]
+(defn find-or-build-node
+  [dependency target included]
   (if-let [node (find-node dependency target)]
     node
     (let [node (new-dependency-node dependency target included)]
@@ -143,7 +149,7 @@
     (new-dependency [(param :project) (param :module) (param :version)] target)))
 
 (defn module-dependency-tree
-  "build the module dependency tree"
+  "Builds the module dependency tree."
   []
   (log :debug "doing build-dependency-tree")
   (def built-nodes []) ; reset built nodes set
@@ -155,7 +161,7 @@
     root))
 
 (defn plugin-dependency-tree
-  "build the plugin dependency tree"
+  "Builds the plugin dependency tree."
   []
   (log :debug "doing build-plugin-dependency-tree")
   (def built-nodes []) ; reset built nodes set
@@ -166,7 +172,9 @@
     (register-val :plugin-dependency-tree root)
     root))
 
-(defn resolve-module-dependency-tree []
+(defn resolve-module-dependency-tree
+  "Resolves the module dependency tree."
+  []
   (let [module-tree (param :module-dependency-tree)]
     (if (seq module-tree)
       module-tree
@@ -178,27 +186,30 @@
 ;      plugin-tree
 ;      (plugin-dependency-tree))))
 (defn resolve-plugin-dependency-tree
-  "Resolve the plugin dependency tree."
+  "Resolves the plugin dependency tree."
   []
   (plugin-dependency-tree))
 
 (defn generate-plugin-dot
-  "Generate dot graphs for the configured dependency tree."
+  "Generates dot graphs for the configured dependency tree."
   []
   (with-open [wrt (java.io.StringWriter.)]
     (dependencies-dot wrt (resolve-plugin-dependency-tree))
     (spit (param "plugin-dependencies.dot") (str wrt))))
 
-(defn module-dependencies []
+(defn module-dependencies
+  "Returns a topologically sorted sequence of the module depencencies."
+  []
   (let [root (resolve-module-dependency-tree)]
     (log :trace "dependency tree" (print-node root))
     ; topologically sorted sequence of the dependency dag
     (topological-sort root)))
 
-(defn plugin-dependencies []
+(defn plugin-dependencies
+  "Returns a topologically sorted sequence of the plugin depencencies."
+  []
   (let [root (resolve-plugin-dependency-tree)]
     (log :trace "dependency tree" (print-node root))
     ;(generate-plugin-dot)
     ; topologically sorted sequence of the dependency dag
     (topological-sort root)))
-

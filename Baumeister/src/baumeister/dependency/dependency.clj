@@ -12,30 +12,39 @@
         [org.soulspace.clj.artifact artifact]
         [baumeister.config registry]))
 
-(defn copy? [dependency]
+(defn copy?
+  "Returns true if the dependency has to be copied."
+  [dependency]
   (contains? (:copy (param :dependency-actions)) (:target dependency)))
 
-(defn unzip? [dependency]
+(defn unzip?
+  "Returns true if the dependency has to be unzipped."
+  [dependency]
   (contains? (:unzip (param :dependency-actions)) (:target dependency)))
 
-(defn follow? [dependency]
+(defn follow?
+  "Returns true if the dependency has to be followed only."
+  [dependency]
   (contains? (:follow (param :dependency-actions)) (:target dependency)))
 
 (def compatible-targets
   {:aspectj :runtime
    :aspectin :dev})
 
-(defn set-dependency-target [dependency target]
+(defn set-dependency-target
   "Sets the target of the dependency."
+  [dependency target]
   (assoc dependency :target target))
 
 (defn print-artifact
+  "Prints an artifact."
   ([artifact]
     (str "[" 
          (clojure.string/join ", " [(:project artifact) (:module artifact) (artifact-version artifact) (:name artifact) (:type artifact)])
          "]")))
 
 (defn print-dependency
+  "Prints a dependency."
   ([dependency]
     (print-dependency dependency (:target dependency)))
   ([dependency target]
@@ -74,5 +83,7 @@
   ([artifact target optional scope exclusions]
     (DependencyImpl. (new-artifact artifact) target optional scope (map new-artifact-pattern exclusions))))
 
-(defn new-dependency [& args]
+(defn new-dependency
+  "Creates a new dependency."
+  [& args]
   (apply create-dependency args))

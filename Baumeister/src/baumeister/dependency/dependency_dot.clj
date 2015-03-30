@@ -26,25 +26,26 @@
   :generator "cyan"})
 
 (defn dot-edge-style
+  "Returns the edge style for the edge between parent and child."
   [parent child]
   (str "[color=" (edge-color (:target (:dependency child)))
        " style=" (if (:optional (:dependency child)) "dotted" "solid") "]"))
 
 (defn dependency-dot-vertex
-  "Renders a vertex for the artifact in the dot representation of the dependency tree."
+  "Returns a vertex for the artifact in the dot representation of the dependency tree."
   [dep-node]
   (let [artifact (:artifact (:dependency dep-node))]
     (str "\"" (artifact-key artifact) "\""
          " [shape=box label=\"" (:project artifact) "\\n" (artifact-name-version artifact) "\"];")))
 
 (defn dependency-dot-edge-end
-  "Renders a edge end for the artifact in the dot representation of the dependency tree."
+  "Returns a edge end for the artifact in the dot representation of the dependency tree."
   [dep-node]
   (let [artifact (:artifact (:dependency dep-node))]
     (str "\"" (artifact-key artifact) "\"")))
 
 (defn dependency-dot-edge
-  "Renders an edge in the dot representation of the dependency tree."
+  "Returns an edge in the dot representation of the dependency tree."
   [parent child]
   (let [dot-edge (str (dependency-dot-edge-end parent) " -> " (dependency-dot-edge-end child)
                       " " (dot-edge-style parent child) ";")]

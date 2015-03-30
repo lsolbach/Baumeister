@@ -17,8 +17,9 @@
         [baumeister.utils ant-utils log]))
 
 ; TODO instead of copying to target lib dirs, build target specific classpaths with references into the repositories?!?
-(defn init-dependency [dependency]
-  "Initialize the dependency for the build by copying or unzipping the referenced artifact."
+(defn init-dependency
+  "Initializes the dependency for the build by copying or unzipping the referenced artifact."
+  [dependency]
   (let [artifact (:artifact dependency)
         src (query-artifact (param :deps-repositories) artifact)
         tgt (param (keyword (str "lib-" (name (:target dependency)) "-dir")))]
@@ -31,8 +32,9 @@
         (follow? dependency) nil ; do nothing in initalization 
         :default (log :error "Could not handle dependency " dependency)))))
 
-(defn init-dependencies [dependencies]
-  "Initialize the sequence of dependencies."
+(defn init-dependencies
+  "Initializes the sequence of dependencies."
+  [dependencies]
   (doseq [dependency dependencies]
     (init-dependency dependency)))
 
@@ -61,28 +63,34 @@
     (map url-for-file (filter (complement nil?) (map file-for-artifact (map :artifact dependencies))))))
 
 ; TODO make the targets configurable in the settings
-(defn runtime-dependencies [dependencies]
+(defn runtime-dependencies
   "Returns the runtime dependencies."
+  [dependencies]
   (dependencies-by-targets [:runtime :aspect] dependencies))
 
-(defn compile-dependencies [dependencies]
+(defn compile-dependencies
   "Returns the compile time dependencies."
+  [dependencies]
   (dependencies-by-targets [:runtime :dev :aspect :aspectin] dependencies))
 
-(defn aspect-dependencies [dependencies]
+(defn aspect-dependencies
   "Returns the aspect dependencies."
+  [dependencies]
   (dependencies-by-targets [:aspect] dependencies))
 
-(defn aspectin-dependencies [dependencies]
+(defn aspectin-dependencies
   "Returns the aspectin dependencies."
+  [dependencies]
   (dependencies-by-targets [:aspectin] dependencies))
 
-(defn model-dependencies [dependencies]
+(defn model-dependencies
   "Returns the model dependencies."
+  [dependencies]
   (dependencies-by-targets [:model] dependencies))
 
-(defn generator-dependencies [dependencies]
+(defn generator-dependencies
   "Returns the generator dependencies."
+  [dependencies]
   (dependencies-by-targets [:generator] dependencies))
 
 ; TODO merge dependency-initialization with repositories query-* to dependency-resolving? 
