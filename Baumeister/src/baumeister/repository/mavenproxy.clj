@@ -30,6 +30,7 @@
     (if (seq (artifact-version artifact))
       (str (ns-to-path (:project artifact)) "/" (:module artifact) "/" (artifact-version artifact))
       (str (ns-to-path (:project artifact)) "/" (:module artifact))))
+  
   (get-artifact [repo artifact]
     (when (and (not (local-hit? repo artifact)) (remote-hit? repo artifact))
       ; local miss but remote hit, cache from remote
@@ -48,15 +49,19 @@
   VersionedArtifactRepository
   (versions [repo artifact]
     (map new-version (:versions (:versioning (get-metadata repo artifact)))))
-    ; (map new-version (map file-name (files (module-dir repo artifact)))))
+  ; (map new-version (map file-name (files (module-dir repo artifact)))))
+  
   (latest? [repo artifact]
     (same-version? (:version artifact) (latest-version repo artifact)))
+  
   (latest-version [repo artifact]
     (let [metadata (get-metadata repo artifact)
           latest (new-version (:latest (:versioning metadata)))]
       (new-version latest)))
+  
   (latest-artifact [repo artifact]
     (new-artifact-version artifact (latest-version repo artifact)))
+  
   (find-artifact [repo artifact]
     (if (seq (artifact-version artifact))
       (get-artifact repo artifact)
@@ -67,8 +72,10 @@
     (if (seq (artifact-version artifact))
       (str (:name artifact) "-" (artifact-version artifact) "." (:type artifact))
       (str (:name artifact) "." (:type artifact))))
+  
   (pom-artifact [repo artifact]
     (new-artifact [(:project artifact) (:module artifact) (artifact-version artifact) (:module artifact) "pom"]))
+  
   (get-pom [repo artifact]
     (let [pom-file (find-artifact repo (pom-artifact repo artifact))]
       (if (exists? pom-file)
@@ -79,8 +86,10 @@
               (parse-pom zipped parent-pom))
             (parse-pom zipped)))
         nil)))
+  
   (metadata-folder [repo artifact]
     (str (ns-to-path (:project artifact) "/" (:module artifact))))
+  
   (get-metadata [repo artifact]
     (log :trace "getting repository metadata for " (:project artifact) "/" (:module artifact))
     (let [md-artifact (new-artifact [(:project artifact) (:module artifact) "" "maven-metadata" "xml"])
