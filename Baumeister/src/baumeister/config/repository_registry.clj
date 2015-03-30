@@ -30,5 +30,7 @@
   (let [[_ usage url path] opts] 
     (MavenProxyArtifactRepositoryImpl. usage url (param path))))
 
-(defn create-repositories [v]
-  (map create-repository v))
+(defn create-repositories
+  "Creates the sequence of repositories."
+  [repos]
+  (map create-repository repos))

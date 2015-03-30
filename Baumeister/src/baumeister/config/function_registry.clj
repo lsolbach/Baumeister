@@ -15,42 +15,55 @@
 (def ^{:dynamic true :private true} fn-registry) ; registry for plugin step functions
 (def ^{:dynamic true :private true} step-fn-registry) ; registry for plugin functions
 
-(defn reset-step-fn-registry [] (def step-fn-registry {}))
-(defn reset-fn-registry [] (def fn-registry {}))
+(defn reset-step-fn-registry
+  "Resets the step function registry."
+  []
+  (def step-fn-registry {}))
 
-(defn register-step [step function]
-  "Registers a function at the step."
-  (let [stp (keyword step)]
-    (def step-fn-registry
-      (assoc step-fn-registry stp (conj (get step-fn-registry stp []) function)))))
-
-(defn register-steps [functions]
-  "Registers the functions at their steps."
-  (doseq [[step function] functions]
-    (register-step step function)))
-
-(defn get-registered-step-functions [step]
-  "Returns the functions for the step."
-  (step-fn-registry step))
-
-(defn register-function [step function]
-  "Registers a function at the step."
-  (let [stp (keyword step)]
-    (def fn-registry
-      (assoc fn-registry stp (conj (get fn-registry stp []) function)))))
-
-(defn register-functions [functions]
-  "Registers the functions at their names."
-  (doseq [[name function] functions]
-    (register-function name function)))
-
-(defn get-registered-functions [step]
-  "Returns the functions for the step."
-  (fn-registry step))
+(defn reset-fn-registry
+  "Resets the function registry."
+  []
+  (def fn-registry {}))
 
 (defn reset-fn-registries
   "Resets the function registries."
   []
   (reset-fn-registry)
   (reset-step-fn-registry))
+
+(defn register-step
+  "Registers a function at the step."
+  [step function]
+  (let [stp (keyword step)]
+    (def step-fn-registry
+      (assoc step-fn-registry stp (conj (get step-fn-registry stp []) function)))))
+
+(defn register-steps
+  "Registers the functions at their steps."
+  [functions]
+  (doseq [[step function] functions]
+    (register-step step function)))
+
+(defn get-registered-step-functions
+  "Returns the functions for the step."
+  [step]
+  (step-fn-registry step))
+
+(defn register-function
+  "Registers a function at the step."
+  [step function]
+  (let [stp (keyword step)]
+    (def fn-registry
+      (assoc fn-registry stp (conj (get fn-registry stp []) function)))))
+
+(defn register-functions
+  "Registers the functions at their names."
+  [functions]
+  (doseq [[name function] functions]
+    (register-function name function)))
+
+(defn get-registered-functions
+  "Returns the functions for the step."
+  [step]
+  (fn-registry step))
 

@@ -16,29 +16,36 @@
 ;
 (def ^{:dynamic true :private true} param-registry)
 
-(defn get-param-registry []
+(defn get-param-registry
   "Returns the parameter registry."
+  []
   param-registry)
 
-(defn reset-param-registry []
+(defn reset-param-registry
   "Resets the parameter registry."
+  []
   (def param-registry {}))
 
-(defn print-parameters []
+(defn print-parameters
+  "Prints the parameter registry."
+  []
   (pprint (get-param-registry)))
 
 ; replace "${build-dir}/report" with (str (get-var (keyword build-dir) "${build-dir}") "/dir")
 (defn replace-vars
+  "Replaces with the variables in the parameter registry with the given value."
   [value]
-    (replace-properties param-registry value))
+  (replace-properties param-registry value))
 
-(defn register-param-as-is [key value]
-  "Register the key/value pair without any preprocessing"
+(defn register-param-as-is
+  "Registers the key/value pair without any preprocessing."
+  [key value]
   (def param-registry (assoc param-registry key value)))
 
 ; TODO refactor to multimethod?
-(defn register-param [key value]
-  "Register the key/value pair with preprocessing (e.g. variable replacement)"
+(defn register-param
+  "Registers the key/value pair with preprocessing (e.g. variable replacement)"
+  [key value]
   (def param-registry
     (cond
       (string? value)
@@ -56,7 +63,8 @@
         (assoc param-registry key value)))))
 
 ; TODO support documentation on vars
-(defn register-params [vars]
-  "Register parameters in the parameter registry."
+(defn register-params
+  "Registers parameters in the parameter registry."
+  [vars]
   (doseq [[key value] vars]
     (register-param key value)))

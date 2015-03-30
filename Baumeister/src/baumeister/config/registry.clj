@@ -53,8 +53,9 @@
       (get-var k default)
       (replace-vars k))))
 
-(defn register-val [key value]
+(defn register-val
   "Register a value."
+  [key value]
   (register-param-as-is key value))
 
 (defn register-var

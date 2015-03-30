@@ -21,9 +21,20 @@
 ;
 (def ^{:dynamic true :private true} plugin-registry)
 
-(defn reset-plugin-registry [] (def plugin-registry #{})) ; initialize plugin registry as empty set
-(defn register-plugin [plugin] (def plugin-registry (conj plugin-registry plugin)))
-(defn has-plugin? [plugin] ((set plugin-registry) plugin))
+(defn reset-plugin-registry
+  "Resets the plugin registry."
+  []
+  (def plugin-registry #{})) ; initialize plugin registry as empty set
+
+(defn register-plugin
+  "Registers a plugin in the plugin registry."
+  [plugin]
+  (def plugin-registry (conj plugin-registry plugin)))
+
+(defn has-plugin?
+  "Returns true if the plugin is registered in the plugin registry."
+  [plugin]
+  ((set plugin-registry) plugin))
 
 ; TODO the plugin namespace is too static, use project and module params from plugin dependencies
 (def plugin-ns-prefix "baumeister.plugin")
@@ -52,6 +63,7 @@
 ; TODO load plugin as dependency? yes, when the build framework is stable
 ; load-file or require? (use compiled classes in Baumeister.jar or Baumeister plugins and load-file user plugins from file system?)
 (defn init-plugin
+  "Initializes a plugin."
   [name]
   (let [plugin (symbol  name)]
     (when-not (has-plugin? plugin)
@@ -65,7 +77,7 @@
 
 ;
 (defn init-plugins
-  "Initialize the given seq of plugins"
+  "Initializes the given sequence of plugins."
   [plugins]
   ; get plugin dependencies for all plugins and set the classpath accordingly
   (set-plugin-dependency-classpath)
