@@ -52,7 +52,9 @@
 
 (defn package-ear
   [dir environment additional-manifest-entries]
-  (log :debug "packaging ear" dir " " environment))
+  (log :debug "packaging ear" dir " " environment)
+  (log :debug "packaging ear is not implemented yet!")
+  )
 
 (defn package-sourcedoc
   []
@@ -65,6 +67,10 @@
             (ant-fileset {:dir (param :source-dir)})
             ;(ant-fileset {:dir (param :generated-source-dir)}) ; etc
             ))
+
+(defn package-app
+  []
+  )
 
 (defn package-data
   "Package data."

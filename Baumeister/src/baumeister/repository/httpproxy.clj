@@ -24,14 +24,12 @@
   (get-artifact [repo  artifact]
     (when (and (not (local-hit? repo artifact)) (remote-hit? repo artifact))
       (cache-artifact repo artifact))
-    (if (local-hit? repo artifact)
-      (artifact-file repo artifact)
-      nil))
+    (when (local-hit? repo artifact)
+      (artifact-file repo artifact)))
   (get-dependencies-for-artifact [repo artifact]
     (let [module-file (find-artifact repo (module-artifact repo artifact))]
-      (if (exists? module-file)
-        (:dependencies (apply hash-map (load-string (slurp module-file))))
-        nil)))
+      (when (exists? module-file)
+        (:dependencies (apply hash-map (load-string (slurp module-file)))))))
   (put-artifact [repo artifact artifact-src]
     (create-dir (artifact-dir repo artifact))
     (copy artifact-src (artifact-file repo artifact))) ; TODO synchronize with remote?

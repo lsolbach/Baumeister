@@ -35,9 +35,8 @@
     (when (and (not (local-hit? repo artifact)) (remote-hit? repo artifact))
       ; local miss but remote hit, cache from remote
       (cache-artifact repo artifact))
-    (if (local-hit? repo artifact)
-      (artifact-file repo artifact)
-      nil))
+    (when (local-hit? repo artifact)
+      (artifact-file repo artifact)))
   
   (get-dependencies-for-artifact [repo artifact]
     (pom-dependencies-data (get-pom repo (pom-artifact repo artifact))))
@@ -84,8 +83,7 @@
             (let [parent-artifact (new-artifact (parse-pom-parent {} zipped))
                   parent-pom (get-pom repo parent-artifact)]
               (parse-pom zipped parent-pom))
-            (parse-pom zipped)))
-        nil)))
+            (parse-pom zipped))))))
   
   (metadata-folder [repo artifact]
     (str (ns-to-path (:project artifact) "/" (:module artifact))))
@@ -100,30 +98,39 @@
   FileArtifactRepository
   (project-dir [repo artifact]
     (as-file (str  path "/" (ns-to-path (:project artifact)))))
+
   (module-dir [repo artifact]
     (as-file (str  path "/" (ns-to-path (:project artifact)) "/" (:module artifact))))
+
   (artifact-dir [repo artifact]
     (as-file (str  path "/" (artifact-folder repo artifact))))
+
   (artifact-file [repo artifact]
     (as-file (str (absolute-path (artifact-dir repo artifact)) "/" (maven-name repo artifact))))
   
   HttpArtifactRepository
   (project-dir-url [repo artifact]
     (as-url (str url "/" (ns-to-path (:project artifact)))))
+
   (module-dir-url [repo artifact]
     (as-url (str url "/" (ns-to-path (:project artifact)) "/" (:module artifact))))
+
   (artifact-dir-url [repo artifact]
     (as-url (str url "/" (artifact-folder repo artifact))))
+
   (artifact-file-url [repo artifact]
     (as-url (str url "/" (artifact-folder repo artifact) "/" (maven-name repo artifact))))
   
   ProxyArtifactRepository
   (cache-artifact [repo artifact]
+    (log :trace "caching artefact" (artifact-file repo artifact))
     (create-dir (artifact-dir repo artifact))
     (copy (input-stream (artifact-file-url repo artifact)) (artifact-file repo artifact)))
+
   (local-hit? [repo artifact]
     (log :trace "checking local hit for" (artifact-file repo artifact) "->" (exists? (artifact-file repo artifact))) 
     (exists? (artifact-file repo artifact)))
+
   (remote-hit? [repo artifact]
     (log :trace "checking remote hit for" (artifact-file-url repo artifact))
     (test-url (artifact-file-url repo artifact)))

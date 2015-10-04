@@ -94,7 +94,7 @@
 (defn init-defaults
   "Initializes the configuration defaults."
   []
-  (set-dynamic-classloader) ; ensure an dynamic classloader
+  (set-dynamic-classloader) ; ensure a dynamic classloader
   (reset-registries) ; for use with repl's
 
   ; set internal defaults  

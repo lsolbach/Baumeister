@@ -1,13 +1,13 @@
 ;
 ; *Please don't change this file!*
 ;
+; If you want to override configuration parameters, use $(HOME)/.Baumeister/settings.clj or module.clj
+;
 ; This file defines the default configuration for Baumeister. 
 ; These settings are merged with the settings in the user specific settings.clj file and the module.clj files
 ;
-; If you want to override configuration parameters, use $(HOME)/.Baumeister/settings.clj or module.clj
-;
 [
- :system-version "0.6.3"
+ :system-version "0.6.5"
  ;
  ; default log and message levels
  ;
@@ -21,6 +21,7 @@
   ; :prerequisites-workflow [:prerequisites] ; verify prerequisites for the build
   :clean-workflow [:clean] ; remove any build artifats and directories from the module
   :init-workflow [:init :dependencies] ; initialize the module, create required directories for a build and resolve dependencies
+  :architecture-workflow [:clean :init :dependencies :generate-architecture] ; generate modules from an architecture model
   :compile-workflow [:init-workflow :generate :compile] ; compile the module
   :package-workflow [:compile-workflow :sourcedoc :package] ; package the module
   :integrationtest-workflow [:package-workflow :integrationtest] ; run the integration tests
@@ -30,7 +31,6 @@
   :analyse-workflow [:package-workflow :analyse] ; perform static code analysis
   :build-workflow [:clean :package-workflow :unittest :coverage :analyse :distribute]
   :distribute-workflow [:build-workflow :generate-distribution :package-distribution :distribute-distribution] ; build distribution packages
-  :architecture-workflow [:clean :init :dependencies :generate-architecture] ; generate modules from an architecture model
   :module-workflow [:create-module]
   }
  ; the default action to take, if no workflow or phase is provided
@@ -169,6 +169,8 @@
                          nil :runtime}
  ; mapping of the maven type/packaging to Baumeister types
  :maven-type-to-type {"jar" "jar"
+                      "war" "war"
+                      "ear" "ear"
                       "ejb-client" "jar"
                       "pom" "pom"
                       nil "jar"}

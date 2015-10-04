@@ -8,11 +8,13 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.genesis
-  (:use [clojure.java.io]
-        [org.soulspace.clj file]
-        [baumeister.config parameter-registry]))
+  (:use [clojure.java.io :exclude [delete-file]]
+        [org.soulspace.clj file string]
+        [baumeister.config registry parameter-registry]))
 
 ; TODO extract templates into (data) modules and use the dependency mechanisms to resolve them
+
+(def root-dir) ; FIXME fix process-project-template and remove
 
 (defn target-filename
   "Returns the file name of the target file."
@@ -29,7 +31,7 @@
 (defn create-folder
   "Creates a folder."
   [file]
-  (mkdir (as-file (path))))
+  (create-dir (as-file (path))))
 
 (defn create-file
   "Creates a file."
@@ -51,11 +53,16 @@
   [coll]
   )
 
+(defn genesis-init
+  "Initialize genesis plugin."
+  []
+  )
+
 (defn genesis-new
   "Creates a new module."
   []
-  (mkdir (param :module))
-  (process-templates (param :templates))
+  (create-dir (param :module))
+  (process-project-templates (param :templates))
   )
 
 (def config

@@ -54,6 +54,7 @@
 (defn process-command
   "Process command (aka module-less workflow)"
   [command arguments options]
+;  (println command arguments options)
   )
 
 (defn start-processing
@@ -64,7 +65,9 @@
     (init-config options)
     (if (command? (first arguments))
       (process-command (first arguments) (rest arguments) options)
-      (apply start-workflow arguments))
+      (try (apply start-workflow arguments) (catch Exception e
+                                              (message :error (.getMessage e))
+                                              (message :debug (.printStackTrace e)))))
     (let [end (System/currentTimeMillis)]
       (message :info (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds.")))))
 
@@ -77,3 +80,4 @@
       (print-options options)
       (start-processing arguments options)))
   0)
+
