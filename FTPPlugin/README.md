@@ -1,7 +1,7 @@
-Baumeister PlantUMLPlugin
+Baumeister FTPPlugin
 =========================
 
-PlantUML plugin to generate PlantUML diagrams with the Baumeister build system.
+FTP plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -17,5 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/Baumeister/PlantUMLPlugin] (https://github.com/lsolbach/Baumeister/PlantUMLPlugin)
+[https://github.com/lsolbach/Baumeister/FTPPlugin] (https://github.com/lsolbach/Baumeister/FPTPlugin)
 

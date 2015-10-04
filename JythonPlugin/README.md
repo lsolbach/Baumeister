@@ -1,7 +1,7 @@
-Baumeister GroovyPlugin
+Baumeister JythonPlugin
 =======================
 
-Groovy compiler plugin for the Baumeister build system.
+Jython plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -9,7 +9,7 @@ Ludger Solbach
 
 Copyright
 ---------
-© 2014 Ludger Solbach
+© 2012-2013 Ludger Solbach
 
 License
 -------
@@ -17,4 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/Baumeister/GroovyPlugin] (https://github.com/lsolbach/Baumeister/GroovyPlugin)
+[https://github.com/lsolbach/Baumeister/JythonPlugin] (https://github.com/lsolbach/Baumeister/JythonPlugin)
+

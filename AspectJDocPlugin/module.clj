@@ -2,7 +2,7 @@
  :module "AspectJDocPlugin"
  :project "org.soulspace.baumeister"
  :type :baumeister-plugin
- :version "0.6.2"
+ :version "0.6.5"
  :description "AspectJDoc plugin for the Baumeister build system."
  :plugins ["global"
            ["org.soulspace.baumeister/DependencyPlugin"]

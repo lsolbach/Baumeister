@@ -17,4 +17,4 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/JavaPlugin] (https://github.com/lsolbach/JavaPlugin)
+[https://github.com/lsolbach/Baumeister/JavaPlugin] (https://github.com/lsolbach/Baumeister/JavaPlugin)

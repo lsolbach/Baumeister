@@ -17,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/DistributionPlugin] (https://github.com/lsolbach/DistributionPlugin)
+[https://github.com/lsolbach/Baumeister/DistributionPlugin] (https://github.com/lsolbach/Baumeister/DistributionPlugin)
 
 History
 -------

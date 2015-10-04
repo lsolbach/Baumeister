@@ -17,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/AspectJPlugin] (https://github.com/lsolbach/AspectJPlugin)
+[https://github.com/lsolbach/Baumeister/AspectJPlugin] (https://github.com/lsolbach/Baumeister/AspectJPlugin)
 
 History
 -------

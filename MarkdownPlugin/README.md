@@ -17,12 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterSitePlugin] (https://github.com/lsolbach/BaumeisterSitePlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
+[https://github.com/lsolbach/Baumeister/MarkdownPlugin] (https://github.com/lsolbach/Baumeister/MarkdownPlugin)
 

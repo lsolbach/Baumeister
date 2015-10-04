@@ -17,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/FindbugsPlugin] (https://github.com/lsolbach/FindbugsPlugin)
+[https://github.com/lsolbach/Baumeister/FindbugsPlugin] (https://github.com/lsolbach/Baumeister/FindbugsPlugin)
 
 History
 -------

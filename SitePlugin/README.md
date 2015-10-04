@@ -17,12 +17,4 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/SitePlugin] (https://github.com/lsolbach/SitePlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
-
+[https://github.com/lsolbach/Baumeister/SitePlugin] (https://github.com/lsolbach/Baumeister/SitePlugin)

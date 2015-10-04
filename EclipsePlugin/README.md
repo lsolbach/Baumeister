@@ -17,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/EclipsePlugin] (https://github.com/lsolbach/EclipsePlugin)
+[https://github.com/lsolbach/Baumeister/EclipsePlugin] (https://github.com/lsolbach/Baumeister/EclipsePlugin)
 
 History
 -------

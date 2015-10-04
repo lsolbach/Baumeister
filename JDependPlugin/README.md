@@ -17,12 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/JDependPlugin] (https://github.com/lsolbach/JDependPlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
+[https://github.com/lsolbach/Baumeister/JDependPlugin] (https://github.com/lsolbach/Baumeister/JDependPlugin)
 

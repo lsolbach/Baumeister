@@ -17,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/CheckstylePlugin] (https://github.com/lsolbach/CheckstylePlugin)
+[https://github.com/lsolbach/Baumeister/CheckstylePlugin] (https://github.com/lsolbach/Baumeister/CheckstylePlugin)
 
 History
 -------

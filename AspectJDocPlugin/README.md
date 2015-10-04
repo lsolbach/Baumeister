@@ -17,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/AspectJDocPlugin] (https://github.com/lsolbach/AspectJDocPlugin)
+[https://github.com/lsolbach/Baumeister/AspectJDocPlugin] (https://github.com/lsolbach/Baumeister/AspectJDocPlugin)
 
 History
 -------

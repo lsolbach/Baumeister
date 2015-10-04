@@ -17,12 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/PMDPlugin] (https://github.com/lsolbach/PMDPlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
+[https://github.com/lsolbach/Baumeister/PMDPlugin] (https://github.com/lsolbach/Baumeister/PMDPlugin)
 

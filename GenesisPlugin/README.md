@@ -17,12 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/GenesisPlugin] (https://github.com/lsolbach/GenesisPlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
+[https://github.com/lsolbach/Baumeister/GenesisPlugin] (https://github.com/lsolbach/Baumeister/GenesisPlugin)
 

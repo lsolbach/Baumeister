@@ -1,6 +1,7 @@
 Baumeister MDDArchitecturePlugin
 ================================
 
+MDD Architecture plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,12 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/MDDArchitecturePlugin] (https://github.com/lsolbach/MDDArchitecturePlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
+[https://github.com/lsolbach/Baumeister/MDDArchitecturePlugin] (https://github.com/lsolbach/Baumeister/MDDArchitecturePlugin)
 

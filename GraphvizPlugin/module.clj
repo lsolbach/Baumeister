@@ -2,11 +2,11 @@
  :module "GraphvizPlugin"
  :project "org.soulspace.baumeister"
  :type :baumeister-plugin
- :version "0.6.1"
- :description "Plugin for the creation of new modules with the Baumeister build system."
+ :version "0.6.5"
+ :description "Graphviz Plugin for the Baumeister build system."
  :plugins ["global"
            ["org.soulspace.baumeister/DependencyPlugin"]
            ["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
- :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.1" :dev]]
+ :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.5" :dev]]
  ]

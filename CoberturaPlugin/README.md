@@ -17,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/CoberturaPlugin] (https://github.com/lsolbach/CoberturaPlugin)
+[https://github.com/lsolbach/Baumeister/CoberturaPlugin] (https://github.com/lsolbach/Baumeister/CoberturaPlugin)
 
 History
 -------

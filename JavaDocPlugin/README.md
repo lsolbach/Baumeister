@@ -17,12 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/JavaDocPlugin] (https://github.com/lsolbach/JavaDocPlugin)
-
-History
--------
-
-Version 0.6.1 (--.--.2014)
---------------------------
-* Extracted from JavaPlugin
+[https://github.com/lsolbach/Baumeister/JavaDocPlugin] (https://github.com/lsolbach/Baumeister/JavaDocPlugin)
 

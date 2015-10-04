@@ -1,6 +1,7 @@
-BaumeisterMDDGeneratorPlugin
-============================
+Baumeister MDDGeneratorPlugin
+=============================
 
+MDD Generator plugin for the Baumeister build system.
 
 Author/Project Lead
 -------------------
@@ -16,12 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/BaumeisterMDDGeneratorPlugin] (https://github.com/lsolbach/BaumeisterMDDGeneratorPlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
+[https://github.com/lsolbach/Baumeister/MDDGeneratorPlugin] (https://github.com/lsolbach/Baumeister/MDDGeneratorPlugin)
 

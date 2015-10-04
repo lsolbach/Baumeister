@@ -17,12 +17,4 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/MavenPlugin] (https://github.com/lsolbach/MavenPlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
-
+[https://github.com/lsolbach/Baumeister/MavenPlugin] (https://github.com/lsolbach/Baumeister/MavenPlugin)

@@ -17,11 +17,4 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/PackagePlugin] (https://github.com/lsolbach/PackagePlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
+[https://github.com/lsolbach/Baumeister/PackagePlugin] (https://github.com/lsolbach/Baumeister/PackagePlugin)

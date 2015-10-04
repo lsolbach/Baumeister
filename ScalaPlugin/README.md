@@ -17,12 +17,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/ScalaPlugin] (https://github.com/lsolbach/ScalaPlugin)
-
-History
--------
-
-Version 0.1.0 (--.--.2014)
---------------------------
-* Initial plugin creation
+[https://github.com/lsolbach/Baumeister/ScalaPlugin] (https://github.com/lsolbach/Baumeister/ScalaPlugin)
 

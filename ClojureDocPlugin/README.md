@@ -17,7 +17,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/ClojureDocPlugin] (https://github.com/lsolbach/ClojureDocPlugin)
+[https://github.com/lsolbach/Baumeister/ClojureDocPlugin] (https://github.com/lsolbach/Baumeister/ClojureDocPlugin)
 
 History
 -------

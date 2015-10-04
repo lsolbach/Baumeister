@@ -31,7 +31,7 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/Baumeister] (https://github.com/lsolbach/Baumeister)
+[https://github.com/lsolbach/Baumeister/Baumeister] (https://github.com/lsolbach/Baumeister/Baumeister)
 
 Download
 --------
