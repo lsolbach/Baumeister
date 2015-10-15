@@ -20,7 +20,7 @@
     clj-path))
 
 (defn collect-namespaces [src-path]
-  (map file-to-ns (map remove-clj-ext (map (partial relative-path src-path) (existing-files-on-path "clj" src-path)))))
+  (map file-to-ns (map normalize-path (map remove-clj-ext (map (partial relative-path src-path) (existing-files-on-path "clj" src-path))))))
 
 (defn compile-clojure [dest-dir src-path class-path]
   (ant-java {:classname "clojure.lang.Compile" :fork (param :clojure-compiler-fork)
