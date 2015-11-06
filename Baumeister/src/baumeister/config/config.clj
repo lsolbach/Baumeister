@@ -23,7 +23,7 @@
   ([file]
     (if (is-file? file)
       (partition 2 (load-file file))
-      (message :info "Could not load configuration file " (file-name file) "."))))
+      (message :info "Could not load configuration file " (canonical-path file) "."))))
 
 (defn parse-define-option
   "Parses a defined command line option."
