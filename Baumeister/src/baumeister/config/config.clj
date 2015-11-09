@@ -119,6 +119,4 @@
   (set-params (read-module (:file options)))
   
   ; add command line parameters (defined by --define or -D)
-  (set-params (get-params-from-options options))
-  (log :trace "registered parameters:")
-  (log :trace (pprint (get-param-registry))))
+  (set-params (get-params-from-options options)))

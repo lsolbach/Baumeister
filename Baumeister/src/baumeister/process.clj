@@ -17,7 +17,7 @@
   (:import [java.util Date])
   (:gen-class))
 
-(def commands #{:new})
+(def known-commands #{:new})
 
 (def option-defs
   "Baumeister option definitions."
@@ -39,7 +39,7 @@
 (defn command?
   "Checks if a command is given."
   [argument]
-  (contains? #{:new} (keyword argument)))
+  (contains? known-commands (keyword argument)))
 
 (defn print-options
   "Print some messages and quit."
@@ -54,7 +54,7 @@
 (defn process-command
   "Process command (aka module-less workflow)"
   [command arguments options]
-;  (println command arguments options)
+  (println "Command:" command arguments options)
   )
 
 (defn start-processing
@@ -80,4 +80,3 @@
       (print-options options)
       (start-processing arguments options)))
   0)
-
