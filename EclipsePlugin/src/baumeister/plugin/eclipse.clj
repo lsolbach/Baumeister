@@ -12,7 +12,7 @@
             [clojure.data.xml :as xml]
             [clojure.data.zip :as zf]
             [clojure.data.zip.xml :as zx]
-            [baumeister.plugin.eclipse.classpath-dsl :as cp])
+            [org.soulspace.clj.eclipse.xml.classpath-dsl :as cp])
   (:use [clojure.java.io :only [as-file]]
         [org.soulspace.clj file]
         [org.soulspace.clj.artifact artifact]
