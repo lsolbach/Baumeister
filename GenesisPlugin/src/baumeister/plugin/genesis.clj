@@ -54,7 +54,6 @@
 (defn genesis-post-new
   "Creates a new module."
   []
-  (log :info "removing build dir...")
   (delete-dir (as-file (param :build-dir))))
 
 (def config

@@ -128,6 +128,7 @@
                        :aspectin ; aspectin dependency, used on aspectin compile classpath
                        :model ; model dependency, used on generation profile path
                        :generator ; generator dependency, used on generation template and profile path
+                       :data ; data dependency
                        :virtual ; meta dependency, no artifacts ???
                        }
  ; :dependency-target-mapping defines the target of a transitive dependency according to the target of the parent dependency
@@ -150,11 +151,12 @@
                                         :aspect :runtime} ; TODO check which transitive dependencies have to be included
                              :model {:model :model}
                              :generator {:generator :generator}
+                             :data {:data :data}
                              } ; TODO virtual target
  ;
  ; :dependency-actions defines the actions for the initialization of the dependencies in the build process
  :dependency-actions {:copy #{:runtime :dev :aspect :aspectin :model} ; copy the artifact to the specified lib target dir
-                      :unzip #{:generator} ; unzip the artifact to ${lib-dir}
+                      :unzip #{:generator :data} ; unzip the artifact to ${lib-dir}
                       :follow #{:root} ; don't use the dependency, just follow for transitive dependencies
                       }
  ;
