@@ -1,5 +1,5 @@
 [:module "DataTemplate"
- :project "${project}"
+ :project "org.soulspace.baumeister"
  :type :data
  :version "0.1.0"
  :description ""
