@@ -36,7 +36,7 @@
   "Process a module template."
   [template]
   (binding [*module* (param :module "NewModule")]
-    (let [entries (read-string (slurp (str template "-template.clj")))]
+    (let [entries (read-string (slurp (str "build/template/" template "-template.clj")))]
       (create-dir (as-file *module*))
       (doseq [entry entries]
         (entry-action entry)))))
@@ -51,8 +51,15 @@
   []
   (process-template (param :template)))
 
+(defn genesis-post-new
+  "Creates a new module."
+  []
+  (log :info "removing build dir...")
+  (delete-dir (as-file (param :build-dir))))
+
 (def config
   {:params []
    :steps [[:init genesis-init]
-           [:new genesis-new]]
+           [:new genesis-new]
+           [:post-new genesis-post-new]]
    :functions []})
