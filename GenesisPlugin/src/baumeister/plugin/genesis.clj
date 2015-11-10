@@ -16,18 +16,6 @@
 
 (def root-dir) ; FIXME fix process-project-template and remove
 
-(defn target-filename
-  "Returns the file name of the target file."
-  [filename]
-  (if (starts-with "dot." filename)
-    (substring 3 filename)
-    filename))
-
-(defn process-template-file
-  "Processes a template file by reading it and replacing the variables."
-  [file]
-  )
-
 (defn create-folder
   "Creates a folder."
   [file]
