@@ -8,38 +8,38 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.genesis
+  (:require [clojure.edn :as edn])
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file string]
+        [org.soulspace.clj.application.string-property]
         [baumeister.config registry parameter-registry]))
 
 ; TODO extract templates into (data) modules and use the dependency mechanisms to resolve them
 
-(def root-dir) ; FIXME fix process-project-template and remove
+(def ^:dynamic *module*)
 
-(defn create-folder
-  "Creates a folder."
+(defn module-path
+  "Returns the relative path with regard to the working directory."
   [file]
-  (create-dir (as-file (path))))
+  (str *module* "/" file))
 
-(defn create-file
-  "Creates a file."
-  [file]
-  ()
-  )
+(defmulti entry-action :type)
+(defmethod entry-action :directory
+  [entry]
+  (create-dir (as-file (module-path (:name entry)))))
 
-(defn process-project-template
-  "Process a project template."
+(defmethod entry-action :file
+  [entry]
+  (spit (module-path (:name entry)) (replace-properties (get-param-registry) (:content entry))))
+
+(defn process-template
+  "Process a module template."
   [template]
-  (->>
-    (str root-dir template)
-    (as-file)
-    (all-files))
-  )
-
-(defn process-project-templates
-  "Process the collection of project templates."
-  [coll]
-  )
+  (binding [*module* (param :module "NewModule")]
+    (let [entries (read-string (slurp (str "templates/" template "-template.clj")))]
+      (create-dir (as-file *module*))
+      (doseq [entry entries]
+        (entry-action entry)))))
 
 (defn genesis-init
   "Initialize genesis plugin."
@@ -49,9 +49,7 @@
 (defn genesis-new
   "Creates a new module."
   []
-  (create-dir (param :module))
-  (process-project-templates (param :templates))
-  )
+  (process-template (param :template)))
 
 (def config
   {:params []

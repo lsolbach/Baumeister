@@ -1,17 +1,19 @@
 [
- {:file "module.clj"
+ {:type :file
+  :name "module.clj"
   :content "[:module \"${module}\"
  :project \"${project}\"
  :type :${type}
  :version \"0.1.0\"
- :description ""
+ :description \"\"
  :plugins [[\"org.soulspace.baumeister/DependencyPlugin\"]
            [\"org.soulspace.baumeister/JavaPlugin\"]
            [\"org.soulspace.baumeister/JUnitPlugin\"]
            [\"org.soulspace.baumeister/PackagePlugin\"]]
  :dependencies []
 ]"}
- {:file "README.md"
+ {:type :file
+  :name "README.md"
   :content "${module}
 ==========
 
@@ -22,7 +24,8 @@ License
 -------
 
 "}
- {:file ".project"
+ {:type :file
+  :name ".project"
   :content "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <projectDescription>
 	<name>${module}</name>
@@ -40,7 +43,8 @@ License
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 </projectDescription>"}
- {:file ".classpath"
+ {:type :file
+  :name ".classpath"
   :content "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <classpath>
 	<classpathentry kind=\"src\" path=\"src\"/>
@@ -50,9 +54,12 @@ License
 	<classpathentry kind=\"output\" path=\"bin\"/>
 </classpath>
 "}
- {:file ".gitignore"
+ {:type :file
+  :name ".gitignore"
   :content "/bin/
 /build/"}
- {:dir "src"}
- {:dir "unittest"}
+ {:type :directory
+  :name "src"}
+ {:type :directory
+  :name "unittest"}
 ]
