@@ -66,4 +66,3 @@
   "Returns the functions for the step."
   [step]
   (fn-registry step))
-

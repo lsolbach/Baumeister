@@ -7,7 +7,7 @@
 ; These settings are merged with the settings in the user specific settings.clj file and the module.clj files
 ;
 [
- :system-version "0.6.6"
+ :system-version "0.6.7"
  ;
  ; default log and message levels
  ;
@@ -31,7 +31,7 @@
   :analyse-workflow [:package-workflow :analyse] ; perform static code analysis
   :build-workflow [:clean :package-workflow :unittest :coverage :analyse :distribute]
   :distribute-workflow [:build-workflow :generate-distribution :package-distribution :distribute-distribution] ; build distribution packages
-  :module-workflow [:create-module]
+  :new-workflow [:new]
   }
  ; the default action to take, if no workflow or phase is provided
  :default-action :package-workflow

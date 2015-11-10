@@ -56,7 +56,7 @@
   ; get the urls for the plugin dependencies, but drop plugin root, because it's the current module
   (let [plugin-deps (plugin-dependencies)
         plugin-dependency-urls (artifact-urls (filter #(not= (:target %) :plugin-root) plugin-deps))]
-    (log :info "plugin dependencies" plugin-deps)
+    (log :debug "plugin dependencies" plugin-deps)
     ;(generate-plugin-dot)
     (add-urls plugin-dependency-urls)))
 
@@ -67,7 +67,7 @@
   [name]
   (let [plugin (symbol  name)]
     (when-not (has-plugin? plugin)
-      (println "loading plugin" name)
+      (log :debug "loading plugin" name)
       (require plugin) ; import plugin namespace
       (register-plugin name) ; register plugin in plugin registry
       (let [config-var (ns-resolve plugin (symbol "config"))]

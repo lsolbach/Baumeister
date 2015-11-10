@@ -1,7 +1,8 @@
 (ns baumeister.config.config
-  (:require [clojure.string :as str :only [split join replace]])
+  (:require [clojure.string :as str :only [split join replace]]
+            [clojure.edn :as edn])
   (:use [clojure.pprint]
-        [clojure.java.io :only [as-file as-url]]
+        [clojure.java.io :only [as-file as-url input-stream]]
         [org.soulspace.clj file string]
         [org.soulspace.clj.application classpath env-vars]
         [baumeister.utils log]
@@ -22,14 +23,14 @@
   ([] (read-module "./module.clj"))
   ([file]
     (if (is-file? file)
-      (partition 2 (load-file file))
+      (partition 2 (edn/read-string (slurp file)))
       (message :info "Could not load configuration file " (canonical-path file) "."))))
 
 (defn parse-define-option
   "Parses a defined command line option."
   [define]
   (let [[key value] (str/split define  #"=")]
-    [(keyword key) (read-string value)]))
+    [(keyword key) (edn/read-string value)]))
 
 (defn get-params-from-options
   "Extracts the defined options from the command line args."
@@ -69,8 +70,7 @@
       ; IDEA as part of the plugin dependency (like in maven).
       (init-plugins value))
     (= key :log-level) (set-log-level (keyword value))
-    (= key :log-level) (set-message-level (keyword value))))
-
+    (= key :message-level) (set-message-level (keyword value))))
 
 (defn set-params
   "Sets parameters in the parameter registry."
