@@ -1,6 +1,6 @@
 [
  {:type :file
-  :name ".project"
+  :name "module.clj"
   :content "[:module \"${module}\"
  :project \"${project}\"
  :type :data
