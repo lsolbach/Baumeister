@@ -39,10 +39,7 @@
         params (cond
                  (nil? define) []
                  (string? define) (parse-define-option define)
-                 (coll? define) (loop [defs define params []]
-                                  (if (seq defs)
-                                    (recur (rest defs) (conj params (parse-define-option (first defs))))
-                                    params))
+                 (coll? define) (mapcat parse-define-option define)
                  :default [])]
     (partition 2 params)))
 
@@ -94,12 +91,12 @@
 (defn init-defaults
   "Initializes the configuration defaults."
   []
-  (set-dynamic-classloader) ; ensure a dynamic classloader
-  (reset-registries) ; for use with repl's
+  (set-dynamic-classloader) ; ensure a dynamic classloader for modifying the plugin and clojure test classpaths
+  (reset-registries) ; always get a fresh environment if used in a repl's
 
   ; set internal defaults  
   (register-var :baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")) ; register baumeister-home-dir
-  (register-var :user-home-dir (get-env "HOME")) ; register baumeister-home-dir
+  (register-var :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))) ; register user-home-dir in a windows safe way
   (register-var :java-home (get-env "JAVA_HOME")) ; register JAVA_HOME
   (register-var :aspectj-home (get-env "ASPECTJ_HOME")) ; register ASPECTJ_HOME
 
