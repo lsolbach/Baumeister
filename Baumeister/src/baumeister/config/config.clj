@@ -29,7 +29,7 @@
 (defn parse-define-option
   "Parses a defined command line option."
   [define]
-  (let [[key value] (str/split define  #"=")]
+  (let [[key value] (str/split define  #"[=:]")] ; TODO '=' is a split char in windows cmd 
     [(keyword key) (edn/read-string value)]))
 
 (defn get-params-from-options
