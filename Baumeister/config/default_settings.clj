@@ -7,7 +7,7 @@
 ; These settings are merged with the settings in the user specific settings.clj file and the module.clj files
 ;
 [
- :system-version "0.6.5"
+ :system-version "0.6.6"
  ;
  ; default log and message levels
  ;

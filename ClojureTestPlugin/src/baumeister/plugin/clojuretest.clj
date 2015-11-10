@@ -35,7 +35,7 @@
     (if (is-dir? dir)
       (->>
         (all-files-by-extension "clj" dir)
-        (map #(second (re-matches (re-pattern (str (absolute-path dir) "/(.*)\\.clj")) (absolute-path %)))) ; collect namespace paths
+        (map #(second (re-matches (re-pattern (str (normalize-path (absolute-path dir)) "/(.*)\\.clj")) (normalize-path (absolute-path %))))) ; collect namespace paths
         (map file-to-ns)
         (map symbol)))))
 
