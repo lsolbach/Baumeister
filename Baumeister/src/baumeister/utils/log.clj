@@ -20,7 +20,7 @@
   {:none 0 :very-important 10 :important 20 :info 30 :fine 40 :finer 50 :finest 60})
 
 (def ^{:dynamic true :private true} current-log-file "log.txt")
-(def ^{:dynamic true :private true} current-log-level (:error log-levels))
+(def ^{:dynamic true :private true} current-log-level (:warn log-levels))
 (def ^{:dynamic true :private true} current-msg-level (:info message-levels))
 
 (defn set-log-level

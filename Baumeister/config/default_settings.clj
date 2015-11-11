@@ -31,7 +31,7 @@
   :analyse-workflow [:package-workflow :analyse] ; perform static code analysis
   :build-workflow [:clean :package-workflow :unittest :coverage :analyse :distribute]
   :distribute-workflow [:build-workflow :generate-distribution :package-distribution :distribute-distribution] ; build distribution packages
-  :new-workflow [:new]
+  :new-workflow [:init :dependencies :new]
   }
  ; the default action to take, if no workflow or phase is provided
  :default-action :package-workflow
@@ -179,5 +179,11 @@
                       "pom" "pom"
                       nil "jar"}
  :plugins ["global"
+           ["org.soulspace.baumeister/DependencyPlugin"]
            ["org.soulspace.baumeister/GenesisPlugin"]]
+ :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
+                ["org.soulspace.baumeister/AspectJTemplate, 0.1.0, AspectJTemplate, zip" :data]
+                ["org.soulspace.baumeister/ClojureTemplate, 0.1.0, ClojureTemplate, zip" :data]
+                ["org.soulspace.baumeister/DataTemplate, 0.1.0, DataTemplate, zip" :data]
+                ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]
  ]

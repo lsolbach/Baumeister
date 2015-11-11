@@ -65,6 +65,7 @@
 (defn init-plugin
   "Initializes a plugin."
   [name]
+  (log :debug "Initializing plugin" name)
   (let [plugin (symbol  name)]
     (when-not (has-plugin? plugin)
       (log :debug "loading plugin" name)
