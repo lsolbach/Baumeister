@@ -27,10 +27,16 @@
     (if (nil? src)
       (log :error (artifact-name artifact) "not found in repositories!")
       (cond
-        (copy? dependency) (copy src (as-file (str tgt "/" (artifact-name artifact))))
-        (unzip? dependency) (ant-unzip {:src src :dest tgt :overwrite "true"})
-        (follow? dependency) nil ; do nothing in initalization 
-        :default (log :error "Could not handle dependency " dependency)))))
+        (copy? dependency) (do
+                             (log :debug "Copying" (print-dependency dependency))
+                             (copy src (as-file (str tgt "/" (artifact-name artifact)))))
+        (unzip? dependency) (do
+                              (log :debug "Unpacking" (print-dependency dependency))
+          (ant-unzip {:src src :dest tgt :overwrite "true"}))
+        (follow? dependency) (do
+                               (log :debug "Following" (print-dependency dependency))
+          nil) ; do nothing in initalization 
+        :default (log :error "Could not handle dependency " (print-dependency dependency))))))
 
 (defn init-dependencies
   "Initializes the sequence of dependencies."
