@@ -69,7 +69,8 @@
  ; TODO define packaging for module types
  :module-types #{:library :framework :component :application :domain :integration :presentation
                   :webservice :webfrontend :consolefrontend :appfrontend
-                  :architecture :analysis :data :baumeister-plugin}
+                  :architecture :analysis :data :baumeister-plugin :baumeister-template}
+ :data-module-types #{:architecture :analysis :data :baumeister-template}
  :code-module-types #{:library :framework :component :application :domain :integration :presentation
                       :webservice :webfrontend :consolefrontend :appfrontend :baumeister-plugin}
  :library-module-types #{:library}
@@ -80,8 +81,8 @@
  :web-frontend-types #{:webfrontend :webservice}
  :console-frontend-types #{:consolefrontend}
  :app-frontend-types #{:appfrontend}
- :data-module-types #{:architecture :analysis :data}
  :baumeister-plugin-types #{:baumeister-plugin}
+ :baumeister-template-types #{:baumeister-template}
  ;
  ; Set of test classifications
  ;
