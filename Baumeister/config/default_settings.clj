@@ -134,13 +134,15 @@
  ; :dependency-target-mapping defines the target of a transitive dependency according to the target of the parent dependency
  ; if there is no mapping here, the transitive dependency will not be included in the build
  :dependency-target-mapping {:plugin-root {:runtime :runtime
-                                           :aspect :runtime}
+                                           :aspect :runtime
+                                           :data :data}
                              :root {:runtime :runtime
                                     :dev :dev
                                     :aspect :aspect
                                     :aspectin :aspectin
                                     :model :model
-                                    :generator :generator}
+                                    :generator :generator
+                                    :data :data}
                              :runtime {:runtime :runtime
                                        :aspect :runtime}
                              :dev {:runtime :dev} ; TODO check if transitive dev dependencies have to be included
