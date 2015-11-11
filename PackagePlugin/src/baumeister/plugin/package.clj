@@ -77,7 +77,7 @@
   []
   (log :debug  "packaging data" (param :dist-dir))
   (ant-zip {:destFile (param "${dist-dir}/${module}.zip")}
-           (ant-fileset {:dir (param :module-dir) :excludes (param "${dist-dir} ${build-dir} ${lib-dir}")})))
+           (ant-fileset {:dir (param :module-dir) :excludes (param "${dist-dir}/** ${build-dir}/** ${lib-dir}/** module.clj README.md .project")})))
 
 ; TODO handle source jars
 (defn package-jars
