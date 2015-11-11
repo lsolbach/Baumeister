@@ -16,7 +16,7 @@
         [baumeister.config registry]))
 
 ; TODO fix classpath (pmd is in the dynamic plugin classpath)
-(def pmd-jar (str (get-lib-dir) "/pmd.jar"))
+(def pmd-jar (str (param "${lib-dev-dir}/pmd.jar")))
 
 (ant-taskdef {:name "pmd" :classname "net.sourceforge.pmd.ant.PMDTask" :classpath pmd-jar})
 (define-ant-task ant-pmd pmd)
