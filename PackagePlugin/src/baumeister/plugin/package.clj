@@ -24,6 +24,10 @@
   (ant-manifest {:file (str dir "/MANIFEST.MF")}
                 (merge {"Implementation-Version" (param :version)} additional-entries)))
 
+(defn local-path
+  [dir]
+  ((partial relative-path (param :module-dir)) dir))
+
 (defn package-jar
   ([dir jar-type]
     (package-jar dir jar-type "jar" {}))
@@ -77,7 +81,8 @@
   []
   (log :debug  "packaging data" (param :dist-dir))
   (ant-zip {:destFile (param "${dist-dir}/${module}.zip")}
-           (ant-fileset {:dir (param :module-dir) :excludes (param "${dist-dir}/** ${build-dir}/** ${lib-dir}/** module.clj README.md .project")})))
+           (ant-fileset {:dir (param :module-dir)
+                         :excludes (str (local-path (param :build-dir)) "/** bin/** .settings/** module.clj README.md .project .classpath license.txt")})))
 
 ; TODO handle source jars
 (defn package-jars
