@@ -36,7 +36,7 @@
   "Process a module template."
   [template]
   (binding [*module* (param :module "NewModule")]
-    (create-dir (as-file *module*)) ; new module directory
+    (create-dir (as-file (str *module*))) ; create new module directory
     (let [entries (read-string (slurp (str "build/template/" template "-template.clj")))]
       (doseq [entry entries]
             (entry-action entry)))
