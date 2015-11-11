@@ -109,7 +109,7 @@
             [:lib-aspectin-dir "${lib-dir}/aspectin"]
             [:lib-model-dir "${lib-dir}/model"]
             [:lib-generator-dir "${lib-dir}/generator"]
-            [:lib-data-dir "${build.dir}"]
+            [:lib-data-dir "${build-dir}"]
             [:deps-report true]
             [:deps-transitive false]
             [:deps-report-dir "${build-report-dir}/dependencies"]]
