@@ -23,15 +23,14 @@
   (let [artifact (:artifact dependency)
         src (query-artifact (param :deps-repositories) artifact)
         tgt (param (keyword (str "lib-" (name (:target dependency)) "-dir")))]
-    (log :debug "Copying" src " -> " tgt)
     (if (nil? src)
       (log :error (artifact-name artifact) "not found in repositories!")
       (cond
         (copy? dependency) (do
-                             (log :debug "Copying" (print-dependency dependency))
+                             (log :debug "Copying" (print-dependency dependency) "->" tgt)
                              (copy src (as-file (str tgt "/" (artifact-name artifact)))))
         (unzip? dependency) (do
-                              (log :debug "Unpacking" (print-dependency dependency))
+                              (log :debug "Unpacking" (print-dependency dependency) "->" tgt)
           (ant-unzip {:src src :dest tgt :overwrite "true"}))
         (follow? dependency) (do
                                (log :debug "Following" (print-dependency dependency))
