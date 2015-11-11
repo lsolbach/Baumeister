@@ -8,7 +8,7 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.ftp
-  (:use [clojure.java.io]
+  (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj.net.ftp ftp-client]))
 
 (defn ftp-upload

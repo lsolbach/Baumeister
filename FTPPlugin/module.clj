@@ -8,5 +8,5 @@
            ["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
  :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
-                ["com.google.code.findbugs/findbugs-ant, 2.0.0" :runtime ["org.apache.ant"]]]
+                ["org.soulspace.clj/CljNetLibrary, 0.1.1"]]
  ]
