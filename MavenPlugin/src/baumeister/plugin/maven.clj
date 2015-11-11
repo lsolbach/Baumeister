@@ -36,8 +36,8 @@
   (let [artifact (:artifact dependency)]
     (pom/dependency 
       {}
-      (pom/groupId {} (:project artifact))
-      (pom/artifactId {} (:module artifact))
+      (pom/group-id {} (:project artifact))
+      (pom/artifact-id {} (:module artifact))
       (pom/version {} (:string (:version artifact)))
       (if (not= (target-to-maven-scope (:target dependency)) "compile")
         (pom/scope {} (target-to-maven-scope (:target dependency))))
@@ -51,9 +51,9 @@
   (let [dependencies (map #(apply new-dependency %) (param :dependencies))]
     (pom/project
       {}
-      (pom/modelVersion {} "4.0.0")
-      (pom/groupId {} (param :project))
-      (pom/artifactId {} (param :module))
+      (pom/model-version {} "4.0.0")
+      (pom/group-id {} (param :project))
+      (pom/artifact-id {} (param :module))
       (pom/version {} (param :version))
       (pom/dependencies
         {}
