@@ -1,0 +1,9 @@
+BaumeisterPluginTemplate
+==========
+
+Copyright
+---------
+
+License
+-------
+

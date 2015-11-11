@@ -1,0 +1,9 @@
+BaumeisterTemplateTemplate
+==========
+
+Copyright
+---------
+
+License
+-------
+
