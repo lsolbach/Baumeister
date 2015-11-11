@@ -58,7 +58,7 @@
 
 (def config
   {:params []
-   :steps [[:pre-new genesis-init]
+   :steps [[:pre-new genesis-pre-new]
            [:new genesis-new]
            [:post-new genesis-post-new]]
    :functions []})
