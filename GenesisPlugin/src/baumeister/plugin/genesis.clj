@@ -41,10 +41,10 @@
       (doseq [entry entries]
         (entry-action entry)))))
 
-(defn genesis-init
+(defn genesis-pre-new
   "Initialize genesis plugin."
   []
-  )
+  (create-dir (as-file (param :build-dir))))
 
 (defn genesis-new
   "Creates a new module."
@@ -58,7 +58,7 @@
 
 (def config
   {:params []
-   :steps [[:init genesis-init]
+   :steps [[:pre-new genesis-init]
            [:new genesis-new]
            [:post-new genesis-post-new]]
    :functions []})
