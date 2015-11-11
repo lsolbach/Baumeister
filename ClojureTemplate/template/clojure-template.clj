@@ -6,8 +6,7 @@
  :type :${type}
  :version \"0.1.0\"
  :description \"\"
- :plugins [[\"org.soulspace.baumeister/DependencyPlugin\"]
-           [\"org.soulspace.baumeister/ClojurePlugin\"]
+ :plugins [[\"org.soulspace.baumeister/ClojurePlugin\"]
            [\"org.soulspace.baumeister/PackagePlugin\"]]
  :dependencies [[\"org.clojure/clojure, 1.7.0\"]]
 ]"}

@@ -6,8 +6,7 @@
  :type :${type}
  :version \"0.1.0\"
  :description \"\"
- :plugins [[\"org.soulspace.baumeister/DependencyPlugin\"]
-           [\"org.soulspace.baumeister/AspectJPlugin\"]
+ :plugins [[\"org.soulspace.baumeister/AspectJPlugin\"]
            [\"org.soulspace.baumeister/JUnitPlugin\"]
            [\"org.soulspace.baumeister/PackagePlugin\"]]
  :dependencies [[\"org.aspectj/aspectjrt, 1.8.7\"]

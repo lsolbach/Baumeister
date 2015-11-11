@@ -39,7 +39,6 @@
 
 (defn distribute-jars [repository]
   "distribute the built jar artifacts"
-  (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) "module" "clj"]) (param :module-dir))
   (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (param :module) "jar"]))
   (when (unittest?)
     (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) (str (param :module) "Unittest") "jar"])))
@@ -66,6 +65,7 @@
   (create-dir (as-file (param :lib-aspectin-dir)))
   (create-dir (as-file (param :lib-model-dir)))
   (create-dir (as-file (param :lib-generator-dir)))
+  (create-dir (as-file (param :lib-data-dir)))
   (create-dir (as-file (param :deps-report-dir))))
 
 (defn dependency-dependencies []
@@ -87,17 +87,21 @@
   "Distribute generated artifacts to the dev repository."
   []
   (message :fine "distributing artifacts...")
-  (when (code-module?)
-    (distribute-jars (get-dev-repository (param :deps-repositories))))
-  (when (web-module?)
-    ) ; TODO distribute war files here or use publish?!?
-  (when (data-module?)
-    (distribute-artifact (get-dev-repository (param :deps-repositories))
-                         (new-artifact [(param :project) (param :module) (param :version) (param :module) "zip"])))
-  (when (plugin? "mdsd")
-    (distribute-artifact (get-dev-repository (param :deps-repositories))
-                         (new-artifact [(param :project) (param :module) (param :version) (param :mdsd-model-name) "xmi"]) (param :mdsd-model-dir))))
-
+  ; TODO select the correct repository (dev/release)
+  (let [repository (get-dev-repository (param :deps-repositories))]
+    ; always distribute module.clj
+    (distribute-artifact repository (new-artifact [(param :project) (param :module) (param :version) "module" "clj"]) (param :module-dir))
+    (when (code-module?)
+      (distribute-jars repository))
+    (when (web-module?)
+      ) ; TODO distribute war files here or use publish?!?
+    (when (data-module?)
+      (distribute-artifact repository
+                           (new-artifact [(param :project) (param :module) (param :version) (param :module) "zip"])))
+    (when (plugin? "mdsd")
+      (distribute-artifact repository
+                           (new-artifact [(param :project) (param :module) (param :version) (param :mdsd-model-name) "xmi"]) (param :mdsd-model-dir)))))
+  
 (def config
   {:params [[:lib-runtime-dir "${lib-dir}/runtime"]
             [:lib-dev-dir "${lib-dir}/dev"]
@@ -105,6 +109,7 @@
             [:lib-aspectin-dir "${lib-dir}/aspectin"]
             [:lib-model-dir "${lib-dir}/model"]
             [:lib-generator-dir "${lib-dir}/generator"]
+            [:lib-data-dir "${build-dir}"]
             [:deps-report true]
             [:deps-transitive false]
             [:deps-report-dir "${build-report-dir}/dependencies"]]
