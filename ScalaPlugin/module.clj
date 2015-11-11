@@ -8,6 +8,6 @@
  :plugins ["global"
            ["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
- :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.5" :dev]
+ :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
                 ["org.scala-lang/scala-compiler, 2.10.3"]]
  ]

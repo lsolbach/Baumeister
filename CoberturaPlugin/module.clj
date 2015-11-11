@@ -7,6 +7,6 @@
  :plugins ["global"
            ["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
- :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.5" :dev]
+ :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
                 ["net.sourceforge.cobertura/cobertura, 1.9.4.1" :runtime ["org.apache.ant"]]]
  ]

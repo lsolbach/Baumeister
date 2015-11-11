@@ -7,7 +7,7 @@
  :plugins ["global"
            ["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
- :dependencies [["org.soulspace.baumeister/Baumeister, 0.6.5" :dev]
+ :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
                 ["org.soulspace.clj/CljXHtmlLibrary, 0.2.1"]]
  :log-level :trace
  :message-level :finer
