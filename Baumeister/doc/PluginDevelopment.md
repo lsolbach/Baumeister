@@ -1,7 +1,7 @@
 Plugin Development
 ==================
 
-Plugins are components providing the functionality for the Baumeister build.
+Plugins are components that provide the functionality for the Baumeister build.
 A plugin registers configuration parameters and functions for the steps of workflow phases.
 
 
@@ -23,7 +23,7 @@ Plugin namespace resolution by plugin dependency
  * plugin namespace package is derived from the project name
    * use the project name as package name
  * plugin namespace name is derived from the module name
-   * lower case name of the module without the Plugin (as regex: (.*)Plugin)
+   * lower case name of the module without the "Plugin" suffix (as extracted by the regex: (.*)Plugin)
 
 
 Plugin configuration
@@ -35,4 +35,5 @@ The configuration of a plugin consists of two parts
 Plugin api
 ----------
 
+Baumeister plugins can use the configuration registries and the utils of the main Baumeister module.
 

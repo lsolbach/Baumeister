@@ -176,6 +176,7 @@
 (define-ant-type ant-formatter org.apache.tools.ant.taskdefs.optional.junit.FormatterElement)
 (define-ant-type-with-project ant-batchtest org.apache.tools.ant.taskdefs.optional.junit.BatchTest ant-project)
 
+; extend coerce multi-fn
 (defmethod coerce [org.apache.tools.ant.taskdefs.optional.junit.FormatterElement$TypeAttribute String] [_ str]
   (org.apache.tools.ant.taskdefs.optional.junit.FormatterElement$TypeAttribute/getInstance
     org.apache.tools.ant.taskdefs.optional.junit.FormatterElement$TypeAttribute str))
@@ -188,6 +189,8 @@
   (org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$SummaryAttribute/getInstance
     org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$SummaryAttribute str))
 
+
+; extend add-nested multi-fn
 (defmethod add-nested [::junit org.apache.tools.ant.types.Path]
   [_ task path] (doto (.createClasspath task) (.add path)))
 

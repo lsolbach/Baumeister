@@ -17,6 +17,11 @@ Features
 * support for model driven development
 * plugins for the Model Generator
 
+Documentation
+-------------
+Please take a look at the different documentation files in the "doc" folder.
+For usage information see doc/Usage.md.
+
 Author/Project Lead
 -------------------
 Ludger Solbach
@@ -38,22 +43,3 @@ Download
 Prebuild versions of the Baumeister Build System can be found at
 [http://downloads.soulspace.org/Baumeister/] (http://downloads.soulspace.org/Baumeister/).
 
-
-History
--------
-
-Version 0.5.1 (--.--.201-)
---------------------------
-
-Version 0.5.0 (--.--.201-)
---------------------------
-
-Version 0.4.0 (--.--.201-)
---------------------------
-
-Version 0.3.0 (--.--.201-)
---------------------------
-
-Version 0.2.0 (--.--.201-)
---------------------------
-* Initial git import

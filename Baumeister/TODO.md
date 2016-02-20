@@ -3,25 +3,31 @@ TODO's
 
 Plugins
 -------
- * FIX PACKAGING AND JAR-COPYING
- * Separate GlobalPlugin, ...
+ * Separate or obsolete GlobalPlugin
  * define default plugins for languages and architectural types
- 
-Configuration
--------------
- * Use clojure.edn for reading config files
 
-Build
------
- * Multi module builds
-   * topological sorting of the modules based on the module dependencies
-     * or as a start just build in declared order?
-   * call baumeister on multiple modules
-     * handle multiple configurations
-	 * parent module configurations?
-       * read parent configuration and merge the config of the current module at registry level or at config level?
-   * use the build output of dependent modules directly, don't rely on packaged jars
-     * use the build/classes dir of dependent modules on the classpath of the current module so no packaging of jars is required 
+Deployment of Artifacts
+-----------------------
+ * deploy develpment artifacts
+ * deploy release artifacts
+ * Synchronisation of repositories with local proxies/caches
+
+Release Builds
+--------------
+ * update module version in the module.clj
+ * release the artifacts to the repository
+ * distribute binaries to binary distribution sites 
+
+Multi Module Build
+------------------
+ * topological sorting of the modules based on the module dependencies
+   * or as a start just build in declared order?
+ * call baumeister on multiple modules
+   * handle multiple configurations
+   * parent module configurations?
+     * read parent configuration and merge the config of the current module at registry level or at config level?
+ * use the build output of dependent modules directly, don't rely on packaged jars
+   * use the build/classes dir of dependent modules on the classpath of the current module so no packaging of jars is required 
 
 Dependency classpath
 --------------------

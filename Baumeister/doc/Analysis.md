@@ -26,6 +26,9 @@ Software build tasks to automate
  * project distribution
  * deployments
 
+Other build tasks with could be automated with Baumeister
+---------------------------------------------------------
+
 
 Dimensions
 ----------

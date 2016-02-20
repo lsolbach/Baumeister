@@ -1,6 +1,8 @@
 Baumeister Design
 =================
 
+This document describes the main design ideas of the Baumeister Build System
+
 Logical Core Components
 -----------------------
 
@@ -15,7 +17,7 @@ Logical Core Components
 
 Configuration
 -------------
-
+Tasks
  * internal setup
  * loading of configuration files
  * registration and initialization of plugins
@@ -31,6 +33,8 @@ Registries
 Workflow Engine
 ---------------
 
+ * execute the requested workflows
+ * call the registered functions for the different steps of the executed workflows
 
 Repositories
 ------------

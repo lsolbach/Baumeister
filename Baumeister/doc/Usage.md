@@ -77,6 +77,9 @@ A plugin registers parameters and functions for steps of workflow phases.
 
 Existing Plugins:
 
+Module Creation
+ * org.soulspace.baumeister/GenesisPlugin
+
 Dependency Resolution
  * org.soulspace.baumeister/DependencyPlugin
 
