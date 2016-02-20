@@ -2,5 +2,27 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="build/lib/dev/ant-junit.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/ant.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/Baumeister.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljApplicationLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljArtifactLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljJavaLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljMavenLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljVersionLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/CljXmlLibrary.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/clojure.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/data.xml.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/data.zip.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/dynapath.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/junit.jar"/>
+	<classpathentry kind="lib" path="build/lib/dev/tools.reader.jar"/>
+	<classpathentry exported="true" kind="lib" path="classes">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
