@@ -21,6 +21,13 @@ As action you can specify workflows (e.g. compile-workflow) or phases (e.g. comp
 See entry :default-workflows in config/default_settings.clj for the default workflow definitions.
 
 
+Creating new modules
+--------------------
+
+> baumeister -Dmodule=<module name> -Dtemplate=<template name> new-workflow
+
+Supported templates: java, aspectj, clojure, baumeister-plugin, baumeister-template
+
 Module Configuration
 --------------------
 

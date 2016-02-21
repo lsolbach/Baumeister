@@ -12,6 +12,7 @@
   (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file string]
         [org.soulspace.clj.application.string-property]
+        [baumeister.utils log]
         [baumeister.config registry parameter-registry]))
 
 ; TODO extract templates into (data) modules and use the dependency mechanisms to resolve them
@@ -36,6 +37,7 @@
   "Process a module template."
   [template]
   (binding [*module* (param :module "NewModule")]
+    (log :trace "creating new project processing template" template "for module" *module*)
     (create-dir (as-file (str *module*))) ; create new module directory
     (let [entries (read-string (slurp (str "build/template/" template "-template.clj")))]
       (doseq [entry entries]
