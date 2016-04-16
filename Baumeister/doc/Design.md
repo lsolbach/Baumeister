@@ -55,4 +55,5 @@ Plugin API
 ----------
 
  * provide access to the baumeister configuration
+
  

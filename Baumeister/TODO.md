@@ -113,3 +113,11 @@ How to start workflows, workflow phases and plugin functions?
 * <phase-name>
 * <plugin-name>:<function-name>
 
+
+Depending on commands or specific command line switches (e.g. --new or "new" command) add specific plugins, dependencies etc. to the config.
+Specifically handle the "normal" arguments according to the command given.
+
+Specific commands could include:
+ * new for new modules
+ * run for starting applications
+ 

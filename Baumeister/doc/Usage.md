@@ -21,18 +21,25 @@ As action you can specify workflows (e.g. compile-workflow) or phases (e.g. comp
 See entry :default-workflows in config/default_settings.clj for the default workflow definitions.
 
 
-Creating new modules
+Creating New Modules
 --------------------
 
 > baumeister -Dmodule=<module name> -Dtemplate=<template name> new-workflow
 
+You can set parameters which are used in the templates with the command line switch --define or -D.
+
+Example:
+
+> baumeister -Dmodule=MyProject -Dtemplate=java new-workflow new-workflow
+
 Supported templates: java, aspectj, clojure, baumeister-plugin, baumeister-template
+
 
 Module Configuration
 --------------------
 
 The configuration file per module is module.clj in the root directory of the module.
-It contains a vector of paeameters, which are specified as key value pairs.
+It contains a vector of parameters, which are specified as key value pairs.
 
 The required parameters are 
 
@@ -50,9 +57,11 @@ please don't change the module_defaults.clj file. Instead copy the
 file config/settings.clj to $HOME/.Baumeister/settings.clj and change
 it to your needs.
 
+
 Workflows
 ---------
 Each workflow consists of phases (which can be other workflows).
+
 
 Phases
 ------
@@ -60,6 +69,7 @@ Each phase consists of 3 steps
  * pre-<phase-name>
  * <phase-name>
  * post-<phase-name>
+
 
 Steps
 -----
@@ -77,6 +87,7 @@ artifact target optional exclusions
 Artifact properties:
 
 project module version name type
+
 
 Plugins
 -------

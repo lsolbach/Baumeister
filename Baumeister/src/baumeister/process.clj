@@ -17,7 +17,7 @@
   (:import [java.util Date])
   (:gen-class))
 
-(def known-commands #{:new})
+(def known-commands #{:new :run})
 
 (def option-defs
   "Baumeister option definitions."
@@ -25,7 +25,8 @@
    ["--version" "-v" "Display the Baumeister version information"]
    ["--file" "-f" "Use the specified module file (eg. -Dfilename)" :default "module.clj"]
    ["--define" "-D" "Define a parameter (eg. -Dname=value)" :multi true]
-   ; ["--new" "-n" "New project (format -n <name> <template>)"]
+   ["--new" "-n" "Create a new module (format -n <name> [<template>])"] ; implement
+   ["--run" "-r" "Run an application (format -r [<command> [<options>]])"] ; implement
    ["--print-config" "-c" "Print the effective configuration after initialization"]])
 
 (defn print-only-options?
@@ -40,6 +41,30 @@
   [argument]
   (contains? known-commands (keyword argument)))
 
+(defn new
+  "Creates a new module."
+  [arguments options]
+  (println "new" arguments options)
+  (let [new-config [:plugins ["org.soulspace.baumeister/GenesisPlugin"]
+                    :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
+                                   ["org.soulspace.baumeister/AspectJTemplate, 0.1.0, AspectJTemplate, zip" :data]
+                                   ["org.soulspace.baumeister/BaumeisterPluginTemplate, 0.1.0, BaumeisterPluginTemplate, zip" :data]
+                                   ["org.soulspace.baumeister/BaumeisterTemplateTemplate, 0.1.0, BaumeisterTemplateTemplate, zip" :data]
+                                   ["org.soulspace.baumeister/ClojureTemplate, 0.1.0, ClojureTemplate, zip" :data]
+                                   ["org.soulspace.baumeister/DataTemplate, 0.1.0, DataTemplate, zip" :data]
+                                   ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]]]
+    ;(configure-from-seq options)
+    (try (apply start-workflow "new-workflow")
+      (catch Exception e
+        (message :error (.getMessage e))
+        (message :debug (.printStackTrace e))))))
+
+(defn run
+  "Runs an application."
+  [arguments options]
+  (println "run" arguments options)
+  )
+
 (defn print-options
   "Print some messages and quit."
   [options]
@@ -50,12 +75,6 @@
     (println "Baumeister usage:")
     (println (doc-options option-defs))))
 
-(defn process-command
-  "Process command (aka module-less workflow)"
-  [command arguments options]
-  (println "Command:" command arguments options)
-  )
-
 (defn start-processing
   "Start processing."
   [arguments options]
@@ -63,10 +82,11 @@
     (message :info "Started at" (Date. start))
     (init-config options)
     (if (command? (first arguments))
-      (process-command (first arguments) (rest arguments) options)
-      (try (apply start-workflow arguments) (catch Exception e
-                                              (message :error (.getMessage e))
-                                              (message :debug (.printStackTrace e)))))
+      ((symbol (first arguments)) (rest arguments) options)
+      (try (apply start-workflow arguments)
+        (catch Exception e
+          (message :error (.getMessage e))
+          (message :debug (.printStackTrace e)))))
     (let [end (System/currentTimeMillis)]
       (message :info (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds.")))))
 

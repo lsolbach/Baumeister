@@ -7,7 +7,7 @@
 ; These settings are merged with the settings in the user specific settings.clj file and the module.clj files
 ;
 [
- :system-version "0.6.7"
+ :system-version "0.6.8"
  ;
  ; default log and message levels
  ;
@@ -184,6 +184,8 @@
            ["org.soulspace.baumeister/GenesisPlugin"]]
  :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
                 ["org.soulspace.baumeister/AspectJTemplate, 0.1.0, AspectJTemplate, zip" :data]
+                ["org.soulspace.baumeister/BaumeisterPluginTemplate, 0.1.0, BaumeisterPluginTemplate, zip" :data]
+                ["org.soulspace.baumeister/BaumeisterTemplateTemplate, 0.1.0, BaumeisterTemplateTemplate, zip" :data]
                 ["org.soulspace.baumeister/ClojureTemplate, 0.1.0, ClojureTemplate, zip" :data]
                 ["org.soulspace.baumeister/DataTemplate, 0.1.0, DataTemplate, zip" :data]
                 ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]

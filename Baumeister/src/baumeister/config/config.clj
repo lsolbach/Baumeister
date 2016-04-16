@@ -65,6 +65,10 @@
       ; otherwise the plugin default config will override the module config
       ; IDEA An alternative is the specification of the module specific plugin configuration
       ; IDEA as part of the plugin dependency (like in maven).
+      ;
+      ; IDEA Another alternative is the building of the complete configuration as a data structure
+      ; IDEA (vector of key/value pairs) over all the different configuration options
+      ; IDEA before parsing the configuration like it is done now.
       (init-plugins value))
     (= key :log-level) (set-log-level (keyword value))
     (= key :message-level) (set-message-level (keyword value))))
@@ -88,6 +92,21 @@
           (register-var key value)
           (param-action key value))))))
 
+(defn configure-from-file
+  "Adds configuration from file."
+  [filename]
+  (set-params (read-module filename)))
+
+(defn configure-from-options
+  "Adds configuration from options."
+  [options]
+  (set-params (get-params-from-options options)))
+
+(defn configure-from-seq
+  "Adds configuration from options."
+  [config]
+  (set-params config))
+
 (defn init-defaults
   "Initializes the configuration defaults."
   []
@@ -99,21 +118,23 @@
   (register-var :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))) ; register user-home-dir in a windows safe way
   (register-var :java-home (get-env "JAVA_HOME")) ; register JAVA_HOME
   (register-var :aspectj-home (get-env "ASPECTJ_HOME")) ; register ASPECTJ_HOME
+  )
 
-  ; load module defaults
-  (set-params (read-module (str (param :baumeister-home-dir) "/config/default_settings.clj"))))
 
 (defn init-config
   "Initializes the configuration."
   [options]
   (init-defaults)
   
-  ; get config path and read configs from path for e.g. user settings
-  (set-params (read-module (str (param :user-home-dir) "/.Baumeister/settings.clj")))
+  ; default settings
+  (configure-from-file (str (param :baumeister-home-dir) "/config/default_settings.clj"))
   
+  ; user settings
+  (configure-from-file (str (param :user-home-dir) "/.Baumeister/settings.clj"))
+
   ; read module.clj (or the file specified with --file or -f) from current module
   ; TODO for module.clj derivation get parent module.clj's and merge them first, requires repository access
-  (set-params (read-module (:file options)))
+  (configure-from-file (:file options))
   
   ; add command line parameters (defined by --define or -D)
-  (set-params (get-params-from-options options)))
+  (configure-from-options options))
