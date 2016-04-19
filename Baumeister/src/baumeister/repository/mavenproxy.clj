@@ -123,15 +123,17 @@
   
   ProxyArtifactRepository
   (cache-artifact [repo artifact]
-    (log :trace "caching artefact" (artifact-file repo artifact))
-    (create-dir (artifact-dir repo artifact))
-    (copy (input-stream (artifact-file-url repo artifact)) (artifact-file repo artifact)))
+    (let [arti-file (artifact-file repo artifact)]
+      (log :trace "caching artefact" arti-file)
+      (create-dir (artifact-dir repo artifact))
+      (copy (input-stream (artifact-file-url repo artifact)) arti-file)))
 
   (local-hit? [repo artifact]
-    (log :trace "checking local hit for" (artifact-file repo artifact) "->" (exists? (artifact-file repo artifact))) 
-    (exists? (artifact-file repo artifact)))
+    (let [local-hit (exists? (artifact-file repo artifact))]
+      (log :trace "checking local hit for" (artifact-file repo artifact) "->" local-hit) 
+      local-hit))
 
   (remote-hit? [repo artifact]
-    (log :trace "checking remote hit for" (artifact-file-url repo artifact))
-    (test-url (artifact-file-url repo artifact)))
-  )
+    (let [remote-hit (test-url (artifact-file-url repo artifact))]
+      (log :trace "checking remote hit for" (artifact-file-url repo artifact) "->" remote-hit)
+      remote-hit)))
