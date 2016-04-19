@@ -53,7 +53,7 @@
                                    ["org.soulspace.baumeister/ClojureTemplate, 0.1.0, ClojureTemplate, zip" :data]
                                    ["org.soulspace.baumeister/DataTemplate, 0.1.0, DataTemplate, zip" :data]
                                    ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]]]
-    ;(configure-from-seq options)
+    ; TODO (configure-from-seq options)
     (try (apply start-workflow "new-workflow")
       (catch Exception e
         (message :error (.getMessage e))
