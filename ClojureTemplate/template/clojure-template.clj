@@ -8,7 +8,7 @@
  :description \"\"
  :plugins [[\"org.soulspace.baumeister/ClojurePlugin\"]
            [\"org.soulspace.baumeister/PackagePlugin\"]]
- :dependencies [[\"org.clojure/clojure, 1.7.0\"]]
+ :dependencies [[\"org.clojure/clojure, 1.8.0\"]]
 ]"}
  {:type :file
   :name "README.md"
