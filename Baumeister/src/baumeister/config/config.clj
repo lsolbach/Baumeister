@@ -22,6 +22,7 @@
   "Reads a module file and returns the content partitioned in key and value sequences."
   ([] (read-module "./module.clj"))
   ([file]
+    (log :trace "Loading configuration from " (canonical-path file))
     (if (is-file? file)
       (partition 2 (edn/read-string (slurp file)))
       (message :info "Could not load configuration file " (canonical-path file) "."))))

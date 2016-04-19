@@ -94,7 +94,7 @@
   "Baumeister main method."
   [& args]
   (let [[arguments options] (parse-args args option-defs)]
-    (println "Options:" options)
+    ;(println "Options:" options)
     (if (print-only-options? options)
       (print-options options)
       (start-processing arguments options)))
