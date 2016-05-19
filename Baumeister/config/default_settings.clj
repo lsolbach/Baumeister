@@ -189,4 +189,39 @@
                 ["org.soulspace.baumeister/ClojureTemplate, 0.1.0, ClojureTemplate, zip" :data]
                 ["org.soulspace.baumeister/DataTemplate, 0.1.0, DataTemplate, zip" :data]
                 ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]
+ 
+ :default-plugins {
+                   :clojure
+                   [["org.soulspace.baumeister/DependencyPlugin"]
+                    ["org.soulspace.baumeister/ClojurePlugin"]
+                    ["org.soulspace.baumeister/ClojureTestPlugin"]
+                    ["org.soulspace.baumeister/PackagePlugin"]]
+                   :java
+                   [["org.soulspace.baumeister/DependencyPlugin"]
+                    ["org.soulspace.baumeister/JavaPlugin"]
+                    ["org.soulspace.baumeister/PackagePlugin"]]
+                   :aspectj
+                   [["org.soulspace.baumeister/DependencyPlugin"]
+                    ["org.soulspace.baumeister/AspectJPlugin"]
+                    ["org.soulspace.baumeister/PackagePlugin"]]
+                   :clojurescript
+                   [["org.soulspace.baumeister/DependencyPlugin"]
+                    ]
+                   :groovy
+                   [["org.soulspace.baumeister/DependencyPlugin"]
+                    ["org.soulspace.baumeister/PackagePlugin"]
+                    ]
+                   :jython
+                   [["org.soulspace.baumeister/DependencyPlugin"]
+                    ["org.soulspace.baumeister/PackagePlugin"]
+                    ]
+                   :jruby
+                   [["org.soulspace.baumeister/DependencyPlugin"]
+                    ["org.soulspace.baumeister/PackagePlugin"]
+                    ]
+                   :scala
+                   [["org.soulspace.baumeister/DependencyPlugin"]
+                    ["org.soulspace.baumeister/ScalaPlugin"]
+                    ["org.soulspace.baumeister/PackagePlugin"]]
+                   }
  ]

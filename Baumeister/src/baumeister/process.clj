@@ -25,8 +25,8 @@
    ["--version" "-v" "Display the Baumeister version information"]
    ["--file" "-f" "Use the specified module file (eg. -Dfilename)" :default "module.clj"]
    ["--define" "-D" "Define a parameter (eg. -Dname=value)" :multi true]
-   ["--new" "-n" "Create a new module (format -n <name> [<template>])"] ; implement
-   ["--run" "-r" "Run an application (format -r [<command> [<options>]])"] ; implement
+   ;["--new" "-n" "Create a new module (format -n <name> [<template>])"] ; implement
+   ;["--run" "-r" "Run an application (format -r [<command> [<options>]])"] ; implement
    ["--print-config" "-c" "Print the effective configuration after initialization"]])
 
 (defn print-only-options?
