@@ -1,7 +1,7 @@
 [:module "BaumeisterTemplateTemplate"
  :project "org.soulspace.baumeister"
  :type :data
- :version "0.1.0"
+ :version "0.1.1"
  :description ""
  :plugins [["org.soulspace.baumeister/DependencyPlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]

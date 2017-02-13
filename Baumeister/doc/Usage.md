@@ -30,9 +30,9 @@ You can set parameters which are used in the templates with the command line swi
 
 Example:
 
-> baumeister -Dmodule=MyProject -Dtemplate=java new-workflow new-workflow
+> baumeister -Dmodule=MyProject -Dtemplate=java new-workflow
 
-Supported templates: java, aspectj, clojure, baumeister-plugin, baumeister-template
+Supported templates include: java, aspectj, clojure, baumeister-plugin, baumeister-template
 
 
 Module Configuration

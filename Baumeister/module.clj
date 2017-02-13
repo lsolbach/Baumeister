@@ -4,7 +4,7 @@
  :project-lead "Ludger Solbach"
  :description "Baumeister Build System"
  :type :consolefrontend
- :version "0.6.9"
+ :version "0.6.10"
  :author "Ludger Solbach"
  :provider "soulspace.org"
  :inception-year 2012
@@ -16,8 +16,8 @@
            ["org.soulspace.baumeister/DistributionPlugin"]
            ]
  ;:repository-root-dir "/home/soulman/devel/repositories" ; FIXME use $HOME here
- :dependencies [["org.clojure/clojure, 1.7.0"]
-                ["org.soulspace.clj/CljApplicationLibrary, 0.5.2"]
+ :dependencies [["org.clojure/clojure, 1.8.0"]
+                ["org.soulspace.clj/CljApplicationLibrary, 0.6.0"]
                 ["org.soulspace.clj/CljArtifactLibrary, 0.4.4"]
                 ["org.soulspace.clj/CljMavenLibrary, 0.5.2"]
                 ["org.soulspace.clj/CljJavaLibrary, 0.6.1"]

@@ -8,7 +8,7 @@ Plugins
 
 Deployment of Artifacts
 -----------------------
- * deploy develpment artifacts
+ * deploy development artifacts
  * deploy release artifacts
  * Synchronisation of repositories with local proxies/caches
 

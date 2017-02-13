@@ -1,5 +1,5 @@
 (ns baumeister.config.config
-  (:require [clojure.string :as str :only [split join replace]]
+  (:require [clojure.string :as str :only [split join replace starts-with?]]
             [clojure.edn :as edn])
   (:use [clojure.pprint]
         [clojure.java.io :only [as-file as-url input-stream]]
@@ -64,6 +64,7 @@
       (message :info "loading plugins...")
       ; plugin registration has to take place when the :plugins key is resolved in module.clj
       ; otherwise the plugin default config will override the module config
+      ;
       ; IDEA An alternative is the specification of the module specific plugin configuration
       ; IDEA as part of the plugin dependency (like in maven).
       ;
@@ -82,7 +83,7 @@
     (doseq [[key value] params]
       ; TODO implement override/append behaviour on defined keys?
       (log :trace "setting parameter" key "to" value)
-      (if (starts-with "additional-" (name key))
+      (if (str/starts-with? (name key) "additional-")
         ; if a key starts with additional, the values get appended to the collection of base values
         (let [param-key (substring (count "additional-") (name key))]
           (log :trace "updating parameter" key "with" value)
@@ -106,26 +107,36 @@
 (defn configure-from-seq
   "Adds configuration from options."
   [config]
-  (set-params config))
+  (set-params (partition 2 config)))
 
-(defn init-defaults
-  "Initializes the configuration defaults."
+(defn init
+  ""
   []
   (set-dynamic-classloader) ; ensure a dynamic classloader for modifying the plugin and clojure test classpaths
   (reset-registries) ; always get a fresh environment if used in a repl's
-
-  ; set internal defaults  
-  (register-var :baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")) ; register baumeister-home-dir
-  (register-var :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))) ; register user-home-dir in a windows safe way
-  (register-var :java-home (get-env "JAVA_HOME")) ; register JAVA_HOME
-  (register-var :aspectj-home (get-env "ASPECTJ_HOME")) ; register ASPECTJ_HOME
   )
+
+(defn init-defaults
+  "Initializes the configuration defaults."
+  ([]
+    ; set internal defaults  
+    (init-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
+                    :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
+                    :java-home (get-env "JAVA_HOME")
+                    :aspectj-home (get-env "ASPECTJ_HOME")]))
+  ([defaults]
+    (println (partition 2 defaults))
+    (configure-from-seq defaults)))
 
 
 (defn init-config
   "Initializes the configuration."
-  [options]
-  (init-defaults)
+  ([options]
+    (init-config () options))
+  ([config options]
+
+  ; use given config
+  (configure-from-seq config)
   
   ; default settings
   (configure-from-file (str (param :baumeister-home-dir) "/config/default_settings.clj"))
@@ -139,3 +150,4 @@
   
   ; add command line parameters (defined by --define or -D)
   (configure-from-options options))
+  )

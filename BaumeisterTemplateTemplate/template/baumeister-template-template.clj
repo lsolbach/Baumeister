@@ -2,7 +2,7 @@
  {:type :file
   :name "module.clj"
   :content "[:module \"${module}\"
- :project \"${project}\"
+ :project \"org.soulspace.baumeister\"
  :type :baumeister-template
  :version \"0.1.0\"
  :description \"Baumeister template for creating new projects.\"

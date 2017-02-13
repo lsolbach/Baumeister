@@ -105,19 +105,6 @@
  :source-version "1.6" ; used for Java and AspectJ
  :target-version "1.6" ; used for Java and AspectJ
  ;
- ; default repository config
- ;
- ; default repository root dir
- :repository-root-dir "${baumeister-home-dir}/../repositories" ; FIXME use $HOME here
- ; default repositories
- :repositories [[:file :release "${repository-root-dir}/release"]
-                [:file :development "${repository-root-dir}/development"]
-                [:file :thirdparty "${repository-root-dir}/thirdparty"]
-                [:http-proxy :thirdparty "http://repo.soulspace.org/baumeister" "${repository-root-dir}/soulspace.org"]
-                [:maven-proxy :thirdparty "http://repo1.maven.org/maven2" "${repository-root-dir}/repo1.maven.org"]
-                [:maven-proxy :thirdparty "http://clojars.org/repo" "${repository-root-dir}/clojars.org"]
-                [:maven-proxy :thirdparty "https://maven.java.net/content/repositories/releases/" "${repository-root-dir}/java.net"]]
- ;
  ; dependency management configuration
  ;
  ; :dependency-targets defines the valid dependency targets
@@ -179,6 +166,22 @@
                       "ejb-client" "jar"
                       "pom" "pom"
                       nil "jar"}
+ ;
+ ; default repository config
+ ;
+ ; default repository root dir
+ :repository-root-dir "${baumeister-home-dir}/../repositories" ; FIXME use $HOME here
+ ; default repositories
+ :repositories [[:file :release "${repository-root-dir}/release"]
+                [:file :development "${repository-root-dir}/development"]
+                [:file :thirdparty "${repository-root-dir}/thirdparty"]
+                [:http-proxy :thirdparty "http://repo.soulspace.org/baumeister" "${repository-root-dir}/soulspace.org"]
+                [:maven-proxy :thirdparty "http://repo1.maven.org/maven2" "${repository-root-dir}/repo1.maven.org"]
+                [:maven-proxy :thirdparty "http://clojars.org/repo" "${repository-root-dir}/clojars.org"]
+                [:maven-proxy :thirdparty "https://maven.java.net/content/repositories/releases/" "${repository-root-dir}/java.net"]]
+;
+; default plugin config
+;
  :plugins ["global"
            ["org.soulspace.baumeister/DependencyPlugin"]
            ["org.soulspace.baumeister/GenesisPlugin"]]
@@ -190,38 +193,37 @@
                 ["org.soulspace.baumeister/DataTemplate, 0.1.0, DataTemplate, zip" :data]
                 ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]
  
- :default-plugins {
-                   :clojure
-                   [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/ClojurePlugin"]
-                    ["org.soulspace.baumeister/ClojureTestPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]]
-                   :java
-                   [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/JavaPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]]
-                   :aspectj
-                   [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/AspectJPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]]
-                   :clojurescript
-                   [["org.soulspace.baumeister/DependencyPlugin"]
-                    ]
-                   :groovy
-                   [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]
-                    ]
-                   :jython
-                   [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]
-                    ]
-                   :jruby
-                   [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]
-                    ]
-                   :scala
-                   [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/ScalaPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]]
-                   }
+ :language-default-plugins {:clojure
+                            [["org.soulspace.baumeister/DependencyPlugin"]
+                             ["org.soulspace.baumeister/ClojurePlugin"]
+                             ["org.soulspace.baumeister/ClojureTestPlugin"]
+                             ["org.soulspace.baumeister/PackagePlugin"]]
+                            :java
+                            [["org.soulspace.baumeister/DependencyPlugin"]
+                             ["org.soulspace.baumeister/JavaPlugin"]
+                             ["org.soulspace.baumeister/PackagePlugin"]]
+                            :aspectj
+                            [["org.soulspace.baumeister/DependencyPlugin"]
+                             ["org.soulspace.baumeister/AspectJPlugin"]
+                             ["org.soulspace.baumeister/PackagePlugin"]]
+                            :clojurescript
+                            [["org.soulspace.baumeister/DependencyPlugin"]
+                             ]
+                            :groovy
+                            [["org.soulspace.baumeister/DependencyPlugin"]
+                             ["org.soulspace.baumeister/PackagePlugin"]
+                             ]
+                            :jython
+                            [["org.soulspace.baumeister/DependencyPlugin"]
+                             ["org.soulspace.baumeister/PackagePlugin"]
+                             ]
+                            :jruby
+                            [["org.soulspace.baumeister/DependencyPlugin"]
+                             ["org.soulspace.baumeister/PackagePlugin"]
+                             ]
+                            :scala
+                            [["org.soulspace.baumeister/DependencyPlugin"]
+                             ["org.soulspace.baumeister/ScalaPlugin"]
+                             ["org.soulspace.baumeister/PackagePlugin"]]
+                            }
  ]

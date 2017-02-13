@@ -12,11 +12,13 @@
 ]"}
  {:type :file
   :name "README.md"
-  :content "${module} for the Baumeister GenesisPlugin 
+  :content "${module} for Baumeister 
 ======================================================
+${module} for the Baumeister build system.
 
 Copyright
 ---------
+(c)
 
 License
 -------

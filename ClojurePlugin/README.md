@@ -9,7 +9,7 @@ Ludger Solbach
 
 Copyright
 ---------
-© 2012-2013 Ludger Solbach
+(c) 2012-2013 Ludger Solbach
 
 License
 -------
@@ -18,11 +18,3 @@ License
 Code Repository
 ---------------
 [https://github.com/lsolbach/Baumeister/ClojurePlugin] (https://github.com/lsolbach/Baumeister/ClojurePlugin)
-
-History
--------
-
-Version 0.5.1 (--.--.2013)
---------------------------
-* Extracted from Baumeister
-

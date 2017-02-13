@@ -9,7 +9,7 @@
 ;
 (ns baumeister.process
   (:use [org.soulspace.clj string file]
-        [org.soulspace.clj.application cli classpath] 
+        [org.soulspace.clj.application cli classpath env-vars] 
         [baumeister.config config]
         [baumeister.config registry]
         [baumeister workflow-engine]
@@ -44,7 +44,6 @@
 (defn new
   "Creates a new module."
   [arguments options]
-  (println "new" arguments options)
   (let [new-config [:plugins ["org.soulspace.baumeister/GenesisPlugin"]
                     :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
                                    ["org.soulspace.baumeister/AspectJTemplate, 0.1.0, AspectJTemplate, zip" :data]
@@ -54,7 +53,9 @@
                                    ["org.soulspace.baumeister/DataTemplate, 0.1.0, DataTemplate, zip" :data]
                                    ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]]]
     ; TODO (configure-from-seq options)
-    (try (apply start-workflow "new-workflow")
+    (try
+      (init-config new-config options)
+      (apply start-workflow "new-workflow")
       (catch Exception e
         (message :error (.getMessage e))
         (message :debug (.printStackTrace e))))))
@@ -62,7 +63,7 @@
 (defn run
   "Runs an application."
   [arguments options]
-  (println "run" arguments options)
+  ; TODO implement application start 
   )
 
 (defn print-options
@@ -80,19 +81,45 @@
   [arguments options]
   (let [start (System/currentTimeMillis)]
     (message :info "Started at" (Date. start))
-    (init-config options)
     (if (command? (first arguments))
-      ((symbol (first arguments)) (rest arguments) options)
-      (try (apply start-workflow arguments)
+      (try 
+        (println (first arguments) (rest arguments) options)
+        ((symbol (first arguments)) (rest arguments) options)
+        (catch Exception e
+          (message :error (.getMessage e))
+          (message :debug (.printStackTrace e))))
+      (try 
+        (init-config options)
+        (apply start-workflow arguments)
         (catch Exception e
           (message :error (.getMessage e))
           (message :debug (.printStackTrace e)))))
     (let [end (System/currentTimeMillis)]
       (message :info (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds.")))))
 
+(defn test-main
+  "Baumeister test method."
+  [& args]
+  (init-defaults [:log-level :trace
+                  :baumeister-home-dir "."
+                  :user-home-dir "."
+                  :java-home (get-env "JAVA_HOME")
+                  :aspectj-home (get-env "ASPECTJ_HOME")])
+  (let [[arguments options] (parse-args args option-defs)]
+    (if (print-only-options? options)
+      (do 
+        (print-options options)
+        )
+      (do
+        (start-processing arguments options))
+      ))
+  0)
+
+
 (defn -main
   "Baumeister main method."
   [& args]
+  (init-defaults)
   (let [[arguments options] (parse-args args option-defs)]
     ;(println "Options:" options)
     (if (print-only-options? options)

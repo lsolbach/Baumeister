@@ -8,8 +8,8 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.mddgenerator
-  (:use [clojure.string :only [split]]
-        [clojure.java.io :exclude [delete-file]]
+  (:require [clojure.string :as str])
+  (:use [clojure.java.io :exclude [delete-file]] 
         [org.soulspace.clj file file-search function]
         [org.soulspace.clj.modelgenerator generator]
         [baumeister.utils ant-utils log]
@@ -18,7 +18,7 @@
 ; TODO handle model dependencies from mdd plugin?
 ; TODO at least access to the dependency tree is needed (to specify model dependencies in the right order)?
 (defn profile-files [path profiles]
-  (let [search-path (map as-file (split path #":"))
+  (let [search-path (map as-file (str/split path #":"))
         xmi-locator (file-locator search-path "xmi")]
     (map #(xmi-locator %) profiles)))
 
@@ -93,7 +93,7 @@
   (let [gen-ctx (generation-context)
         gens (generators)]
     (log :debug "Generation Context:" gen-ctx)
-    (log :debug "Generators:" gens)
+    (log :debug "Generators:" (str (str/join ", " gens)))
     (generate-all gen-ctx gens)))
 
 (defn mddgenerator-post-generate []
@@ -116,5 +116,5 @@
            [:init mddgenerator-init]
            [:pre-generate mddgenerator-pre-generate]
            [:generate mddgenerator-generate]
-           [:generate mddgenerator-post-generate]]
+           [:post-generate mddgenerator-post-generate]]
    :functions []})

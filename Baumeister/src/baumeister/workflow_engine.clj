@@ -8,6 +8,7 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.workflow-engine
+  (:require [clojure.string :as str :only [ends-with?]])
   (:use [org.soulspace.clj string]
         [baumeister.utils checks log]
         [baumeister.config registry function-registry]))
@@ -15,12 +16,12 @@
 (defn workflow?
   "Returns true if the given id identifies a workflow."
   [id]
-  (ends-with "-workflow" (name id)))
+  (str/ends-with? (name id) "-workflow"))
 
 (defn phase?
   "Returns true if the given id identifies a workflow phase."
   [id]
-  (not (ends-with "-workflow" (name id))))
+  (not (str/ends-with? (name id) "-workflow")))
 
 (defn pre-key
   "Returns the key of the pre step of the phase."

@@ -56,8 +56,7 @@
           (derive ::pack ::takes-fileset)
           (derive ::unpack ::takes-fileset)
           (derive ::exec ::has-args)
-          (derive ::java ::has-args)
-          )))
+          (derive ::java ::has-args))))
 
 (defmulti add-nested
   "Adds a nested element to ant task.

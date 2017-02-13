@@ -12,11 +12,12 @@
 ]"}
  {:type :file
   :name "README.md"
-  :content "${module}
+  :content "${module} for the Baumeister GenesisPlugin
 ==========
 
 Copyright
 ---------
+(c)
 
 License
 -------
