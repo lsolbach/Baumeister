@@ -11,9 +11,9 @@
  :license ["Eclipse Public License 1.0" "http://www.eclipse.org/legal/epl-v10.html"]
  :plugins [["org.soulspace.baumeister/EclipsePlugin"]
            ;["org.soulspace.baumeister/MavenPlugin"]
-           ["org.soulspace.baumeister/ClojurePlugin"]
-           ["org.soulspace.baumeister/PackagePlugin"]
-           ["org.soulspace.baumeister/DistributionPlugin"]
+           ["org.soulspace.baumeister/ClojurePlugin, 0.6.5"]
+           ["org.soulspace.baumeister/PackagePlugin, 0.6.7"]
+           ["org.soulspace.baumeister/DistributionPlugin, 0.6.5"]
            ]
  ;:repository-root-dir "/home/soulman/devel/repositories" ; FIXME use $HOME here
  :dependencies [["org.clojure/clojure, 1.8.0"]
