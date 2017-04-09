@@ -11,56 +11,59 @@
   (:use [clojure.pprint]
         [org.soulspace.clj.application string-property]))
 
-;
-; parameter registry
-;
-(def ^{:dynamic true :private true} param-registry)
+(def param-registry (atom {})) ; parameter registry
 
 (defn get-param-registry
   "Returns the parameter registry."
   []
-  param-registry)
+  @param-registry)
 
 (defn reset-param-registry
   "Resets the parameter registry."
   []
-  (def param-registry {}))
+  (reset! param-registry {}))
 
 (defn print-parameters
   "Prints the parameter registry."
   []
   (pprint (get-param-registry)))
 
-; replace "${build-dir}/report" with (str (get-var (keyword build-dir) "${build-dir}") "/dir")
 (defn replace-vars
   "Replaces with the variables in the parameter registry with the given value."
   [value]
+  ; replace "${build-dir}/report" with (str (get-var (keyword build-dir) "${build-dir}") "/dir")
   (replace-properties param-registry value))
 
 (defn register-param-as-is
   "Registers the key/value pair without any preprocessing."
   [key value]
-  (def param-registry (assoc param-registry key value)))
+  (swap! param-registry assoc key value))
 
 ; TODO refactor to multimethod?
+(defn assoc-param
+  "Associate a parameter."
+  [m key value]
+  (println "assoc" key value)
+  (cond
+    (string? value)
+    (assoc m key (replace-vars value))
+    (keyword? value)
+    (assoc m key value)
+    (vector? value)
+    (assoc m key (map replace-vars value))
+    (set? value)
+    (assoc m key value)
+    (map? value)
+    (assoc m key value)
+    (seq? value)
+    (assoc m key (map replace-vars value))
+    :default
+    (assoc m key value)))
+
 (defn register-param
   "Registers the key/value pair with preprocessing (e.g. variable replacement)"
   [key value]
-  (def param-registry
-    (cond
-      (string? value)
-      (assoc param-registry key (replace-vars value))
-      (vector? value)
-      (assoc param-registry key (map replace-vars value))
-      (set? value)
-      (assoc param-registry key value)
-      (map? value)
-      (assoc param-registry key value)
-      (seq? value)
-      (assoc param-registry key (map replace-vars value))
-      :default
-      (do 
-        (assoc param-registry key value)))))
+  (swap! param-registry assoc-param key value))
 
 ; TODO support documentation on vars
 (defn register-params

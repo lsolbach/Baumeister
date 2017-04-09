@@ -15,6 +15,7 @@
            [baumeister.repository.mavenproxy MavenProxyArtifactRepositoryImpl]))
 
 (def ^{:dynamic true :private true} repositories [])
+(def repositories (atom []))
 
 ;
 ; repository registry

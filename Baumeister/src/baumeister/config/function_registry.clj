@@ -12,18 +12,18 @@
 ;
 ; function registry
 ;
-(def ^{:dynamic true :private true} fn-registry) ; registry for plugin step functions
-(def ^{:dynamic true :private true} step-fn-registry) ; registry for plugin functions
+(def fn-registry (atom {})) ; registry for plugin step functions
+(def step-fn-registry (atom {})) ; registry for plugin functions
 
 (defn reset-step-fn-registry
   "Resets the step function registry."
   []
-  (def step-fn-registry {}))
+  (reset! step-fn-registry {}))
 
 (defn reset-fn-registry
   "Resets the function registry."
   []
-  (def fn-registry {}))
+  (reset! fn-registry {}))
 
 (defn reset-fn-registries
   "Resets the function registries."
@@ -34,9 +34,8 @@
 (defn register-step
   "Registers a function at the step."
   [step function]
-  (let [stp (keyword step)]
-    (def step-fn-registry
-      (assoc step-fn-registry stp (conj (get step-fn-registry stp []) function)))))
+  (let [step-key (keyword step)]
+    (swap! step-fn-registry assoc step-key (conj (get step-fn-registry step-key []) function))))
 
 (defn register-steps
   "Registers the functions at their steps."
@@ -52,9 +51,8 @@
 (defn register-function
   "Registers a function at the step."
   [step function]
-  (let [stp (keyword step)]
-    (def fn-registry
-      (assoc fn-registry stp (conj (get fn-registry stp []) function)))))
+  (let [step-key (keyword step)]
+    (swap! fn-registry assoc step-key (conj (get fn-registry step-key []) function))))
 
 (defn register-functions
   "Registers the functions at their names."

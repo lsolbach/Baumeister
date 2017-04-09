@@ -12,3 +12,4 @@ Extensibility
 * Baumeister should be extensible with plugins
 * Baumeister plugins should be created easily
 
+

@@ -10,7 +10,6 @@
 (ns baumeister.process
   (:use [org.soulspace.clj string file]
         [org.soulspace.clj.application cli classpath env-vars] 
-        [baumeister.config config]
         [baumeister.config registry]
         [baumeister workflow-engine]
         [baumeister.utils log])
@@ -104,17 +103,13 @@
                   :baumeister-home-dir "."
                   :user-home-dir "."
                   :java-home (get-env "JAVA_HOME")
-                  :aspectj-home (get-env "ASPECTJ_HOME")])
+                  :aspectj-home (get-env "ASPECTJ_HOME")
+                  :repository-home-dir (get-env "BAUMEISTER_REPOS" "/home/soulman/devel/repositories")])
   (let [[arguments options] (parse-args args option-defs)]
     (if (print-only-options? options)
-      (do 
-        (print-options options)
-        )
-      (do
-        (start-processing arguments options))
-      ))
+      (print-options options)
+      (start-processing arguments options)))
   0)
-
 
 (defn -main
   "Baumeister main method."

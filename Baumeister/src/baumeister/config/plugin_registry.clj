@@ -19,22 +19,27 @@
 ;
 ; plugin registry
 ;
-(def ^{:dynamic true :private true} plugin-registry)
+(def plugin-registry (atom #{}))
+
+(defn get-plugin-registry
+  "Returns the plugin registry."
+  []
+  @plugin-registry)
 
 (defn reset-plugin-registry
   "Resets the plugin registry."
   []
-  (def plugin-registry #{})) ; initialize plugin registry as empty set
+  (reset! plugin-registry #{})) ; initialize plugin registry as empty set
 
 (defn register-plugin
   "Registers a plugin in the plugin registry."
   [plugin]
-  (def plugin-registry (conj plugin-registry plugin)))
+  (swap! plugin-registry conj plugin))
 
 (defn has-plugin?
   "Returns true if the plugin is registered in the plugin registry."
   [plugin]
-  ((set plugin-registry) plugin))
+  (@plugin-registry plugin))
 
 ; TODO the plugin namespace is too static, use project and module params from plugin dependencies
 (def plugin-ns-prefix "baumeister.plugin")
@@ -60,6 +65,29 @@
     ;(generate-plugin-dot)
     (add-urls plugin-dependency-urls)))
 
+(defn get-plugin-config
+  "Resolves the given plugin namespace and returns the config of the plugin."
+  [plugin]
+  (deref (ns-resolve plugin (symbol "config"))))
+
+(defn register-plugin-parameters
+  "Registers the plugin parameters."
+  [plugin]
+  (if-let [cfg (get-plugin-config plugin)]
+    (register-params (:params cfg))))
+
+(defn register-plugin-stepss
+  "Registers the plugin steps."
+  [plugin]
+  (if-let [cfg (get-plugin-config plugin)]
+    (register-steps (:steps cfg))))
+
+(defn register-plugin-functions
+  "Registers the plugin functions."
+  [plugin]
+  (if-let [cfg (get-plugin-config plugin)]
+    (register-functions (:functions cfg))))
+
 ; TODO load plugin as dependency? yes, when the build framework is stable
 ; load-file or require? (use compiled classes in Baumeister.jar or Baumeister plugins and load-file user plugins from file system?)
 (defn init-plugin
@@ -71,6 +99,7 @@
       (log :debug "loading plugin" name)
       (require plugin) ; import plugin namespace
       (register-plugin name) ; register plugin in plugin registry
+      ; TODO use functions or extract registration
       (let [config-var (ns-resolve plugin (symbol "config"))]
         (register-params (:params @config-var))
         (register-steps (:steps @config-var))

@@ -94,6 +94,21 @@
           (register-var key value)
           (param-action key value))))))
 
+(defn read-from-file
+  "Reads configuration from file."
+  [filename]
+  (read-module filename))
+
+(defn read-from-options
+  "Reads configuration from options."
+  [options]
+  (get-params-from-options options))
+
+(defn read-from-seq
+  "Adds configuration from coll."
+  [coll]
+  (partition 2 coll))
+
 (defn configure-from-file
   "Adds configuration from file."
   [filename]
@@ -105,7 +120,7 @@
   (set-params (get-params-from-options options)))
 
 (defn configure-from-seq
-  "Adds configuration from options."
+  "Adds configuration from coll."
   [config]
   (set-params (partition 2 config)))
 

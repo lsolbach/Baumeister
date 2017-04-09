@@ -25,7 +25,7 @@ Multi Module Build
  * call baumeister on multiple modules
    * handle multiple configurations
    * parent module configurations?
-     * read parent configuration and merge the config of the current module at registry level or at config level?
+   * read parent configuration and merge the config of the current module at registry level or at config level?
  * use the build output of dependent modules directly, don't rely on packaged jars
    * use the build/classes dir of dependent modules on the classpath of the current module so no packaging of jars is required 
 
@@ -113,11 +113,39 @@ How to start workflows, workflow phases and plugin functions?
 * <phase-name>
 * <plugin-name>:<function-name>
 
-
 Depending on commands or specific command line switches (e.g. --new or "new" command) add specific plugins, dependencies etc. to the config.
 Specifically handle the "normal" arguments according to the command given.
 
 Specific commands could include:
  * new for new modules
  * run for starting applications
- 
+
+
+Configuration
+-------------
+
+* configuration process
+  * read configuration from all sources
+  * parse configuration into a data structure
+  * configure build from data structure
+
+* questions
+  * how to handle configuration dependencies
+  * how to handle configuration order
+  
+* init action
+  * set up logging 
+  * set up classpath
+  * register repositories
+  * load plugins
+
+
+* configuration order
+  * environment vars
+  * default settings
+  * user settings
+  * module settings
+  * command line parameters
+
+* config sections?
+

@@ -8,14 +8,16 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.clojure
+  (:require [clojure.string :as str]
+            [clojure.java.io :as io])
   (:use [clojure.java.io :exclude [delete-file]]
-        [clojure.string :only [join]]
+        [clojure.string :only [join ends-with?]]
         [org.soulspace.clj file file-search namespace string ]
         [baumeister.utils ant-utils files checks log]
         [baumeister.config registry]))
 
 (defn remove-clj-ext [clj-path]
-  (if (ends-with ".clj" clj-path)
+  (if (str/ends-with? clj-path ".clj")
     (substring 0 (- (count clj-path) 4) clj-path)
     clj-path))
 
@@ -26,7 +28,7 @@
   (ant-java {:classname "clojure.lang.Compile" :fork (param :clojure-compiler-fork)
              :failonerror "true" :classpath class-path}
             (ant-variable {:key "clojure.compile.path" :value dest-dir})
-            {:line (join " " (collect-namespaces src-path))}))
+            {:line (str/join " " (collect-namespaces src-path))}))
 
 (defn clojure-init
   "clojure init"
