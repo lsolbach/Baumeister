@@ -21,6 +21,7 @@
 
 (defn manifest
   [dir additional-entries]
+  (create-dir (as-file dir))
   (ant-manifest {:file (str dir "/MANIFEST.MF")}
                 (merge {"Implementation-Version" (param :version)} additional-entries)))
 
