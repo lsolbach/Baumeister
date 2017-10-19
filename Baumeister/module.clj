@@ -18,14 +18,14 @@
  ;:repository-root-dir "/home/soulman/devel/repositories" ; FIXME use $HOME here
  :dependencies [["org.clojure/clojure, 1.8.0"]
                 ["org.soulspace.clj/CljApplicationLibrary, 0.6.0"]
-                ["org.soulspace.clj/CljArtifactLibrary, 0.4.4"]
+                ["org.soulspace.clj/CljArtifactLibrary, 0.4.5"]
                 ["org.soulspace.clj/CljMavenLibrary, 0.5.2"]
-                ["org.soulspace.clj/CljJavaLibrary, 0.6.1"]
-                ["org.soulspace.clj/CljXmlLibrary, 0.4.1"] ; xml generation, maven pom, eclipse
+                ["org.soulspace.clj/CljJavaLibrary, 0.7.0"]
+                ["org.soulspace.clj/CljXmlLibrary, 0.4.2"] ; xml generation, maven pom, eclipse
                 ["org.clojure/data.zip, 0.1.1"] ; maven pom support
                 ["org.clojure/tools.reader, 0.8.3"] ; edn reader
                 ["org.apache.ant/ant-junit, 1.8.3"]]
- :dependency-excludes [["ch.qos.logback"]
-                       ["avalon-framework"]
-                       ["com.ibm.icu"]]
+; :dependency-excludes [["ch.qos.logback"]
+;                       ["avalon-framework"]
+;                       ["com.ibm.icu"]]
  ]
