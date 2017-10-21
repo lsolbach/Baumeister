@@ -2,6 +2,7 @@ ClojureRingPlugin for Baumeister
 ================================
 
 ClojureRingPlugin for the Baumeister build system.
+Work in Progress.
 
 Author/Project Lead
 -------------------
@@ -17,5 +18,5 @@ License
 
 Code Repository
 ---------------
-[https://github.com/lsolbach/Baumeister/ClojureRingPlugin] (https://github.com/lsolbach/Baumeister/ClojureRingPlugin)
+[https://github.com/lsolbach/Baumeister] (https://github.com/lsolbach/Baumeister)
 
