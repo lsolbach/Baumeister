@@ -2,8 +2,8 @@
  :module "CoberturaPlugin"
  :project "org.soulspace.baumeister"
  :type :baumeister-plugin
- :version "0.6.5"
- :description "Cobertura plugin for the measure code coverage with the Baumeister build system."
+ :version "0.7.0"
+ :description "Cobertura plugin for measuring the code coverage with the Baumeister build system"
  :plugins [["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
  :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
