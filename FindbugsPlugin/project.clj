@@ -5,5 +5,5 @@
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [com.google.code.findbugs/findbugs-ant "2.0.0" :excludes [org.apache.ant/ant]]]
-  :dev-dependencies [["org.soulspace.baumeister/Baumeister, 0.7.0"]]
+  :dev-dependencies [[org.soulspace.baumeister/Baumeister "0.7.0"]]
   :test-paths ["unittest"])
