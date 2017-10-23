@@ -2,8 +2,8 @@
  :module "FindbugsPlugin"
  :project "org.soulspace.baumeister"
  :type :baumeister-plugin
- :version "0.6.5"
- :description "FindBugs statical code analysis plugin for the Baumeister build system."
+ :version "0.7.0"
+ :description "FindBugs statical code analysis plugin for the Baumeister build system"
  :plugins [["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
  :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
