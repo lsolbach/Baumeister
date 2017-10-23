@@ -2,8 +2,8 @@
  :module "GroovyPlugin"
  :project "org.soulspace.baumeister"
  :type :baumeister-plugin
- :version "0.6.5"
- :description "Groovy compiler plugin for the Baumeister build system."
+ :version "0.7.0"
+ :description "Groovy compiler plugin for the Baumeister build system"
  :log-level :debug
  :plugins [["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
