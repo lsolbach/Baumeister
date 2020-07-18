@@ -22,15 +22,15 @@
   "Reads a module file and returns the content partitioned in key and value sequences."
   ([] (read-module "./module.clj"))
   ([file]
-    (log :trace "Loading configuration from " (canonical-path file))
-    (if (is-file? file)
-      (partition 2 (edn/read-string (slurp file)))
-      (message :info "Could not load configuration file " (canonical-path file) "."))))
+   (log :trace "Loading configuration from " (canonical-path file))
+   (if (is-file? file)
+     (partition 2 (edn/read-string (slurp file)))
+     (message :info "Could not load configuration file " (canonical-path file) "."))))
 
 (defn parse-define-option
   "Parses a defined command line option."
   [define]
-  (let [[key value] (str/split define  #"[=:]")] ; TODO '=' is a split char in windows cmd 
+  (let [[key value] (str/split define  #"[=:]")] ; TODO '=' is a split char in windows cmd
     [(keyword key) (edn/read-string value)]))
 
 (defn get-params-from-options
@@ -128,41 +128,40 @@
   ""
   []
   (set-dynamic-classloader) ; ensure a dynamic classloader for modifying the plugin and clojure test classpaths
-  (reset-registries) ; always get a fresh environment if used in a repl's
-  )
+  (reset-registries)) ; always get a fresh environment if used in a repl's
+
 
 (defn init-defaults
   "Initializes the configuration defaults."
   ([]
-    ; set internal defaults  
-    (init-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
-                    :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
-                    :java-home (get-env "JAVA_HOME")
-                    :aspectj-home (get-env "ASPECTJ_HOME")]))
+    ; set internal defaults
+   (init-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
+                   :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
+                   :java-home (get-env "JAVA_HOME")
+                   :aspectj-home (get-env "ASPECTJ_HOME")]))
   ([defaults]
-    (println (partition 2 defaults))
-    (configure-from-seq defaults)))
+   (println (partition 2 defaults))
+   (configure-from-seq defaults)))
 
 
 (defn init-config
   "Initializes the configuration."
   ([options]
-    (init-config () options))
+   (init-config () options))
   ([config options]
 
   ; use given config
-  (configure-from-seq config)
-  
+   (configure-from-seq config)
+
   ; default settings
-  (configure-from-file (str (param :baumeister-home-dir) "/config/default_settings.clj"))
-  
+   (configure-from-file (str (param :baumeister-home-dir) "/config/default_settings.clj"))
+
   ; user settings
-  (configure-from-file (str (param :user-home-dir) "/.Baumeister/settings.clj"))
+   (configure-from-file (str (param :user-home-dir) "/.Baumeister/settings.clj"))
 
   ; read module.clj (or the file specified with --file or -f) from current module
   ; TODO for module.clj derivation get parent module.clj's and merge them first, requires repository access
-  (configure-from-file (:file options))
-  
+   (configure-from-file (:file options))
+
   ; add command line parameters (defined by --define or -D)
-  (configure-from-options options))
-  )
+   (configure-from-options options)))

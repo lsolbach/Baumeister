@@ -73,11 +73,11 @@
 (defn dependencies-dot
   "Renders a dot representation of the dependency tree"
   ([writer root-node]
-    (def processed-edges #{})
-    (binding [*out* writer]
-      (println "digraph Dependencies {
+   (def processed-edges #{})
+   (binding [*out* writer]
+     (println "digraph Dependencies {
     outputmode=nodefirst;
     node [shape=plaintext fontsize=9];")
-      (dependency-vertices root-node)
-      (dependency-edges root-node)
-      (println "}"))))
+     (dependency-vertices root-node)
+     (dependency-edges root-node)
+     (println "}"))))

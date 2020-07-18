@@ -62,5 +62,4 @@
   (artifact-dir [repo artifact]
     (as-file (str  path "/" (artifact-folder repo artifact))))
   (artifact-file [repo artifact]
-    (as-file (str (absolute-path (artifact-dir repo artifact)) "/" (artifact-name artifact))))
-  )
+    (as-file (str (absolute-path (artifact-dir repo artifact)) "/" (artifact-name artifact)))))

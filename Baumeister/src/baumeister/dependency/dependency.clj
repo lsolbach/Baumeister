@@ -39,20 +39,20 @@
 (defn print-artifact
   "Prints an artifact."
   ([artifact]
-    (str "[" 
-         (clojure.string/join ", " [(:project artifact) (:module artifact) (artifact-version artifact) (:name artifact) (:type artifact)])
-         "]")))
+   (str "["
+        (clojure.string/join ", " [(:project artifact) (:module artifact) (artifact-version artifact) (:name artifact) (:type artifact)])
+        "]")))
 
 (defn print-dependency
   "Prints a dependency."
   ([dependency]
-    (print-dependency dependency (:target dependency)))
+   (print-dependency dependency (:target dependency)))
   ([dependency target]
-    (let [artifact (:artifact dependency)]
-      (str "[" (clojure.string/join ", " [(print-artifact artifact) target (:optional dependency)]) "]"))))
+   (let [artifact (:artifact dependency)]
+     (str "[" (clojure.string/join ", " [(print-artifact artifact) target (:optional dependency)]) "]"))))
 
 ;
-; Dependency Protocol 
+; Dependency Protocol
 ;
 (defprotocol Dependency
   (compatible-dependency? [this other] "Returns true if both dependencies are compatible."))
@@ -73,15 +73,15 @@
 (defn create-dependency
   "Creates a new dependency to the given artifact."
   ([artifact]
-    (DependencyImpl. (new-artifact artifact) :runtime false nil []))
+   (DependencyImpl. (new-artifact artifact) :runtime false nil []))
   ([artifact target]
-    (DependencyImpl. (new-artifact artifact) target false nil []))
+   (DependencyImpl. (new-artifact artifact) target false nil []))
   ([artifact target exclusions]
-    (DependencyImpl. (new-artifact artifact) target false nil (map new-artifact-pattern exclusions)))
+   (DependencyImpl. (new-artifact artifact) target false nil (map new-artifact-pattern exclusions)))
   ([artifact target optional exclusions]
-    (DependencyImpl. (new-artifact artifact) target optional nil (map new-artifact-pattern exclusions)))
+   (DependencyImpl. (new-artifact artifact) target optional nil (map new-artifact-pattern exclusions)))
   ([artifact target optional scope exclusions]
-    (DependencyImpl. (new-artifact artifact) target optional scope (map new-artifact-pattern exclusions))))
+   (DependencyImpl. (new-artifact artifact) target optional scope (map new-artifact-pattern exclusions))))
 
 (defn new-dependency
   "Creates a new dependency."

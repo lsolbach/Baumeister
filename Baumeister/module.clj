@@ -13,8 +13,8 @@
            ;["org.soulspace.baumeister/MavenPlugin"]
            ["org.soulspace.baumeister/ClojurePlugin, 0.6.5"]
            ["org.soulspace.baumeister/PackagePlugin, 0.6.7"]
-           ["org.soulspace.baumeister/DistributionPlugin, 0.6.5"]
-           ]
+           ["org.soulspace.baumeister/DistributionPlugin, 0.6.5"]]
+
  ;:repository-root-dir "/home/soulman/devel/repositories" ; FIXME use $HOME here
  :dependencies [["org.clojure/clojure, 1.8.0"]
                 ["org.soulspace.clj/CljApplicationLibrary, 0.6.0"]
@@ -24,8 +24,7 @@
                 ["org.soulspace.clj/CljXmlLibrary, 0.4.3"] ; xml generation, maven pom, eclipse
                 ["org.clojure/data.zip, 0.1.1"] ; maven pom support
                 ["org.clojure/tools.reader, 0.8.3"] ; edn reader
-                ["org.apache.ant/ant-junit, 1.8.3"]]
+                ["org.apache.ant/ant-junit, 1.8.3"]]]
 ; :dependency-excludes [["ch.qos.logback"]
 ;                       ["avalon-framework"]
 ;                       ["com.ibm.icu"]]
- ]

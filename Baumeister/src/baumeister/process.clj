@@ -9,7 +9,7 @@
 ;
 (ns baumeister.process
   (:use [org.soulspace.clj string file]
-        [org.soulspace.clj.application cli classpath env-vars] 
+        [org.soulspace.clj.application cli classpath env-vars]
         [baumeister.config registry]
         [baumeister workflow-engine]
         [baumeister.utils log])
@@ -61,9 +61,9 @@
 
 (defn run
   "Runs an application."
-  [arguments options]
-  ; TODO implement application start 
-  )
+  [arguments options])
+  ; TODO implement application start
+
 
 (defn print-options
   "Print some messages and quit."
@@ -81,13 +81,13 @@
   (let [start (System/currentTimeMillis)]
     (message :info "Started at" (Date. start))
     (if (command? (first arguments))
-      (try 
+      (try
         (println (first arguments) (rest arguments) options)
         ((symbol (first arguments)) (rest arguments) options)
         (catch Exception e
           (message :error (.getMessage e))
           (message :debug (.printStackTrace e))))
-      (try 
+      (try
         (init-config options)
         (apply start-workflow arguments)
         (catch Exception e

@@ -65,40 +65,40 @@
 ;
 ; repository query functions
 ;
-; TODO merge dependency-initialization with repositories query-* to dependency-resolving? 
-(defn query-artifact 
+; TODO merge dependency-initialization with repositories query-* to dependency-resolving?
+(defn query-artifact
   "Query the configured repositories for an artifact."
   ([artifact]
-    (log :debug "Querying artifact:" (artifact-name-version artifact))
-    (query-artifact (param :deps-repositories) artifact))
+   (log :debug "Querying artifact:" (artifact-name-version artifact))
+   (query-artifact (param :deps-repositories) artifact))
   ([repositories artifact]
-    (if (seq repositories)
-      ; iterate through the configured repositories to find this artifact
-      (let [repo (first repositories)
-            artifact-file (find-artifact repo artifact)]
-        (log :trace "querying repository" repo)
-        (if (exists? artifact-file)
-          artifact-file ; found, return artifact file
-          (recur (rest repositories) artifact))) ; not found, try next repository
-      (do
-        (log :warn "Could not find artifact" (artifact-name-version artifact) "in the configured repositories!")
-        nil))))
+   (if (seq repositories)
+     ; iterate through the configured repositories to find this artifact
+     (let [repo (first repositories)
+           artifact-file (find-artifact repo artifact)]
+       (log :trace "querying repository" repo)
+       (if (exists? artifact-file)
+         artifact-file ; found, return artifact file
+         (recur (rest repositories) artifact))) ; not found, try next repository
+     (do
+       (log :warn "Could not find artifact" (artifact-name-version artifact) "in the configured repositories!")
+       nil))))
 
 (defn query-dependencies
   "Query the configured repositories for transitive dependencies."
   ([artifact]
-    (log :debug "Querying transitive dependencies for artifact:" (artifact-key artifact))
-    (query-dependencies (param :deps-repositories) artifact))
+   (log :debug "Querying transitive dependencies for artifact:" (artifact-key artifact))
+   (query-dependencies (param :deps-repositories) artifact))
   ([repositories artifact]
-    (if (seq repositories)
-      ; Iterate through the configured repositories to find the dependencies file for this artifact
-      (let [repo (first repositories)
-            deps (get-dependencies-for-artifact repo artifact)]
-        (log :trace "Querying depependencies from repository:" repo)
-        ; test for nil instead of seq to distinguish between no module/pom file or no dependencies in module/pom file
-        (if (nil? deps)
-          (recur (rest repositories) artifact) ; not found, try next repository
-          (map (partial map-dependency repo) deps))) ; found, return dependency
-      (do
-        (log :warn "Could not find dependencies for" (artifact-name-version artifact) "in the configured repositories!")
-        nil))))
+   (if (seq repositories)
+     ; Iterate through the configured repositories to find the dependencies file for this artifact
+     (let [repo (first repositories)
+           deps (get-dependencies-for-artifact repo artifact)]
+       (log :trace "Querying depependencies from repository:" repo)
+       ; test for nil instead of seq to distinguish between no module/pom file or no dependencies in module/pom file
+       (if (nil? deps)
+         (recur (rest repositories) artifact) ; not found, try next repository
+         (map (partial map-dependency repo) deps))) ; found, return dependency
+     (do
+       (log :warn "Could not find dependencies for" (artifact-name-version artifact) "in the configured repositories!")
+       nil))))

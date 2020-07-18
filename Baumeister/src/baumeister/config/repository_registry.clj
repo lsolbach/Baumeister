@@ -14,7 +14,7 @@
            [baumeister.repository.httpproxy HttpProxyArtifactRepositoryImpl]
            [baumeister.repository.mavenproxy MavenProxyArtifactRepositoryImpl]))
 
-(def ^{:dynamic true :private true} repositories [])
+;(def ^{:dynamic true :private true} repositories [])
 (def repositories (atom []))
 
 ;
@@ -25,10 +25,10 @@
   (let [[_ usage path] opts]
     (FileArtifactRepositoryImpl. usage (param path))))
 (defmethod create-repository :http-proxy [opts]
-  (let [[_ usage url path] opts] 
+  (let [[_ usage url path] opts]
     (HttpProxyArtifactRepositoryImpl. usage url (param path))))
 (defmethod create-repository :maven-proxy [opts]
-  (let [[_ usage url path] opts] 
+  (let [[_ usage url path] opts]
     (MavenProxyArtifactRepositoryImpl. usage url (param path))))
 
 (defn create-repositories

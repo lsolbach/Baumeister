@@ -8,7 +8,7 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.global
-  (:use [clojure.java.io :exclude [delete-file]] 
+  (:use [clojure.java.io :exclude [delete-file]]
         [org.soulspace.clj file system net]
         [baumeister.utils ant-utils log]
         [baumeister.config registry plugin-registry]))
@@ -27,9 +27,9 @@
         (set-http-proxy http-proxy-host http-proxy-port http-proxy-bybasshosts)
         (set-http-proxy http-proxy-host http-proxy-port))
       (if (seq https-proxy-host)
-        (set-https-proxy https-proxy-host https-proxy-port))
+        (set-https-proxy https-proxy-host https-proxy-port)))))
       ;(println (into {} (System/getProperties)))
-      )))
+
 
 (defn global-clean
   "Global clean"

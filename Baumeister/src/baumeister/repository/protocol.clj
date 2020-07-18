@@ -13,7 +13,7 @@
 ; Repository protocols
 ;
 
-; TODO add usage type of repository ("dev" "release" "thirdparty"), add (usage-type [repo] "Returns the usage type of the repository") 
+; TODO add usage type of repository ("dev" "release" "thirdparty"), add (usage-type [repo] "Returns the usage type of the repository")
 (defprotocol ArtifactRepository
   "Protocol for an artifact repository."
   (artifact-folder [repo artifact] "Get the folder of this artifact in this repository.")
@@ -51,8 +51,8 @@
   (pom-artifact [repo artifact] "Create the maven POM artifact for this artifact.")
   (get-pom [repo artifact] "Get the POM with parent POMs if any.")
   (metadata-folder [repo artifact] "Get the folder for the metadata of this artifact in this repository.")
-  (get-metadata [repo artifact] "Get the repositor metadata for this artifact.")
-  )
+  (get-metadata [repo artifact] "Get the repositor metadata for this artifact."))
+
 
 (defprotocol VersionedArtifactRepository
   "Protocol for a repository which stores versioned artifacts."
@@ -60,5 +60,4 @@
   (latest? [repo artifact] "True, if no newer version of this artifact is available.")
   (latest-version [repo artifact] "Get the latest version for this artifact.")
   (latest-artifact [repo artifact] "Get the artifact with the latest version, returns the artifact.")
-  (find-artifact [repo artifact] "Find an artifact in the the artifact repository. Returns the artifact with the latest matching version.")
-  )
+  (find-artifact [repo artifact] "Find an artifact in the the artifact repository. Returns the artifact with the latest matching version."))

@@ -20,8 +20,8 @@
 
 (defn configure
   ""
-  [key value]  
-  (swap! build-config assoc-in ))
+  [key value]
+  (swap! build-config assoc-in))
 
 
 (defn get-classpath-urls
@@ -45,7 +45,7 @@
       (let [url (as-url (canonical-file entry))]
         (if-not (contains? urls url)
           (add-url url))))))
-  
+
 ; TODO returns a parameter as-is without property replacement. still needed? if so, choose new fn name
 (defn get-var
   "Get parameter without replacements."
@@ -55,13 +55,13 @@
 (defn param
   "Get parameter with replacements."
   ([k]
-    (if (keyword? k)
-      (get-var k)
-      (replace-vars k)))
+   (if (keyword? k)
+     (get-var k)
+     (replace-vars k)))
   ([k default]
-    (if (keyword? k)
-      (get-var k default)
-      (replace-vars k))))
+   (if (keyword? k)
+     (get-var k default)
+     (replace-vars k))))
 
 (defn register-val
   "Register a value."
@@ -81,9 +81,9 @@
       (vector? var)
       (register-var key (into var value))
       (set? var)
-      (register-var key (into var value))
-      )
-  ))
+      (register-var key (into var value)))))
+
+
 
 (defn register-vars
   "Register variables."
@@ -108,15 +108,15 @@
   "Reads a module file and returns the content partitioned in key and value sequences."
   ([] (read-module "./module.clj"))
   ([file]
-    (log :trace "Loading configuration from " (canonical-path file))
-    (if (is-file? file)
-      (partition 2 (edn/read-string (slurp file)))
-      (message :info "Could not load configuration file " (canonical-path file) "."))))
+   (log :trace "Loading configuration from " (canonical-path file))
+   (if (is-file? file)
+     (partition 2 (edn/read-string (slurp file)))
+     (message :info "Could not load configuration file " (canonical-path file) "."))))
 
 (defn parse-define-option
   "Parses a defined command line option."
   [define]
-  (let [[key value] (str/split define  #"[=:]")] ; TODO '=' is a split char in windows cmd 
+  (let [[key value] (str/split define  #"[=:]")] ; TODO '=' is a split char in windows cmd
     [(keyword key) (edn/read-string value)]))
 
 (defn get-params-from-options
@@ -219,12 +219,12 @@
 (defn load-defaults
   ""
   ([]
-    (load-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
-                    :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
-                    :java-home (get-env "JAVA_HOME")
-                    :aspectj-home (get-env "ASPECTJ_HOME")]))
+   (load-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
+                   :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
+                   :java-home (get-env "JAVA_HOME")
+                   :aspectj-home (get-env "ASPECTJ_HOME")]))
   ([coll]
-    (read-from-seq )))
+   (read-from-seq)))
 
 (defn load-environment-vars
   []
@@ -236,36 +236,34 @@
 (defn init-defaults
   "Initializes the configuration defaults."
   ([]
-    ; set internal defaults  
-    (init-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
-                    :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
-                    :java-home (get-env "JAVA_HOME")
-                    :aspectj-home (get-env "ASPECTJ_HOME")]))
+    ; set internal defaults
+   (init-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
+                   :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
+                   :java-home (get-env "JAVA_HOME")
+                   :aspectj-home (get-env "ASPECTJ_HOME")]))
   ([defaults]
-    (println (partition 2 defaults))
-    (configure-from-seq defaults)))
+   (println (partition 2 defaults))
+   (configure-from-seq defaults)))
 
 
 (defn init-config
   "Initializes the configuration."
   ([options]
-    (init-config () options))
+   (init-config () options))
   ([config options]
 
   ; use given config
-  (configure-from-seq config)
-  
+   (configure-from-seq config)
+
   ; default settings
-  (configure-from-file (str (param :baumeister-home-dir) "/config/default_settings.clj"))
-  
+   (configure-from-file (str (param :baumeister-home-dir) "/config/default_settings.clj"))
+
   ; user settings
-  (configure-from-file (str (param :user-home-dir) "/.Baumeister/settings.clj"))
+   (configure-from-file (str (param :user-home-dir) "/.Baumeister/settings.clj"))
 
   ; read module.clj (or the file specified with --file or -f) from current module
   ; TODO for module.clj derivation get parent module.clj's and merge them first, requires repository access
-  (configure-from-file (:file options))
-  
-  ; add command line parameters (defined by --define or -D)
-  (configure-from-options options))
-  )
+   (configure-from-file (:file options))
 
+  ; add command line parameters (defined by --define or -D)
+   (configure-from-options options)))

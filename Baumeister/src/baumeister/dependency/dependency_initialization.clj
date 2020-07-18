@@ -11,9 +11,9 @@
   (:use [clojure.java.io :only [as-file as-url copy]]
         [org.soulspace.clj file]
         [org.soulspace.clj.artifact artifact]
-        [baumeister.config registry parameter-registry] ; TODO remove parammeter-registry 
+        [baumeister.config registry parameter-registry] ; TODO remove parammeter-registry
         [baumeister.repository repositories]
-        [baumeister.dependency dependency dependency-initialization]
+        [baumeister.dependency dependency]
         [baumeister.utils ant-utils log]))
 
 ; TODO instead of copying to target lib dirs, build target specific classpaths with references into the repositories?!?
@@ -31,10 +31,10 @@
                              (copy src (as-file (str tgt "/" (artifact-name artifact)))))
         (unzip? dependency) (do
                               (log :debug "Unpacking" (print-dependency dependency) "->" tgt)
-          (ant-unzip {:src src :dest tgt :overwrite "true"}))
+                             (ant-unzip {:src src :dest tgt :overwrite "true"}))
         (follow? dependency) (do
                                (log :debug "Following" (print-dependency dependency))
-          nil) ; do nothing in initalization 
+                              nil) ; do nothing in initalization
         :default (log :error "Could not handle dependency " (print-dependency dependency))))))
 
 (defn init-dependencies
@@ -52,8 +52,8 @@
 (defn file-for-artifact
   "Returns the file for the artifact."
   ([artifact]
-    (log :trace "file for artifact" (print-artifact artifact))
-    (query-artifact artifact)))
+   (log :trace "file for artifact" (print-artifact artifact))
+   (query-artifact artifact)))
 
 (defn url-for-file
   "Returns the url for the given file."
@@ -64,8 +64,8 @@
 (defn artifact-urls
   "Returns the artifact urls for the dependencies."
   ([dependencies]
-    (log :trace dependencies)
-    (map url-for-file (filter (complement nil?) (map file-for-artifact (map :artifact dependencies))))))
+   (log :trace dependencies)
+   (map url-for-file (filter (complement nil?) (map file-for-artifact (map :artifact dependencies))))))
 
 ; TODO make the targets configurable in the settings
 (defn runtime-dependencies
@@ -98,11 +98,10 @@
   [dependencies]
   (dependencies-by-targets [:generator] dependencies))
 
-; TODO merge dependency-initialization with repositories query-* to dependency-resolving? 
+; TODO merge dependency-initialization with repositories query-* to dependency-resolving?
 
-(defn resolve-dependency 
+(defn resolve-dependency
   "Returns a resolved dependency structure (map/vec?), that contains the dependency data and the resolved artifact file."
-  [dependency]
+  [dependency])
   ; what do we need? Dependency data (target), Artifact data (all?), file in local repository
   ; TODO implement with query artifact
-  )
