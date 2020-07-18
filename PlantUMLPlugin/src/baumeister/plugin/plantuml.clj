@@ -14,7 +14,8 @@
         [baumeister.config registry]
         [baumeister.utils ant-utils files log]))
 
-(ant-taskdef {:name "plantuml" :classname "net.sourceforge.plantuml.ant.PlantUmlTask"})
+(ant-taskdef {:name "plantuml"
+              :classname "net.sourceforge.plantuml.ant.PlantUmlTask"})
 (define-ant-task ant-plantuml plantuml)
 
 (defn plantuml-task
@@ -23,11 +24,11 @@
 
 (defn plantuml-clean
   []
-  (delete-file (as-file (param :report-plantuml-dir))))
+  (delete-file (as-file (param :plantuml-target-dir))))
 
 (defn plantuml-init
   []
-  (create-dir (as-file (param :report-unittest-dir))))
+  (create-dir (as-file (param :plantuml-target-dir))))
 
 (defn plantuml-generate
   []
