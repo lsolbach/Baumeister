@@ -7,5 +7,4 @@
  :plugins [["org.soulspace.baumeister/ClojurePlugin"]
            ["org.soulspace.baumeister/PackagePlugin"]]
  :dependencies [["org.soulspace.baumeister/Baumeister" :dev]
-                ["net.sourceforge.plantuml/plantuml, 7991" :runtime ["org.apache.ant"]]]
- ]
+                ["net.sourceforge.plantuml/plantuml, 7991" :runtime ["org.apache.ant"]]]]

@@ -25,8 +25,8 @@
 
 (defn configure
   ""
-  [key value]  
-  (swap! build-config assoc-in ))
+  [key value]
+  (swap! build-config assoc-in))
 
 
 (defn get-classpath-urls
@@ -50,7 +50,7 @@
       (let [url (io/as-url (file/canonical-file entry))]
         (if-not (contains? urls url)
           (cp/add-url url))))))
-  
+
 ; TODO returns a parameter as-is without property replacement. still needed? if so, choose new fn name
 (defn get-var
   "Get parameter without replacements."
@@ -86,9 +86,9 @@
       (vector? var)
       (register-var key (into var value))
       (set? var)
-      (register-var key (into var value))
-      )
-  ))
+      (register-var key (into var value)))))
+
+
 
 (defn register-vars
   "Register variables."
@@ -121,7 +121,7 @@
 (defn parse-define-option
   "Parses a defined command line option."
   [define]
-  (let [[key value] (str/split define  #"[=:]")] ; TODO '=' is a split char in windows cmd 
+  (let [[key value] (str/split define  #"[=:]")] ; TODO '=' is a split char in windows cmd
     [(keyword key) (edn/read-string value)]))
 
 (defn get-params-from-options
@@ -224,10 +224,10 @@
 (defn load-defaults
   ""
   ([]
-    (load-defaults [:baumeister-home-dir (sys/get-env "BAUMEISTER_HOME" ".")
-                    :user-home-dir (sys/get-env "HOME" (sys/get-env "USERPROFILE"))
-                    :java-home (sys/get-env "JAVA_HOME")
-                    :aspectj-home (sys/get-env "ASPECTJ_HOME")]))
+   (load-defaults [:baumeister-home-dir (sys/get-environment-variable "BAUMEISTER_HOME" ".")
+                   :user-home-dir (sys/get-environment-variable "HOME" (sys/get-environment-variable "USERPROFILE"))
+                   :java-home (sys/get-environment-variable "JAVA_HOME")
+                   :aspectj-home (sys/get-environment-variable "ASPECTJ_HOME")]))
   ([coll]
     (read-from-seq coll)))
 
@@ -242,35 +242,33 @@
   "Initializes the configuration defaults."
   ([]
     ; set internal defaults  
-    (init-defaults [:baumeister-home-dir (sys/get-env "BAUMEISTER_HOME" ".")
-                    :user-home-dir (sys/get-env "HOME" (sys/get-env "USERPROFILE"))
-                    :java-home (sys/get-env "JAVA_HOME")
-                    :aspectj-home (sys/get-env "ASPECTJ_HOME")]))
+    (init-defaults [:baumeister-home-dir (sys/get-environment-variable "BAUMEISTER_HOME" ".")
+                    :user-home-dir (sys/get-environment-variable "HOME" (sys/get-environment-variable "USERPROFILE"))
+                    :java-home (sys/get-environment-variable "JAVA_HOME")
+                    :aspectj-home (sys/get-environment-variable "ASPECTJ_HOME")]))
   ([defaults]
-    (println (partition 2 defaults))
-    (configure-from-seq defaults)))
+   (println (partition 2 defaults))
+   (configure-from-seq defaults)))
 
 
 (defn init-config
   "Initializes the configuration."
   ([options]
-    (init-config () options))
+   (init-config () options))
   ([config options]
 
   ; use given config
-  (configure-from-seq config)
-  
+   (configure-from-seq config)
+
   ; default settings
-  (configure-from-file (str (param :baumeister-home-dir) "/config/default_settings.clj"))
-  
+   (configure-from-file (str (param :baumeister-home-dir) "/config/default_settings.clj"))
+
   ; user settings
-  (configure-from-file (str (param :user-home-dir) "/.Baumeister/settings.clj"))
+   (configure-from-file (str (param :user-home-dir) "/.Baumeister/settings.clj"))
 
   ; read module.clj (or the file specified with --file or -f) from current module
   ; TODO for module.clj derivation get parent module.clj's and merge them first, requires repository access
-  (configure-from-file (:file options))
-  
-  ; add command line parameters (defined by --define or -D)
-  (configure-from-options options))
-  )
+   (configure-from-file (:file options))
 
+  ; add command line parameters (defined by --define or -D)
+   (configure-from-options options)))

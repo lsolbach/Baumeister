@@ -3,7 +3,7 @@
 ;
 ; If you want to override configuration parameters, use $(HOME)/.Baumeister/settings.clj or module.clj
 ;
-; This file defines the default configuration for Baumeister. 
+; This file defines the default configuration for Baumeister.
 ; These settings are merged with the settings in the user specific settings.clj file and the module.clj files
 ;
 [
@@ -31,8 +31,8 @@
   :analyse-workflow [:package-workflow :analyse] ; perform static code analysis
   :build-workflow [:clean :package-workflow :unittest :coverage :analyse :distribute]
   :distribute-workflow [:build-workflow :generate-distribution :package-distribution :distribute-distribution] ; build distribution packages
-  :new-workflow [:init :dependencies :new]
-  }
+  :new-workflow [:init :dependencies :new]}
+
  ; the default action to take, if no workflow or phase is provided
  :default-action :package-workflow
  ;
@@ -117,8 +117,8 @@
                        :model ; model dependency, used on generation profile path
                        :generator ; generator dependency, used on generation template and profile path
                        :data ; data dependency
-                       :virtual ; meta dependency, no artifacts ???
-                       }
+                       :virtual} ; meta dependency, no artifacts ???
+
  ; :dependency-target-mapping defines the target of a transitive dependency according to the target of the parent dependency
  ; if there is no mapping here, the transitive dependency will not be included in the build
  :dependency-target-mapping {:plugin-root {:runtime :runtime
@@ -141,14 +141,14 @@
                                         :aspect :runtime} ; TODO check which transitive dependencies have to be included
                              :model {:model :model}
                              :generator {:generator :generator}
-                             :data {:data :data}
-                             } ; TODO virtual target
+                             :data {:data :data}}
+                              ; TODO virtual target
  ;
  ; :dependency-actions defines the actions for the initialization of the dependencies in the build process
  :dependency-actions {:copy #{:runtime :dev :aspect :aspectin :model} ; copy the artifact to the specified lib target dir
                       :unzip #{:generator :data} ; unzip the artifact to ${lib-dir}
-                      :follow #{:root} ; don't use the dependency, just follow for transitive dependencies
-                      }
+                      :follow #{:root}} ; don't use the dependency, just follow for transitive dependencies
+
  ;
  ; maven dependency management compatibility
  ;
@@ -192,7 +192,7 @@
                 ["org.soulspace.baumeister/ClojureTemplate, 0.1.0, ClojureTemplate, zip" :data]
                 ["org.soulspace.baumeister/DataTemplate, 0.1.0, DataTemplate, zip" :data]
                 ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]
- 
+
  :language-default-plugins {:clojure
                             [["org.soulspace.baumeister/DependencyPlugin"]
                              ["org.soulspace.baumeister/ClojurePlugin"]
@@ -207,23 +207,21 @@
                              ["org.soulspace.baumeister/AspectJPlugin"]
                              ["org.soulspace.baumeister/PackagePlugin"]]
                             :clojurescript
-                            [["org.soulspace.baumeister/DependencyPlugin"]
-                             ]
+                            [["org.soulspace.baumeister/DependencyPlugin"]]
+
                             :groovy
                             [["org.soulspace.baumeister/DependencyPlugin"]
-                             ["org.soulspace.baumeister/PackagePlugin"]
-                             ]
+                             ["org.soulspace.baumeister/PackagePlugin"]]
+
                             :jython
                             [["org.soulspace.baumeister/DependencyPlugin"]
-                             ["org.soulspace.baumeister/PackagePlugin"]
-                             ]
+                             ["org.soulspace.baumeister/PackagePlugin"]]
+
                             :jruby
                             [["org.soulspace.baumeister/DependencyPlugin"]
-                             ["org.soulspace.baumeister/PackagePlugin"]
-                             ]
+                             ["org.soulspace.baumeister/PackagePlugin"]]
+
                             :scala
                             [["org.soulspace.baumeister/DependencyPlugin"]
                              ["org.soulspace.baumeister/ScalaPlugin"]
-                             ["org.soulspace.baumeister/PackagePlugin"]]
-                            }
- ]
+                             ["org.soulspace.baumeister/PackagePlugin"]]}]

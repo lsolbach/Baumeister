@@ -17,7 +17,7 @@
             [baumeister.dependency.dependency-dot :as dep-dot]))
 
 ;
-; Transitive dependency functions 
+; Transitive dependency functions
 ;
 (def ^:dynamic built-nodes []) ; cache built nodes
 (def ^:dynamic dependency-data {}) ; cache dependency data
@@ -68,26 +68,26 @@
 ;
 ; Dependency node
 ;
-(defprotocol DependencyNode
+(defprotocol DependencyNode)
   ; TODO functions?
-  )
+
 
 ; A node in the transitive dependency tree
 ; contains a dependency, included nodes, excluded artifact patterns?
 (defrecord DependencyNodeImpl
   [dependency target included excluded]
-  DependencyNode
+  DependencyNode)
   ; TODO functions?
-  )
+
 
 (defn new-dependency-node
   "Creates a new dependency tree node for the given dependency."
   ([dependency target]
-    (new-dependency-node dependency target [] #{}))
+   (new-dependency-node dependency target [] #{}))
   ([dependency target included]
-    (new-dependency-node dependency target included #{}))
+   (new-dependency-node dependency target included #{}))
   ([dependency target included excluded]
-    (DependencyNodeImpl. dependency target included excluded)))
+   (DependencyNodeImpl. dependency target included excluded)))
 
 ; TODO use memoization for caching?! (must work over plugin and module dependency resolution, which works now, because the cache is resetted)
 (defn find-or-build-node
@@ -99,9 +99,9 @@
       node)))
 
 (defn build-dependency-node
-  "Recursively build dependency nodes depth first, use built-nodes set as cache."  
+  "Recursively build dependency nodes depth first, use built-nodes set as cache."
   ([target path excluded dependency]
-    (build-dependency-node target path excluded dependency false))
+   (build-dependency-node target path excluded dependency false))
   ([target path excluded dependency follow-optional]
     ; get transitive dependency data for the current dependency from its module descriptor and convert it to transitive dependencies
     (let [transitive-dep-data (get-transitive-dependency-data dependency)
@@ -129,7 +129,7 @@
 (defn topological-sort
   "Generate a sequence of dependencies by processing the dependency tree in breadth first order."
   ([root]
-    (topological-sort [root] []))
+   (topological-sort [root] []))
   ([queue dependencies]
     (if (seq queue)
       (let [node (first queue)

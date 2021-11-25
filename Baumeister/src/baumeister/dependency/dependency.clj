@@ -9,7 +9,6 @@
 ;
 (ns baumeister.dependency.dependency
   (:require [clojure.string :as str]
-            [org.soulspace.clj.file :as file]
             [org.soulspace.tools.artifact :as artifact]
             [baumeister.config.registry :as reg]))
 
@@ -47,13 +46,13 @@
 (defn print-dependency
   "Prints a dependency."
   ([dependency]
-    (print-dependency dependency (:target dependency)))
+   (print-dependency dependency (:target dependency)))
   ([dependency target]
     (let [artifact (:artifact dependency)]
       (str "[" (str/join ", " [(print-artifact artifact) target (:optional dependency)]) "]"))))
 
 ;
-; Dependency Protocol 
+; Dependency Protocol
 ;
 (defprotocol Dependency
   (compatible-dependency? [this other] "Returns true if both dependencies are compatible."))

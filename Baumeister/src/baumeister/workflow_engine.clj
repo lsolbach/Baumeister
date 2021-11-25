@@ -66,7 +66,7 @@
 (defn start-workflow
   "Starts the workflow."
   ([]
-    (do-workflow (keyword (param :default-action)))) ; default workflow is :build-workflow
+   (do-workflow (keyword (param :default-action)))) ; default workflow is :build-workflow
   ([& args]
-    (doseq [workflow (seq args)]
-      (do-workflow (keyword workflow)))))
+   (doseq [workflow (seq args)]
+     (do-workflow (keyword workflow)))))

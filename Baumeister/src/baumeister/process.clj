@@ -13,8 +13,6 @@
             [baumeister.config.registry :as reg]
             [baumeister.utils.log :as log]
             [baumeister.workflow-engine :as engine])
-  (:use 
-        )
   (:import [java.util Date])
   (:gen-class))
 

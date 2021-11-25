@@ -18,4 +18,3 @@ License
 Code Repository
 ---------------
 [https://github.com/lsolbach/Baumeister/PlantUMLPlugin] (https://github.com/lsolbach/Baumeister/PlantUMLPlugin)
-
