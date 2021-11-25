@@ -8,16 +8,13 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.repository.mavenproxy
-  (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj file file-search namespace net]
-        [org.soulspace.clj.xml zip]
-        [org.soulspace.clj.version version]
-        [org.soulspace.clj.artifact artifact]
-        [org.soulspace.clj.maven pom-model metadata-model]
-        [baumeister.config registry]
-        [baumeister.repository protocol]
-        [baumeister.utils log]))
-
+  (:require [clojure.java.io :as io]
+            [org.soulspace.clj.file :as sfile]
+            [org.soulspace.tools.artifact :as artifact]
+            [org.soulspace.tools.version :as version]
+            [org.soulspace.clj.namespace :as namespace]
+            [baumeister.repository protocol :as protocol]
+            [baumeister.utils.log :as log]))
 ;
 ; repository metadata handling
 ;

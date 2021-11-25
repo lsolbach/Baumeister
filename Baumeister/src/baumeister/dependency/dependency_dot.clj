@@ -8,8 +8,8 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.dependency.dependency-dot
-  (:use [org.soulspace.clj.artifact artifact]
-        [baumeister.dependency dependency]))
+  (:require [org.soulspace.tools.artifact :as artifact]
+            [baumeister.dependency.dependency :as dep]))
 
 ;
 ; create dot graph of the dependencies
@@ -35,14 +35,14 @@
   "Returns a vertex for the artifact in the dot representation of the dependency tree."
   [dep-node]
   (let [artifact (:artifact (:dependency dep-node))]
-    (str "\"" (artifact-key artifact) "\""
-         " [shape=box label=\"" (:project artifact) "\\n" (artifact-name-version artifact) "\"];")))
+    (str "\"" (artifact/artifact-key artifact) "\""
+         " [shape=box label=\"" (:project artifact) "\\n" (artifact/artifact-name-version artifact) "\"];")))
 
 (defn dependency-dot-edge-end
   "Returns a edge end for the artifact in the dot representation of the dependency tree."
   [dep-node]
   (let [artifact (:artifact (:dependency dep-node))]
-    (str "\"" (artifact-key artifact) "\"")))
+    (str "\"" (artifact/artifact-key artifact) "\"")))
 
 (defn dependency-dot-edge
   "Returns an edge in the dot representation of the dependency tree."

@@ -16,7 +16,7 @@
            ["org.soulspace.baumeister/DistributionPlugin, 0.6.5"]
            ]
  ;:repository-root-dir "/home/soulman/devel/repositories" ; FIXME use $HOME here
- :dependencies [["org.clojure/clojure, 1.8.0"]
+ :dependencies [["org.clojure/clojure, 1.10.3"]
                 ["org.soulspace.clj/CljApplicationLibrary, 0.6.0"]
                 ["org.soulspace.clj/CljArtifactLibrary, 0.4.5"]
                 ["org.soulspace.clj/CljMavenLibrary, 0.5.3"]

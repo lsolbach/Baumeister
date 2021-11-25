@@ -8,13 +8,12 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.bmdebug
-  (:use [clojure.pprint]
-        [baumeister.config registry parameter-registry plugin-registry]
-        [baumeister.utils log]))
+  (:require [baumeister.config.registry :as reg]
+            [baumeister.config.parameter-registry :as preg]))
 
 (defn bmdebug-init []
-  (spit (param "${build-dir}/debug")
-        (with-out-str (print-parameters))))
+  (spit (reg/param "${build-dir}/debug")
+        (with-out-str (preg/print-parameters))))
 
 (def config
   {:params []

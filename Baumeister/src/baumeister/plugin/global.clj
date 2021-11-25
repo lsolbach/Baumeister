@@ -8,41 +8,42 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.plugin.global
-  (:use [clojure.java.io :exclude [delete-file]] 
-        [org.soulspace.clj file system net]
-        [baumeister.utils ant-utils log]
-        [baumeister.config registry plugin-registry]))
+  (:require [clojure.java.io :as io]
+            [org.soulspace.clj.file :as file]
+            [org.soulspace.clj.system :as sys]
+            [baumeister.utils.log :as log]
+            [baumeister.config.registry :as reg]))
 
 (defn init-proxies
   "Initializes HTTP(S) Proxies."
   []
-  (let [http-proxy-bybasshosts (param :http-proxy-bybasshosts)
-        http-proxy-host (param :http-proxy-host)
-        http-proxy-port (str (param :http-proxy-port 3128))
-        https-proxy-host (param :https-proxy-host)
-        https-proxy-port (str (param :https-proxy-port 3128))]
+  (let [http-proxy-bybasshosts (reg/param :http-proxy-bybasshosts)
+        http-proxy-host (reg/param :http-proxy-host)
+        http-proxy-port (str (reg/param :http-proxy-port 3128))
+        https-proxy-host (reg/param :https-proxy-host)
+        https-proxy-port (str (reg/param :https-proxy-port 3128))]
     (when http-proxy-host
-      (set-system-property "java.net.useSystemProxies" "true")
+      (sys/set-system-property "java.net.useSystemProxies" "true")
       (if (seq http-proxy-bybasshosts)
-        (set-http-proxy http-proxy-host http-proxy-port http-proxy-bybasshosts)
-        (set-http-proxy http-proxy-host http-proxy-port))
+        (sys/set-http-proxy http-proxy-host http-proxy-port http-proxy-bybasshosts)
+        (sys/set-http-proxy http-proxy-host http-proxy-port))
       (if (seq https-proxy-host)
-        (set-https-proxy https-proxy-host https-proxy-port))
+        (sys/set-https-proxy https-proxy-host https-proxy-port))
       ;(println (into {} (System/getProperties)))
       )))
 
 (defn global-clean
   "Global clean"
   []
-  (log :info "cleaning globally...")
-  (delete-dir (as-file (param :build-dir))))
+  (log/log :info "cleaning globally...")
+  (file/delete-dir (io/as-file (reg/param :build-dir))))
 
 (defn global-init
   "Global initialization"
   []
-  (log :info "initializing globally...")
+  (log/log :info "initializing globally...")
   (init-proxies)
-  (create-dir (as-file (param :build-dir))))
+  (file/create-dir (io/as-file (reg/param :build-dir))))
 
 (def config
   {:params [[:module-dir "."]

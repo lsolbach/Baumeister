@@ -8,11 +8,13 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.process
-  (:use [org.soulspace.clj string file]
-        [org.soulspace.clj.application cli classpath env-vars] 
-        [baumeister.config registry]
-        [baumeister workflow-engine]
-        [baumeister.utils log])
+  (:require [org.soulspace.clj.cli :as cli]
+            [org.soulspace.clj.java.system :as sys]
+            [baumeister.config.registry :as reg]
+            [baumeister.utils.log :as log]
+            [baumeister.workflow-engine :as engine])
+  (:use 
+        )
   (:import [java.util Date])
   (:gen-class))
 
@@ -53,11 +55,11 @@
                                    ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]]]
     ; TODO (configure-from-seq options)
     (try
-      (init-config new-config options)
-      (apply start-workflow "new-workflow")
+      (reg/init-config new-config options)
+      (apply engine/start-workflow "new-workflow")
       (catch Exception e
-        (message :error (.getMessage e))
-        (message :debug (.printStackTrace e))))))
+        (log/message :error (.getMessage e))
+        (log/message :debug (.printStackTrace e))))))
 
 (defn run
   "Runs an application."
@@ -68,44 +70,44 @@
 (defn print-options
   "Print some messages and quit."
   [options]
-  (init-defaults) ; initialize defaults only
+  (reg/init-defaults) ; initialize defaults only
   (if-not (nil? (:version options))
-    (println "Baumeister version: " (param :system-version)))
+    (println "Baumeister version: " (reg/param :system-version)))
   (when-not (nil? (:help options))
     (println "Baumeister usage:")
-    (println (doc-options option-defs))))
+    (println (cli/doc-options option-defs))))
 
 (defn start-processing
   "Start processing."
   [arguments options]
   (let [start (System/currentTimeMillis)]
-    (message :info "Started at" (Date. start))
+    (log/message :info "Started at" (Date. start))
     (if (command? (first arguments))
       (try 
         (println (first arguments) (rest arguments) options)
         ((symbol (first arguments)) (rest arguments) options)
         (catch Exception e
-          (message :error (.getMessage e))
-          (message :debug (.printStackTrace e))))
+          (log/message :error (.getMessage e))
+          (log/message :debug (.printStackTrace e))))
       (try 
-        (init-config options)
-        (apply start-workflow arguments)
+        (reg/init-config options)
+        (apply engine/start-workflow arguments)
         (catch Exception e
-          (message :error (.getMessage e))
-          (message :debug (.printStackTrace e)))))
+          (log/message :error (.getMessage e))
+          (log/message :debug (.printStackTrace e)))))
     (let [end (System/currentTimeMillis)]
-      (message :info (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds.")))))
+      (log/message :info (str "Done at " (Date. end) ", duration " (/ (- end start) 1000.0) " seconds.")))))
 
 (defn test-main
   "Baumeister test method."
   [& args]
-  (init-defaults [:log-level :trace
+  (reg/init-defaults [:log-level :trace
                   :baumeister-home-dir "."
                   :user-home-dir "."
-                  :java-home (get-env "JAVA_HOME")
-                  :aspectj-home (get-env "ASPECTJ_HOME")
-                  :repository-home-dir (get-env "BAUMEISTER_REPOS" "/home/soulman/devel/repositories")])
-  (let [[arguments options] (parse-args args option-defs)]
+                  :java-home (sys/get-environment-variable "JAVA_HOME")
+                  :aspectj-home (sys/get-environment-variable "ASPECTJ_HOME")
+                  :repository-home-dir (sys/get-environment-variable "BAUMEISTER_REPOS" "/home/soulman/devel/repositories")])
+  (let [[arguments options] (cli/parse-args args option-defs)]
     (if (print-only-options? options)
       (print-options options)
       (start-processing arguments options)))
@@ -114,8 +116,8 @@
 (defn -main
   "Baumeister main method."
   [& args]
-  (init-defaults)
-  (let [[arguments options] (parse-args args option-defs)]
+  (reg/init-defaults)
+  (let [[arguments options] (cli/parse-args args option-defs)]
     ;(println "Options:" options)
     (if (print-only-options? options)
       (print-options options)

@@ -8,8 +8,8 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.config.parameter-registry
-  (:use [clojure.pprint]
-        [org.soulspace.clj.application string-property]))
+  (:require [clojure.pprint :as pp]
+            [org.soulspace.clj.property-replacement :as props]))
 
 (def param-registry (atom {})) ; parameter registry
 
@@ -26,13 +26,13 @@
 (defn print-parameters
   "Prints the parameter registry."
   []
-  (pprint (get-param-registry)))
+  (pp/pprint (get-param-registry)))
 
 (defn replace-vars
   "Replaces with the variables in the parameter registry with the given value."
   [value]
   ; replace "${build-dir}/report" with (str (get-var (keyword build-dir) "${build-dir}") "/dir")
-  (replace-properties param-registry value))
+  (props/replace-properties param-registry value))
 
 (defn register-param-as-is
   "Registers the key/value pair without any preprocessing."

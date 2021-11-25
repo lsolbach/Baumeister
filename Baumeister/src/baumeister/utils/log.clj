@@ -8,8 +8,11 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.utils.log
-  (:use [clojure.string :only [join]]
-        [baumeister.config registry]))
+  (:require [clojure.string :as str]))
+
+;;;
+;;; Simple logging
+;;;
 
 ; TODO finer grained log levels?
 (def log-levels
@@ -19,6 +22,7 @@
   "Definition of the message levels."
   {:none 0 :very-important 10 :important 20 :info 30 :fine 40 :finer 50 :finest 60})
 
+; FIXME replace by atom
 (def ^{:dynamic true :private true} current-log-file "log.txt")
 (def ^{:dynamic true :private true} current-log-level (:warn log-levels))
 (def ^{:dynamic true :private true} current-msg-level (:info message-levels))
@@ -38,7 +42,7 @@
   [level & msgs]
   (let [msg-lvl (get log-levels (keyword level) (log-levels :error))]
     (when (<= msg-lvl current-log-level)
-      (println (keyword level) (join " " msgs)))))
+      (println (keyword level) (str/join " " msgs)))))
 
 (defn message 
   "Show a user visible message with the specified level."
@@ -46,14 +50,14 @@
   (apply log level msgs) ; log the message too
   (let [msg-lvl (get message-levels (keyword level) (message-levels :info))]
     (when (<= msg-lvl current-msg-level)
-      (println (join " " msgs)))))
+      (println (str/join " " msgs)))))
 
 ; TODO helpful?
 (defn thow-logged
   "Throws an exception after logging it's message."
   [level e]
   (log level (.getMessage e))
-  (log :debug "\t" (join "\n\t" (map str (.getStacktrace e))))
+  (log :debug "\t" (str/join "\n\t" (map str (.getStacktrace e))))
   (throw e))
 
 ; convenience log functions

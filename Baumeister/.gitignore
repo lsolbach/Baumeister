@@ -3,5 +3,16 @@
 /classes/
 /plugin-dependencies.dot
 target
-pom.xml
+
+# Leiningen
 .lein-failures
+pom.xml
+
+# VS Code/Calva
+.clj-kondo
+.lsp
+.calva
+
+# Eclipse
+.project
+.classpath

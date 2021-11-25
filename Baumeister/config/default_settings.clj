@@ -6,8 +6,7 @@
 ; This file defines the default configuration for Baumeister. 
 ; These settings are merged with the settings in the user specific settings.clj file and the module.clj files
 ;
-[
- :system-version "0.6.10"
+[:system-version "0.6.10"
  ;
  ; default log and message levels
  ;
@@ -16,9 +15,10 @@
  ;
  ; definition of the default workflows
  ;
+ ; :<workflow-key> [:<phase-key1> ...]
+ ;
  :workflow-definitions
- {
-  ; :prerequisites-workflow [:prerequisites] ; verify prerequisites for the build
+ {; :prerequisites-workflow [:prerequisites] ; verify prerequisites for the build
   :clean-workflow [:clean] ; remove any build artifats and directories from the module
   :init-workflow [:init :dependencies] ; initialize the module, create required directories for a build and resolve dependencies
   :architecture-workflow [:clean :init :dependencies :generate-architecture] ; generate modules from an architecture model
@@ -31,8 +31,7 @@
   :analyse-workflow [:package-workflow :analyse] ; perform static code analysis
   :build-workflow [:clean :package-workflow :unittest :coverage :analyse :distribute]
   :distribute-workflow [:build-workflow :generate-distribution :package-distribution :distribute-distribution] ; build distribution packages
-  :new-workflow [:init :dependencies :new]
-  }
+  :new-workflow [:init :dependencies :new]}
  ; the default action to take, if no workflow or phase is provided
  :default-action :package-workflow
  ;
@@ -68,8 +67,8 @@
  ; TODO think about hexagonal architecture
  ; TODO define packaging for module types
  :module-types #{:library :framework :component :application :domain :integration :presentation
-                  :webservice :webfrontend :consolefrontend :appfrontend
-                  :architecture :analysis :data :baumeister-plugin :baumeister-template}
+                 :webservice :webfrontend :consolefrontend :appfrontend
+                 :architecture :analysis :data :baumeister-plugin :baumeister-template}
  :data-module-types #{:architecture :analysis :data :baumeister-template}
  :code-module-types #{:library :framework :component :application :domain :integration :presentation
                       :webservice :webfrontend :consolefrontend :appfrontend :baumeister-plugin}
@@ -154,8 +153,7 @@
                                         :aspect :runtime} ; TODO check which transitive dependencies have to be included
                              :model {:model :model}
                              :generator {:generator :generator}
-                             :data {:data :data}
-                             } ; TODO virtual target
+                             :data {:data :data}} ; TODO virtual target
  ;
  ; :dependency-actions defines the actions for the initialization of the dependencies in the build process
  :dependency-actions {:copy #{:runtime :dev :aspect :aspectin :model} ; copy the artifact to the specified lib target dir
@@ -189,9 +187,8 @@
                 ["org.soulspace.baumeister/ClojureTemplate, 0.1.0, ClojureTemplate, zip" :data]
                 ["org.soulspace.baumeister/DataTemplate, 0.1.0, DataTemplate, zip" :data]
                 ["org.soulspace.baumeister/JavaTemplate, 0.1.0, JavaTemplate, zip" :data]]
- 
- :default-plugins {
-                   :clojure
+
+ :default-plugins {:clojure
                    [["org.soulspace.baumeister/DependencyPlugin"]
                     ["org.soulspace.baumeister/ClojurePlugin"]
                     ["org.soulspace.baumeister/ClojureTestPlugin"]
@@ -205,23 +202,17 @@
                     ["org.soulspace.baumeister/AspectJPlugin"]
                     ["org.soulspace.baumeister/PackagePlugin"]]
                    :clojurescript
-                   [["org.soulspace.baumeister/DependencyPlugin"]
-                    ]
+                   [["org.soulspace.baumeister/DependencyPlugin"]]
                    :groovy
                    [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]
-                    ]
+                    ["org.soulspace.baumeister/PackagePlugin"]]
                    :jython
                    [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]
-                    ]
+                    ["org.soulspace.baumeister/PackagePlugin"]]
                    :jruby
                    [["org.soulspace.baumeister/DependencyPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]
-                    ]
+                    ["org.soulspace.baumeister/PackagePlugin"]]
                    :scala
                    [["org.soulspace.baumeister/DependencyPlugin"]
                     ["org.soulspace.baumeister/ScalaPlugin"]
-                    ["org.soulspace.baumeister/PackagePlugin"]]
-                   }
- ]
+                    ["org.soulspace.baumeister/PackagePlugin"]]}]

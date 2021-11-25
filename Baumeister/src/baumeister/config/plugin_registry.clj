@@ -8,17 +8,18 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.config.plugin-registry
-  (:use [clojure.string :only [lower-case]]
-        [org.soulspace.clj string namespace]
-        [org.soulspace.clj.application classpath]
-        [org.soulspace.clj.artifact artifact]
-        [baumeister.utils log]
-        [baumeister.config parameter-registry function-registry]
-        [baumeister.dependency dependency dependency-transitivity dependency-initialization]))
+  (:require [clojure.string :as str]
+            [org.soulspace.clj.application.classpath :as cp]
+            [org.soulspace.tools.artifact :as artifact]
+            [baumeister.utils.log :as log]
+            [baumeister.config.parameter-registry :as preg]
+            [baumeister.config.function-registry :as freg]
+            [baumeister.dependency.dependency-transitivity :as dep-t]
+            [baumeister.dependency.dependency-initialization :as dep-i]))
 
-;
-; plugin registry
-;
+;;;
+;;; plugin registry
+;;;
 (def plugin-registry (atom #{}))
 
 (defn get-plugin-registry
@@ -53,17 +54,17 @@
 (defn plugin-name
   "Extracts the plugin namespace name from the plugin artifact"
   [c]
-  (lower-case (second (first (re-seq #"(.*)Plugin" (:module (new-artifact (first c))))))))
+  (str/lower-case (second (first (re-seq #"(.*)Plugin" (:module (artifact/new-artifact (first c))))))))
 
 (defn set-plugin-dependency-classpath
   "Adds the plugin dependencies to the baumeister classpath."
   []
   ; get the urls for the plugin dependencies, but drop plugin root, because it's the current module
-  (let [plugin-deps (plugin-dependencies)
-        plugin-dependency-urls (artifact-urls (filter #(not= (:target %) :plugin-root) plugin-deps))]
-    (log :debug "plugin dependencies" plugin-deps)
+  (let [plugin-deps (dep-t/plugin-dependencies)
+        plugin-dependency-urls (dep-i/artifact-urls (filter #(not= (:target %) :plugin-root) plugin-deps))]
+    (log/log :debug "plugin dependencies" plugin-deps)
     ;(generate-plugin-dot)
-    (add-urls plugin-dependency-urls)))
+    (cp/add-urls plugin-dependency-urls)))
 
 (defn get-plugin-config
   "Resolves the given plugin namespace and returns the config of the plugin."
@@ -74,36 +75,36 @@
   "Registers the plugin parameters."
   [plugin]
   (if-let [cfg (get-plugin-config plugin)]
-    (register-params (:params cfg))))
+    (preg/register-params (:params cfg))))
 
 (defn register-plugin-stepss
   "Registers the plugin steps."
   [plugin]
   (if-let [cfg (get-plugin-config plugin)]
-    (register-steps (:steps cfg))))
+    (freg/register-steps (:steps cfg))))
 
 (defn register-plugin-functions
   "Registers the plugin functions."
   [plugin]
   (if-let [cfg (get-plugin-config plugin)]
-    (register-functions (:functions cfg))))
+    (freg/register-functions (:functions cfg))))
 
 ; TODO load plugin as dependency? yes, when the build framework is stable
 ; load-file or require? (use compiled classes in Baumeister.jar or Baumeister plugins and load-file user plugins from file system?)
 (defn init-plugin
   "Initializes a plugin."
   [name]
-  (log :debug "Initializing plugin" name)
+  (log/log :debug "Initializing plugin" name)
   (let [plugin (symbol  name)]
     (when-not (has-plugin? plugin)
-      (log :debug "loading plugin" name)
+      (log/log :debug "loading plugin" name)
       (require plugin) ; import plugin namespace
       (register-plugin name) ; register plugin in plugin registry
       ; TODO use functions or extract registration
       (let [config-var (ns-resolve plugin (symbol "config"))]
-        (register-params (:params @config-var))
-        (register-steps (:steps @config-var))
-        (register-functions (:functions @config-var))))))
+        (preg/register-params (:params @config-var))
+        (freg/register-steps (:steps @config-var))
+        (freg/register-functions (:functions @config-var))))))
 
 ;
 (defn init-plugins

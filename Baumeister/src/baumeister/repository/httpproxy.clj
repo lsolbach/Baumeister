@@ -8,13 +8,13 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.repository.httpproxy
-  (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj file file-search namespace net]
-        [org.soulspace.clj.version version]
-        [org.soulspace.clj.artifact artifact]
-        [baumeister.config registry]
-        [baumeister.repository protocol]
-        [baumeister.utils log]))
+  (:require [clojure.java.io :as io]
+            [org.soulspace.clj.file :as sfile]
+            [org.soulspace.tools.artifact :as artifact]
+            [org.soulspace.tools.version :as version]
+            [org.soulspace.clj.namespace :as namespace]
+            [baumeister.repository protocol :as protocol]
+            [baumeister.utils.log :as log]))
 
 (defrecord HttpProxyArtifactRepositoryImpl [usage url path]
 ;  "A proxy artifact repository in Baumeister layout that can retrieve and store artifacts from an HTTP repository."

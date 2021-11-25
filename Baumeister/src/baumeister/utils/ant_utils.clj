@@ -8,9 +8,10 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.utils.ant-utils
-  (:use [clojure.java.io :only [as-file]]
-        [org.soulspace.clj.java type-conversion beans]
-        [baumeister.utils log])
+  (:require [clojure.java.io :as io]
+            [org.soulspace.clj.java.type-conversion :as tc]
+            [org.soulspace.clj.java.beans :as beans]
+            [baumeister.utils.log :as log])
   (:import [java.util.concurrent CountDownLatch]
            [org.apache.tools.ant.types Path]
            [org.apache.tools.ant.taskdefs Manifest$Attribute]
@@ -30,9 +31,9 @@
       (.addBuildListener logger))))
 
 ; extend coerce from type-conversion
-(defmethod coerce [Boolean/TYPE String] [_ str]
+(defmethod tc/coerce [Boolean/TYPE String] [_ str]
   (contains? #{"on" "yes" "true"} (.toLowerCase str)))
-(defmethod coerce [Path String] [_ str]
+(defmethod tc/coerce [Path String] [_ str]
   (Path. ant-project str))
 
 (def ant-task-hierarchy
@@ -79,7 +80,7 @@
 
 (defmethod add-nested [::has-args Map]
   [_ task props]
-  (set-properties! (.createArg task) props))
+  (beans/set-properties! (.createArg task) props))
 
 (defmethod add-nested [::java org.apache.tools.ant.types.Environment$Variable]
   [_ task variable]
@@ -102,7 +103,7 @@
   (.addFileset task fileset))
 
 (defmethod add-nested :default [_ task nested] 
-  (log :debug "Ant add-nested: using default" task nested)
+  (log/log :debug "Ant add-nested: using default" task nested)
   (.addFileset task nested))
 
 (defn instantiate-task [project name props & nested]
@@ -112,7 +113,7 @@
     (doto task
       (.init)
       (.setProject project)
-      (set-properties! props))
+      (beans/set-properties! props))
     (doseq [n nested]
       (add-nested name task n))
     task))
@@ -128,7 +129,7 @@
      (let [bean# (new ~ant-name)]
        (set-properties! bean# props#)
        (when (has-set-method? (class bean#) "project")
-         (set-property! bean# "project" ant-project))
+         (beans/set-property! bean# "project" ant-project))
        ; TODO add nested elements
        ; (doseq [n nested#]
        ;   )
@@ -137,7 +138,7 @@
 (defmacro define-ant-type-with-project [clj-name ant-name project]
   `(defn ~clj-name [props# & nested#]
      (let [bean# (new ~ant-name ant-project)]
-       (set-properties! bean# props#)
+       (beans/set-properties! bean# props#)
        ; TODO add nested elements
        ; (doseq [n nested#]
        ;   )
@@ -176,15 +177,15 @@
 (define-ant-type-with-project ant-batchtest org.apache.tools.ant.taskdefs.optional.junit.BatchTest ant-project)
 
 ; extend coerce multi-fn
-(defmethod coerce [org.apache.tools.ant.taskdefs.optional.junit.FormatterElement$TypeAttribute String] [_ str]
+(defmethod tc/coerce [org.apache.tools.ant.taskdefs.optional.junit.FormatterElement$TypeAttribute String] [_ str]
   (org.apache.tools.ant.taskdefs.optional.junit.FormatterElement$TypeAttribute/getInstance
     org.apache.tools.ant.taskdefs.optional.junit.FormatterElement$TypeAttribute str))
 
-(defmethod coerce [org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$ForkMode String] [_ str]
+(defmethod tc/coerce [org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$ForkMode String] [_ str]
   (org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$ForkMode/getInstance
     org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$ForkMode str))
 
-(defmethod coerce [org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$SummaryAttribute String] [_ str]
+(defmethod tc/coerce [org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$SummaryAttribute String] [_ str]
   (org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$SummaryAttribute/getInstance
     org.apache.tools.ant.taskdefs.optional.junit.JUnitTask$SummaryAttribute str))
 
@@ -200,4 +201,4 @@
   [_ task formatter] (.addFormatter task formatter))
 
 (defmethod add-nested [::junit java.util.Map]
-  [_ task props] (doto (.createBatchTest task) (.setTodir (as-file (:todir props))) (.addFileSet (:fileset props))))
+  [_ task props] (doto (.createBatchTest task) (.setTodir (io/as-file (:todir props))) (.addFileSet (:fileset props))))

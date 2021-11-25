@@ -8,11 +8,16 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.config.registry
-  (:require [clojure.string :as str :only [join]])
-  (:use [clojure.java.io :only [as-url]]
-        [org.soulspace.clj.application classpath]
-        [org.soulspace.clj file]
-        [baumeister.config parameter-registry]))
+  (:require [clojure.string :as str]
+            [clojure.java.io :as io]
+            [org.soulspace.clj.application.classpath :as cp]
+            [org.soulspace.clj.file :as file]
+            [org.soulspace.clj.java.system :as sys]
+            [baumeister.utils.log :as log]
+            [baumeister.config.parameter-registry :as preg]
+            [baumeister.config.function-registry :as freg]
+            [baumeister.config.plugin-registry :as plreg]
+            [baumeister.config.repository-registry :as rreg]))
 
 ; global build configuration
 (def build-config "global build configuration"
@@ -27,7 +32,7 @@
 (defn get-classpath-urls
   "Returns the registered urls of the classpath."
   []
-  (urls))
+  (cp/urls))
 
 (defn register-classpath-urls
   "Register classpath urls."
@@ -35,43 +40,43 @@
   (let [urls (into #{} (get-classpath-urls))]
     (doseq [url cl-urls]
       (if-not (contains? urls url)
-        (add-url url)))))
+        (cp/add-url url)))))
 
 (defn register-classpath-entries
   "Register classpath entries."
   [cl-entries]
   (let [urls (into #{} (get-classpath-urls))]
     (doseq [entry cl-entries]
-      (let [url (as-url (canonical-file entry))]
+      (let [url (io/as-url (file/canonical-file entry))]
         (if-not (contains? urls url)
-          (add-url url))))))
+          (cp/add-url url))))))
   
 ; TODO returns a parameter as-is without property replacement. still needed? if so, choose new fn name
 (defn get-var
   "Get parameter without replacements."
-  ([name] (get (get-param-registry) name ""))
-  ([name default] (get (get-param-registry) name default)))
+  ([name] (get (preg/get-param-registry) name ""))
+  ([name default] (get (preg/get-param-registry) name default)))
 
 (defn param
   "Get parameter with replacements."
   ([k]
     (if (keyword? k)
       (get-var k)
-      (replace-vars k)))
+      (preg/replace-vars k)))
   ([k default]
     (if (keyword? k)
       (get-var k default)
-      (replace-vars k))))
+      (preg/replace-vars k))))
 
 (defn register-val
   "Register a value."
   [key value]
-  (register-param-as-is key value))
+  (preg/register-param-as-is key value))
 
 (defn register-var
   "Register a variable."
   [key value]
-  (register-param key value))
+  (preg/register-param key value))
 
 (defn update-var
   "Update a variable by adding the values."
@@ -88,7 +93,7 @@
 (defn register-vars
   "Register variables."
   [vars]
-  (register-params vars))
+  (preg/register-params vars))
 
 ;
 ; config
@@ -100,18 +105,18 @@
 (defn- reset-registries
   "Resets the registries."
   []
-  (reset-plugin-registry)
-  (reset-fn-registries)
-  (reset-param-registry))
+  (plreg/reset-plugin-registry)
+  (freg/reset-fn-registries)
+  (preg/reset-param-registry))
 
 (defn- read-module
   "Reads a module file and returns the content partitioned in key and value sequences."
   ([] (read-module "./module.clj"))
   ([file]
-    (log :trace "Loading configuration from " (canonical-path file))
-    (if (is-file? file)
+    (log/log :trace "Loading configuration from " (file/canonical-path file))
+    (if (file/is-file? file)
       (partition 2 (edn/read-string (slurp file)))
-      (message :info "Could not load configuration file " (canonical-path file) "."))))
+      (log/message :info "Could not load configuration file " (file/canonical-path file) "."))))
 
 (defn parse-define-option
   "Parses a defined command line option."
@@ -133,21 +138,21 @@
 (defn param-action
   "Executes an action for the parameter based on the key."
   [key value]
-  (log :trace "param action for" key "->" value)
+  (log/log :trace "param action for" key "->" value)
   (cond
     ; repositories
     (= key :repositories) ; TODO append to existing repositories
     (do
-      (message :info "registering repositories...")
+      (log/message :info "registering repositories...")
       ; register repositories
       (register-val :deps-repositories (if (seq (param :deps-repositories))
                                          (let [repos (param :deps-repositories)]
-                                           (into repos (create-repositories value)))
-                                         (create-repositories value))))
+                                           (into repos (rreg/create-repositories value)))
+                                         (rreg/create-repositories value))))
     ; plugins
     (= key :plugins)
     (do
-      (message :info "loading plugins...")
+      (log/message :info "loading plugins...")
       ; plugin registration has to take place when the :plugins key is resolved in module.clj
       ; otherwise the plugin default config will override the module config
       ;
@@ -157,26 +162,26 @@
       ; IDEA Another alternative is the building of the complete configuration as a data structure
       ; IDEA (vector of key/value pairs) over all the different configuration options
       ; IDEA before parsing the configuration like it is done now.
-      (init-plugins value))
-    (= key :log-level) (set-log-level (keyword value))
-    (= key :message-level) (set-message-level (keyword value))))
+      (plreg/init-plugins value))
+    (= key :log-level) (log/set-log-level (keyword value))
+    (= key :message-level) (log/set-message-level (keyword value))))
 
 (defn set-params
   "Sets parameters in the parameter registry."
   [params]
-  (log :debug "set params" params)
+  (log/log :debug "set params" params)
   (if (seq params)
     (doseq [[key value] params]
       ; TODO implement override/append behaviour on defined keys?
-      (log :trace "setting parameter" key "to" value)
+      (log/log :trace "setting parameter" key "to" value)
       (if (str/starts-with? (name key) "additional-")
         ; if a key starts with additional, the values get appended to the collection of base values
-        (let [param-key (substring (count "additional-") (name key))]
-          (log :trace "updating parameter" key "with" value)
+        (let [param-key (sstr/substring (count "additional-") (name key))]
+          (log/log :trace "updating parameter" key "with" value)
           (update-var param-key value)
           (param-action param-key value))
         (do
-          (log :trace "setting parameter" key "to" value)
+          (log/log :trace "setting parameter" key "to" value)
           (register-var key value)
           (param-action key value))))))
 
@@ -213,34 +218,34 @@
 (defn init
   ""
   []
-  (set-dynamic-classloader) ; ensure a dynamic classloader for modifying the plugin and clojure test classpaths
+  (cp/set-dynamic-classloader) ; ensure a dynamic classloader for modifying the plugin and clojure test classpaths
   (reset-registries)) ; always get a fresh environment if used in a repl
 
 (defn load-defaults
   ""
   ([]
-    (load-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
-                    :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
-                    :java-home (get-env "JAVA_HOME")
-                    :aspectj-home (get-env "ASPECTJ_HOME")]))
+    (load-defaults [:baumeister-home-dir (sys/get-env "BAUMEISTER_HOME" ".")
+                    :user-home-dir (sys/get-env "HOME" (sys/get-env "USERPROFILE"))
+                    :java-home (sys/get-env "JAVA_HOME")
+                    :aspectj-home (sys/get-env "ASPECTJ_HOME")]))
   ([coll]
-    (read-from-seq )))
+    (read-from-seq coll)))
 
 (defn load-environment-vars
   []
-  [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
-   :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
-   :java-home (get-env "JAVA_HOME")
-   :aspectj-home (get-env "ASPECTJ_HOME")])
+  [:baumeister-home-dir (sys/get-env "BAUMEISTER_HOME" ".")
+   :user-home-dir (sys/get-env "HOME" (sys/get-env "USERPROFILE"))
+   :java-home (sys/get-env "JAVA_HOME")
+   :aspectj-home (sys/get-env "ASPECTJ_HOME")])
 
 (defn init-defaults
   "Initializes the configuration defaults."
   ([]
     ; set internal defaults  
-    (init-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
-                    :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
-                    :java-home (get-env "JAVA_HOME")
-                    :aspectj-home (get-env "ASPECTJ_HOME")]))
+    (init-defaults [:baumeister-home-dir (sys/get-env "BAUMEISTER_HOME" ".")
+                    :user-home-dir (sys/get-env "HOME" (sys/get-env "USERPROFILE"))
+                    :java-home (sys/get-env "JAVA_HOME")
+                    :aspectj-home (sys/get-env "ASPECTJ_HOME")]))
   ([defaults]
     (println (partition 2 defaults))
     (configure-from-seq defaults)))

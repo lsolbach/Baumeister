@@ -8,13 +8,13 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.dependency.dependency-transitivity
-  (:require [clojure.zip :as zip])
-  (:use [clojure.set :only [union]]
-        [org.soulspace.clj.artifact artifact]
-        [baumeister.utils log]
-        [baumeister.config registry]
-        [baumeister.repository repositories]
-        [baumeister.dependency dependency dependency-dot]))
+  (:require [clojure.set :as set]
+            [org.soulspace.tools.artifact :as artifact]
+            [baumeister.utils.log :as log]
+            [baumeister.config.registry :as reg]
+            [baumeister.repository.repositories :as repo]
+            [baumeister.dependency.dependency :as dep]
+            [baumeister.dependency.dependency-dot :as dep-dot]))
 
 ;
 ; Transitive dependency functions 
@@ -24,7 +24,7 @@
 
 (defn print-node
   [node]
-  (print-dependency (:dependency node) (:target node)))
+  (dep/print-dependency (:dependency node) (:target node)))
 
 (defn matches-node?
   [dependency target node]
@@ -41,8 +41,8 @@
 
 (defn is-excluded?
   [excluded dependency]
-  (let [excluding-patterns (filter #(matches-artifact? % (:artifact dependency)) excluded)]
-    (log :trace "is excluded?" (print-dependency dependency) "<<" excluded ">>" (seq excluding-patterns))
+  (let [excluding-patterns (filter #(artifact/matches-artifact? % (:artifact dependency)) excluded)]
+    (log/log :trace "is excluded?" (dep/print-dependency dependency) "<<" excluded ">>" (seq excluding-patterns))
     (not (nil? (seq excluding-patterns)))))
 
 (defn cycle?
@@ -52,15 +52,15 @@
 (defn map-target
   "Maps the target of a dependency according to the parents target."
   [parent-target dependency-target]
-  (((param :dependency-target-mapping) parent-target) dependency-target))
+  (((reg/param :dependency-target-mapping) parent-target) dependency-target))
 
 (defn get-transitive-dependency-data
   "Gets the transitive dependencies configuration for the specified dependency."
   [dependency]
   (cond
-    (= (:target dependency) :root) (param :dependencies) ; current module, use config
-    (= (:target dependency) :plugin-root) (filter coll? (param :plugins)) ; current module plugins, without internal plugins 
-    :default (query-dependencies (:artifact dependency))))
+    (= (:target dependency) :root) (reg/param :dependencies) ; current module, use config
+    (= (:target dependency) :plugin-root) (filter coll? (reg/param :plugins)) ; current module plugins, without internal plugins 
+    :default (repo/query-dependencies (:artifact dependency))))
 
 ; cache dependency data
 (def get-transitive-dependency-data (memoize get-transitive-dependency-data))
@@ -106,14 +106,14 @@
     ; get transitive dependency data for the current dependency from its module descriptor and convert it to transitive dependencies
     (let [transitive-dep-data (get-transitive-dependency-data dependency)
           ; TODO handle POMDependencies differently?
-          transitive-deps (map #(apply new-dependency %) transitive-dep-data)
+          transitive-deps (map #(apply dep/new-dependency %) transitive-dep-data)
           included
           (loop [deps transitive-deps inclusions []]
             ; build a list of dependency nodes as inclusions, for all children that are not already loaded or excluded
             (if (seq deps)
               (let [dep (first deps)
                     node-target (map-target target (:target dep))] ; compute the nodes target, which depends on the parent target (e.g. :aspect -> :runtime)
-                (log :trace "target mapping for" (print-dependency dep) "is" node-target)
+                (log/log :trace "target mapping for" (dep/print-dependency dep) "is" node-target)
                 ; excluded or optional dependencies are are not added to the included list of this dependency
                 (if (or (is-excluded? excluded dep) ; dependency is excluded
                         (and (:optional dep) (not follow-optional)) ; don't include transitive optional dependencies
@@ -121,7 +121,7 @@
                         (cycle? path dep)) ; dependency was seen on the way down, cycle!
                   (recur (rest deps) inclusions)
                   (recur (rest deps)
-                         (conj inclusions (build-dependency-node node-target (conj path dependency) (union excluded (:exclusions dep)) dep)))))
+                         (conj inclusions (build-dependency-node node-target (conj path dependency) (set/union excluded (:exclusions dep)) dep)))))
               inclusions))] ; return the inclusions
       (find-or-build-node dependency target included))))
 
@@ -133,10 +133,10 @@
   ([queue dependencies]
     (if (seq queue)
       (let [node (first queue)
-            node-dependency (set-dependency-target (:dependency node) (:target node))]
+            node-dependency (dep/set-dependency-target (:dependency node) (:target node))]
         (if (or
               (= (:target node) :root) ; don't include root, it's the module itself
-              (seq (filter #(compatible-dependency? node-dependency %) dependencies))) ; already included
+              (seq (filter #(dep/compatible-dependency? node-dependency %) dependencies))) ; already included
           (recur (concat (rest queue) (:included node)) dependencies) ; concat included children anyway, they can have new transitive dependencies
           (recur (concat (rest queue) (:included node)) (conj dependencies node-dependency)))) ; not yet included, include dependency and add children
       dependencies))) ; return the processed dependencies
@@ -144,38 +144,38 @@
 (defn root-dependency
   "Create a new dummy dependency to act as the root of the dependency tree."
   ([]
-    (new-dependency [(param :project) (param :module) (param :version)] :root))
+    (dep/new-dependency [(reg/param :project) (reg/param :module) (reg/param :version)] :root))
   ([target]
-    (new-dependency [(param :project) (param :module) (param :version)] target)))
+    (dep/new-dependency [(reg/param :project) (reg/param :module) (reg/param :version)] target)))
 
 (defn module-dependency-tree
   "Builds the module dependency tree."
   []
-  (log :debug "doing build-dependency-tree")
+  (log/log :debug "doing build-dependency-tree")
   (def built-nodes []) ; reset built nodes set
   (let [root (build-dependency-node :root
                          []
-                         (into #{} (map new-artifact-pattern (param :dependency-excludes)))
+                         (into #{} (map artifact/new-artifact-pattern (reg/param :dependency-excludes)))
                          (root-dependency))]
-    (register-val :module-dependency-tree root)
+    (reg/register-val :module-dependency-tree root)
     root))
 
 (defn plugin-dependency-tree
   "Builds the plugin dependency tree."
   []
-  (log :debug "doing build-plugin-dependency-tree")
+  (log/log :debug "doing build-plugin-dependency-tree")
   (def built-nodes []) ; reset built nodes set
   (let [root (build-dependency-node :plugin-root
                                     [] 
-                                    (into #{} (map new-artifact-pattern (param :dependency-excludes)))
+                                    (into #{} (map artifact/new-artifact-pattern (reg/param :dependency-excludes)))
                                     (root-dependency :plugin-root))]
-    (register-val :plugin-dependency-tree root)
+    (reg/register-val :plugin-dependency-tree root)
     root))
 
 (defn resolve-module-dependency-tree
   "Resolves the module dependency tree."
   []
-  (let [module-tree (param :module-dependency-tree)]
+  (let [module-tree (reg/param :module-dependency-tree)]
     (if (seq module-tree)
       module-tree
       (module-dependency-tree))))
@@ -194,14 +194,14 @@
   "Generates dot graphs for the configured dependency tree."
   []
   (with-open [wrt (java.io.StringWriter.)]
-    (dependencies-dot wrt (resolve-plugin-dependency-tree))
-    (spit (param "plugin-dependencies.dot") (str wrt))))
+    (dep-dot/dependencies-dot wrt (resolve-plugin-dependency-tree))
+    (spit (reg/param "plugin-dependencies.dot") (str wrt))))
 
 (defn module-dependencies
   "Returns a topologically sorted sequence of the module depencencies."
   []
   (let [root (resolve-module-dependency-tree)]
-    (log :trace "dependency tree" (print-node root))
+    (log/log :trace "dependency tree" (print-node root))
     ; topologically sorted sequence of the dependency dag
     (topological-sort root)))
 
@@ -209,7 +209,7 @@
   "Returns a topologically sorted sequence of the plugin depencencies."
   []
   (let [root (resolve-plugin-dependency-tree)]
-    (log :trace "dependency tree" (print-node root))
+    (log/log :trace "dependency tree" (print-node root))
     ;(generate-plugin-dot)
     ; topologically sorted sequence of the dependency dag
     (topological-sort root)))

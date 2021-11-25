@@ -8,24 +8,25 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.dependency.dependency
-  (:use [org.soulspace.clj file]
-        [org.soulspace.clj.artifact artifact]
-        [baumeister.config registry]))
+  (:require [clojure.string :as str]
+            [org.soulspace.clj.file :as file]
+            [org.soulspace.tools.artifact :as artifact]
+            [baumeister.config.registry :as reg]))
 
 (defn copy?
   "Returns true if the dependency has to be copied."
   [dependency]
-  (contains? (:copy (param :dependency-actions)) (:target dependency)))
+  (contains? (:copy (reg/param :dependency-actions)) (:target dependency)))
 
 (defn unzip?
   "Returns true if the dependency has to be unzipped."
   [dependency]
-  (contains? (:unzip (param :dependency-actions)) (:target dependency)))
+  (contains? (:unzip (reg/param :dependency-actions)) (:target dependency)))
 
 (defn follow?
   "Returns true if the dependency has to be followed only."
   [dependency]
-  (contains? (:follow (param :dependency-actions)) (:target dependency)))
+  (contains? (:follow (reg/param :dependency-actions)) (:target dependency)))
 
 (def compatible-targets
   {:aspectj :runtime
@@ -40,7 +41,7 @@
   "Prints an artifact."
   ([artifact]
     (str "[" 
-         (clojure.string/join ", " [(:project artifact) (:module artifact) (artifact-version artifact) (:name artifact) (:type artifact)])
+         (str/join ", " [(:project artifact) (:module artifact) (artifact/artifact-version artifact) (:name artifact) (:type artifact)])
          "]")))
 
 (defn print-dependency
@@ -49,7 +50,7 @@
     (print-dependency dependency (:target dependency)))
   ([dependency target]
     (let [artifact (:artifact dependency)]
-      (str "[" (clojure.string/join ", " [(print-artifact artifact) target (:optional dependency)]) "]"))))
+      (str "[" (str/join ", " [(print-artifact artifact) target (:optional dependency)]) "]"))))
 
 ;
 ; Dependency Protocol 
@@ -63,7 +64,7 @@
   (compatible-dependency? [this other]
     (let [this-artifact (:artifact this)
           other-artifact (:artifact other)]
-      (and (same-artifact-apart-from-version? this-artifact other-artifact)
+      (and (artifact/same-artifact-apart-from-version? this-artifact other-artifact)
            ;(= (contains-version? (:version a1) (:version a2)))
            (or (= (:target this) (:target other))
                (= (compatible-targets (:target this)) (:target other)))))))
@@ -73,15 +74,15 @@
 (defn create-dependency
   "Creates a new dependency to the given artifact."
   ([artifact]
-    (DependencyImpl. (new-artifact artifact) :runtime false nil []))
+    (DependencyImpl. (artifact/new-artifact artifact) :runtime false nil []))
   ([artifact target]
-    (DependencyImpl. (new-artifact artifact) target false nil []))
+    (DependencyImpl. (artifact/new-artifact artifact) target false nil []))
   ([artifact target exclusions]
-    (DependencyImpl. (new-artifact artifact) target false nil (map new-artifact-pattern exclusions)))
+    (DependencyImpl. (artifact/new-artifact artifact) target false nil (map artifact/new-artifact-pattern exclusions)))
   ([artifact target optional exclusions]
-    (DependencyImpl. (new-artifact artifact) target optional nil (map new-artifact-pattern exclusions)))
+    (DependencyImpl. (artifact/new-artifact artifact) target optional nil (map artifact/new-artifact-pattern exclusions)))
   ([artifact target optional scope exclusions]
-    (DependencyImpl. (new-artifact artifact) target optional scope (map new-artifact-pattern exclusions))))
+    (DependencyImpl. (artifact/new-artifact artifact) target optional scope (map artifact/new-artifact-pattern exclusions))))
 
 (defn new-dependency
   "Creates a new dependency."

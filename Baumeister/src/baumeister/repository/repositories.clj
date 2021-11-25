@@ -8,21 +8,24 @@
 ;   You must not remove this notice, or any other, from this software.
 ;
 (ns baumeister.repository.repositories
-  (:use [clojure.java.io :exclude [delete-file]]
-        [org.soulspace.clj file file-search net]
-        [org.soulspace.clj.artifact artifact]
-        [baumeister.config registry]
-        [baumeister.repository protocol file httpproxy mavenproxy]
-        [baumeister.utils log])
+  (:require [clojure.java.io :as io]
+            [org.soulspace.clj.file :as sfile]
+            [org.soulspace.clj.namespace :as namespace]
+            [org.soulspace.tools.artifact :as artifact]
+            [org.soulspace.tools.version :as version]
+            [baumeister.repository protocol :as protocol]
+            [baumeister.utils.log :as log])
   (:import [baumeister.repository.file FileArtifactRepositoryImpl]
            [baumeister.repository.httpproxy HttpProxyArtifactRepositoryImpl]
            [baumeister.repository.mavenproxy MavenProxyArtifactRepositoryImpl]))
 
-(defn maven-scope-to-target [maven-scope]
+(defn maven-scope-to-target
+  [maven-scope]
   "Maps a maven scope to a target"
   ((param :maven-scope-to-target) maven-scope))
 
-(defn maven-type-to-type [maven-type]
+(defn maven-type-to-type
+  [maven-type]
   "Maps the maven type to a type."
   ((param :maven-type-to-type) maven-type))
 
@@ -50,16 +53,20 @@
 ;
 ; TODO think about the repository design
 ;
-(defn get-dev-repository [repositories]
+(defn get-dev-repository
+  [repositories]
   (first (filter #(= (:usage %) :development) repositories)))
 
-(defn get-staging-repository [repositories]
+(defn get-staging-repository
+  [repositories]
   (first (filter #(= (:usage %) :staging) repositories)))
 
-(defn get-release-repository [repositories]
+(defn get-release-repository
+  [repositories]
   (first (filter #(= (:usage %) :release) repositories)))
 
-(defn repositories-by-usage [repositories usage]
+(defn repositories-by-usage
+  [repositories usage]
   (filter #(= (:usage %) (keyword usage)) repositories))
 
 ;

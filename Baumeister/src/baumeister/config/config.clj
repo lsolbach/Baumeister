@@ -1,12 +1,18 @@
 (ns baumeister.config.config
-  (:require [clojure.string :as str :only [split join replace starts-with?]]
-            [clojure.edn :as edn])
-  (:use [clojure.pprint]
-        [clojure.java.io :only [as-file as-url input-stream]]
-        [org.soulspace.clj file string]
-        [org.soulspace.clj.application classpath env-vars]
-        [baumeister.utils log]
-        [baumeister.config registry parameter-registry repository-registry function-registry plugin-registry]))
+  (:require [clojure.string :as str]
+            [clojure.edn :as edn]
+            [org.soulspace.clj.file :as file]
+            [org.soulspace.clj.string :as sstr]
+            [org.soulspace.clj.application.classpath :as cp]
+            [org.soulspace.clj.java.system :as sys]
+            [baumeister.utils.log :as log]
+            [baumeister.config.registry :as reg]
+            [baumeister.config.parameter-registry :as preg]
+            [baumeister.config.repository-registry :as rreg]
+            [baumeister.config.function-registry :as freg]
+            [baumeister.config.plugin-registry :as plreg]))
+
+;;;; FIXME remove, seems to be superseeded by registry.clj
 
 ; TODO read the whole configuration before taking actions on specific keys (repositories, plugins,...)?!
 ; TODO conj all configuration items to a list and process them after reading all?! So the order would be preserved.
@@ -14,18 +20,18 @@
 (defn- reset-registries
   "Resets the registries."
   []
-  (reset-plugin-registry)
-  (reset-fn-registries)
-  (reset-param-registry))
+  (plreg/reset-plugin-registry)
+  (freg/reset-fn-registries)
+  (preg/reset-param-registry))
 
 (defn- read-module
   "Reads a module file and returns the content partitioned in key and value sequences."
   ([] (read-module "./module.clj"))
   ([file]
-    (log :trace "Loading configuration from " (canonical-path file))
-    (if (is-file? file)
+    (log/log :trace "Loading configuration from " (file/canonical-path file))
+    (if (file/is-file? file)
       (partition 2 (edn/read-string (slurp file)))
-      (message :info "Could not load configuration file " (canonical-path file) "."))))
+      (log/message :info "Could not load configuration file " (file/canonical-path file) "."))))
 
 (defn parse-define-option
   "Parses a defined command line option."
@@ -47,21 +53,21 @@
 (defn param-action
   "Executes an action for the parameter based on the key."
   [key value]
-  (log :trace "param action for" key "->" value)
+  (log/log :trace "param action for" key "->" value)
   (cond
     ; repositories
     (= key :repositories) ; TODO append to existing repositories
     (do
-      (message :info "registering repositories...")
+      (log/message :info "registering repositories...")
       ; register repositories
-      (register-val :deps-repositories (if (seq (param :deps-repositories))
-                                         (let [repos (param :deps-repositories)]
-                                           (into repos (create-repositories value)))
-                                         (create-repositories value))))
+      (reg/register-val :deps-repositories (if (seq (preg/param :deps-repositories))
+                                         (let [repos (preg/param :deps-repositories)]
+                                           (into repos (rreg/create-repositories value)))
+                                         (rreg/create-repositories value))))
     ; plugins
     (= key :plugins)
     (do
-      (message :info "loading plugins...")
+      (log/message :info "loading plugins...")
       ; plugin registration has to take place when the :plugins key is resolved in module.clj
       ; otherwise the plugin default config will override the module config
       ;
@@ -71,27 +77,27 @@
       ; IDEA Another alternative is the building of the complete configuration as a data structure
       ; IDEA (vector of key/value pairs) over all the different configuration options
       ; IDEA before parsing the configuration like it is done now.
-      (init-plugins value))
-    (= key :log-level) (set-log-level (keyword value))
-    (= key :message-level) (set-message-level (keyword value))))
+      (preg/init-plugins value))
+    (= key :log-level) (log/set-log-level (keyword value))
+    (= key :message-level) (log/set-message-level (keyword value))))
 
 (defn set-params
   "Sets parameters in the parameter registry."
   [params]
-  (log :debug "set params" params)
+  (log/log :debug "set params" params)
   (if (seq params)
     (doseq [[key value] params]
       ; TODO implement override/append behaviour on defined keys?
-      (log :trace "setting parameter" key "to" value)
+      (log/log :trace "setting parameter" key "to" value)
       (if (str/starts-with? (name key) "additional-")
         ; if a key starts with additional, the values get appended to the collection of base values
-        (let [param-key (substring (count "additional-") (name key))]
-          (log :trace "updating parameter" key "with" value)
-          (update-var param-key value)
+        (let [param-key (sstr/substring (count "additional-") (name key))]
+          (log/log :trace "updating parameter" key "with" value)
+          (reg/update-var param-key value)
           (param-action param-key value))
         (do
-          (log :trace "setting parameter" key "to" value)
-          (register-var key value)
+          (log/log :trace "setting parameter" key "to" value)
+          (reg/register-var key value)
           (param-action key value))))))
 
 (defn read-from-file
@@ -127,7 +133,7 @@
 (defn init
   ""
   []
-  (set-dynamic-classloader) ; ensure a dynamic classloader for modifying the plugin and clojure test classpaths
+  (cp/set-dynamic-classloader) ; ensure a dynamic classloader for modifying the plugin and clojure test classpaths
   (reset-registries) ; always get a fresh environment if used in a repl's
   )
 
@@ -135,10 +141,10 @@
   "Initializes the configuration defaults."
   ([]
     ; set internal defaults  
-    (init-defaults [:baumeister-home-dir (get-env "BAUMEISTER_HOME" ".")
-                    :user-home-dir (get-env "HOME" (get-env "USERPROFILE"))
-                    :java-home (get-env "JAVA_HOME")
-                    :aspectj-home (get-env "ASPECTJ_HOME")]))
+    (init-defaults [:baumeister-home-dir (sys/get-environment-variable "BAUMEISTER_HOME" ".")
+                    :user-home-dir (sys/get-environment-variable "HOME" (sys/get-environment-variable "USERPROFILE"))
+                    :java-home (sys/get-environment-variable "JAVA_HOME")
+                    :aspectj-home (sys/get-environment-variable "ASPECTJ_HOME")]))
   ([defaults]
     (println (partition 2 defaults))
     (configure-from-seq defaults)))
@@ -154,10 +160,10 @@
   (configure-from-seq config)
   
   ; default settings
-  (configure-from-file (str (param :baumeister-home-dir) "/config/default_settings.clj"))
+  (configure-from-file (str (preg/param :baumeister-home-dir) "/config/default_settings.clj"))
   
   ; user settings
-  (configure-from-file (str (param :user-home-dir) "/.Baumeister/settings.clj"))
+  (configure-from-file (str (preg/param :user-home-dir) "/.Baumeister/settings.clj"))
 
   ; read module.clj (or the file specified with --file or -f) from current module
   ; TODO for module.clj derivation get parent module.clj's and merge them first, requires repository access

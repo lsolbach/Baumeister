@@ -3,7 +3,7 @@
   :url "https://github.com/lsolbach/Baumeister"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.10.3"]
                  [org.soulspace.clj/CljApplicationLibrary "0.6.0"]
                  [org.soulspace.clj/CljArtifactLibrary "0.4.5"]
                  [org.soulspace.clj/CljMavenLibrary "0.5.3"]
